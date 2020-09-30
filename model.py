@@ -1,4 +1,5 @@
 import mujoco_py as mjc
+import numpy as np
 
 
 class Model:
@@ -7,8 +8,12 @@ class Model:
         self.mjc_model = mjc.load_model_from_path(xml_path)
 
     def visualize(self):
-        simulation: mjc.MjSim = mjc.MjSim(self.mjc_model)
-        viewer: mjc.MjViewer = mjc.MjViewer(simulation)
+        sim: mjc.MjSim = mjc.MjSim(self.mjc_model)
+        viewer: mjc.MjViewer = mjc.MjViewer(sim)
+
         while True:
-            simulation.step()
+            actions = np.random.uniform(low=-0.001, high=0.001, size=sim.data.ctrl.shape)[:]
+
+            sim.data.ctrl[:] = actions[:]
+            sim.step()
             viewer.render()
