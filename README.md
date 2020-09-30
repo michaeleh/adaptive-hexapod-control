@@ -4,22 +4,22 @@ adaptive control and simulation for hexapod mk-III
 ## Model
 Stl files was extracted from the complete hexapod model using fusion 360 and broght together using mojuco's xml.\
 The body was seperated from the legs and each leg was separated to 3 pieces according the joints.\
-![legstructure](images/legstructure.jpg) 
+<img src="images/legstructure.jpg" width=200>
 ### Hexapod mk-III model
-![hexapod](images/hexapod.gif)
+<img src="images/hexapod.gif" width=200>
 
 ### Body stl
-![body](images/body.gif)
+<img src="images/body.gif" width=200>
 
 
 ### Coxa stl
-![coxa](images/coxa.gif)
+<img src="images/coxa.gif" width=200>
 
 
 ### Femur stl
-![femur](images/femur.gif)
+<img src="images/femur.gif" width=200>
 
 
 ### Tibia stl
-![tibia](images/tibia.gif)
+<img src="images/tibia.gif" width=200>
 
