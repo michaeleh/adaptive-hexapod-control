@@ -1,0 +1,192 @@
+<mujoco model="mk3">
+
+    <compiler angle="degree" meshdir="meshes" balanceinertia="true"/>
+
+    <asset>
+        <mesh file="body.stl"/>
+        <mesh file="coxa.stl"/>
+        <mesh file="femur.stl"/>
+        <mesh file="tibia.stl"/>
+        <texture  name="floor_tile" file="meshes/floor_tile.png" width="3000" height="3000" type="2d"/>
+        <material name="tile" texture="floor_tile" specular="0" shininess="0" reflectance="0" emission="1" />
+
+        <material name="black" specular="1" shininess="1" reflectance="1" rgba="0.08 0.08 0.08 1" emission="1"/>
+    </asset>
+
+    <contact>
+        <!--leg1 and body-->
+        <exclude body1="body:body" body2="body:coxa1"/>
+        <exclude body1="body:coxa1" body2="body:femur1"/>
+        <exclude body1="body:femur1" body2="body:tibia1"/>
+
+        <!--leg2 and body-->
+        <exclude body1="body:body" body2="body:coxa2"/>
+        <exclude body1="body:coxa2" body2="body:femur2"/>
+        <exclude body1="body:femur2" body2="body:tibia2"/>
+
+        <!--leg3 and body-->
+        <exclude body1="body:body" body2="body:coxa3"/>
+        <exclude body1="body:coxa3" body2="body:femur3"/>
+        <exclude body1="body:femur3" body2="body:tibia3"/>
+
+        <!--leg4 and body-->
+        <exclude body1="body:body" body2="body:coxa4"/>
+        <exclude body1="body:coxa4" body2="body:femur4"/>
+        <exclude body1="body:femur4" body2="body:tibia4"/>
+
+        <!--leg5 and body-->
+        <exclude body1="body:body" body2="body:coxa5"/>
+        <exclude body1="body:coxa5" body2="body:femur5"/>
+        <exclude body1="body:femur5" body2="body:tibia5"/>
+
+        <!--leg6 and body-->
+        <exclude body1="body:body" body2="body:coxa6"/>
+        <exclude body1="body:coxa6" body2="body:femur6"/>
+        <exclude body1="body:femur6" body2="body:tibia6"/>
+    </contact>
+
+    <worldbody>
+
+        <camera fovy="45" pos="1 1 1"/>
+        <light pos="0 0 2000" dir="0 0 -1" diffuse="1 1 -1"/>
+        <geom name="floor_grey_tile" pos="0 0 -0.001" size="5000 5000 10" type="plane" material="tile"/>
+
+        <!--        Body of hexapod-->
+        <body name="body:body" pos="0 0 0">
+            <geom name="body" type="mesh" mesh="body" pos="0 0 0" material="black"/>
+            <!--            <inertial pos="0 0 0" mass="1.226" diaginertia="0.25 0.25 0.25"/>-->
+
+            <!--            leg1-->
+            <body name="body:coxa1" pos="0 0 0">
+                <joint name="joint:coxa1" pos="0 0 0" axis="0 0 1"/>
+                <geom name="coxa1" type="mesh" mesh="coxa" pos="0 0 0" material="black"/>
+                <!--                <inertial pos="0 0 0" mass="0.798614" diaginertia="0.3 0.3 0.3"/>-->
+                <body name="body:femur1" pos="0 0 0">
+                    <joint name="joint:femur1" pos="0 0 0" axis="0 1 0"/>
+                    <geom name="femur1" type="mesh" mesh="femur" pos="0 0 0" material="black"/>
+                    <!--                    <inertial pos="0 -0.0008 0.0058" mass="0.792592" euler="1.5708 0 0" diaginertia="0.3 0.3 0.3"/>-->
+                    <body name="body:tibia1" pos="0 0 0">
+                        <joint name="joint:tibia1" pos="0 0 0" axis="0 1 0"/>
+                        <geom name="tibia1" type="mesh" mesh="tibia" pos="0 0 0" material="black"/>
+                        <!--                    <inertial pos="0 -0.0008 0.0058" mass="0.792592" euler="1.5708 0 0" diaginertia="0.3 0.3 0.3"/>-->
+
+                    </body>
+                </body>
+            </body>
+            <!--            leg2-->
+            <body name="body:coxa2" pos="172 -22 0" euler="0 0 45">
+                <joint name="joint:coxa2" pos="0 0 0" axis="0 0 1"/>
+                <geom name="coxa2" type="mesh" mesh="coxa" pos="0 0 0" material="black"/>
+                <!--                <inertial pos="0 0 0" mass="0.798614" diaginertia="0.3 0.3 0.3"/>-->
+                <body name="body:femur2" pos="0 0 0">
+                    <joint name="joint:femur2" pos="0 0 0" axis="0 1 0"/>
+                    <geom name="femur2" type="mesh" mesh="femur" pos="0 0 0" material="black"/>
+                    <!--                    <inertial pos="0 -0.0008 0.0058" mass="0.792592" euler="1.5708 0 0" diaginertia="0.3 0.3 0.3"/>-->
+                    <body name="body:tibia2" pos="0 0 0">
+                        <joint name="joint:tibia2" pos="0 0 0" axis="0 1 0"/>
+                        <geom name="tibia2" type="mesh" mesh="tibia" pos="0 0 0" material="black"/>
+                        <!--                    <inertial pos="0 -0.0008 0.0058" mass="0.792592" euler="1.5708 0 0" diaginertia="0.3 0.3 0.3"/>-->
+
+                    </body>
+                </body>
+            </body>
+            <!--            leg3-->
+            <body name="body:coxa3" pos="-87 130 0" euler="0 0 -45">
+                <joint name="joint:coxa3" pos="0 0 0" axis="0 0 1"/>
+                <geom name="coxa3" type="mesh" mesh="coxa" pos="0 0 0" material="black"/>
+                <!--                <inertial pos="0 0 0" mass="0.798614" diaginertia="0.3 0.3 0.3"/>-->
+                <body name="body:femur3" pos="0 0 0">
+                    <joint name="joint:femur3" pos="0 0 0" axis="0 1 0"/>
+                    <geom name="femur3" type="mesh" mesh="femur" pos="0 0 0" material="black"/>
+                    <!--                    <inertial pos="0 -0.0008 0.0058" mass="0.792592" euler="1.5708 0 0" diaginertia="0.3 0.3 0.3"/>-->
+                    <body name="body:tibia3" pos="0 0 0">
+                        <joint name="joint:tibia3" pos="0 0 0" axis="0 1 0"/>
+                        <geom name="tibia3" type="mesh" mesh="tibia" pos="0 0 0" material="black"/>
+                        <!--                    <inertial pos="0 -0.0008 0.0058" mass="0.792592" euler="1.5708 0 0" diaginertia="0.3 0.3 0.3"/>-->
+
+                    </body>
+                </body>
+            </body>
+            <!--            leg4-->
+            <body name="body:coxa4" pos="357 365 0" euler="0 0 180">
+                <joint name="joint:coxa4" pos="0 0 0" axis="0 0 1"/>
+                <geom name="coxa4" type="mesh" mesh="coxa" pos="0 0 0" material="black"/>
+                <!--                <inertial pos="0 0 0" mass="0.798614" diaginertia="0.3 0.3 0.3"/>-->
+                <body name="body:femur4" pos="0 0 0">
+                    <joint name="joint:femur4" pos="0 0 0" axis="0 1 0"/>
+                    <geom name="femur4" type="mesh" mesh="femur" pos="0 0 0" material="black"/>
+                    <!--                    <inertial pos="0 -0.0008 0.0058" mass="0.792592" euler="1.5708 0 0" diaginertia="0.3 0.3 0.3"/>-->
+                    <body name="body:tibia4" pos="0 0 0">
+                        <joint name="joint:tibia4" pos="0 0 0" axis="0 1 0"/>
+                        <geom name="tibia4" type="mesh" mesh="tibia" pos="0 0 0" material="black"/>
+                        <!--                    <inertial pos="0 -0.0008 0.0058" mass="0.792592" euler="1.5708 0 0" diaginertia="0.3 0.3 0.3"/>-->
+
+                    </body>
+                </body>
+            </body>
+            <!--            leg5-->
+            <body name="body:coxa5" pos="187 388 0" euler="0 0 225">
+                <joint name="joint:coxa5" pos="0 0 0" axis="0 0 1"/>
+                <geom name="coxa5" type="mesh" mesh="coxa" pos="0 0 0" material="black"/>
+                <!--                <inertial pos="0 0 0" mass="0.798614" diaginertia="0.3 0.3 0.3"/>-->
+                <body name="body:femur5" pos="0 0 0">
+                    <joint name="joint:femur5" pos="0 0 0" axis="0 1 0"/>
+                    <geom name="femur5" type="mesh" mesh="femur" pos="0 0 0" material="black"/>
+                    <!--                    <inertial pos="0 -0.0008 0.0058" mass="0.792592" euler="1.5708 0 0" diaginertia="0.3 0.3 0.3"/>-->
+                    <body name="body:tibia5" pos="0 0 0">
+                        <joint name="joint:tibia5" pos="0 0 0" axis="0 1 0"/>
+                        <geom name="tibia5" type="mesh" mesh="tibia" pos="0 0 0" material="black"/>
+                        <!--                    <inertial pos="0 -0.0008 0.0058" mass="0.792592" euler="1.5708 0 0" diaginertia="0.3 0.3 0.3"/>-->
+
+                    </body>
+                </body>
+            </body>
+            <!--            leg6-->
+            <body name="body:coxa6" pos="445 234 0" euler="0 0 -225">
+                <joint name="joint:coxa6" pos="0 0 0" axis="0 0 1"/>
+                <geom name="coxa6" type="mesh" mesh="coxa" pos="0 0 0" material="black"/>
+                <!--                <inertial pos="0 0 0" mass="0.798614" diaginertia="0.3 0.3 0.3"/>-->
+                <body name="body:femur6" pos="0 0 0">
+                    <joint name="joint:femur6" pos="0 0 0" axis="0 1 0"/>
+                    <geom name="femur6" type="mesh" mesh="femur" pos="0 0 0" material="black"/>
+                    <!--                    <inertial pos="0 -0.0008 0.0068" mass="0.792592" euler="1.5708 0 0" diaginertia="0.3 0.3 0.3"/>-->
+                    <body name="body:tibia6" pos="0 0 0">
+                        <joint name="joint:tibia6" pos="0 0 0" axis="0 1 0"/>
+                        <geom name="tibia6" type="mesh" mesh="tibia" pos="0 0 0" material="black"/>
+                        <!--                    <inertial pos="0 -0.0008 0.0058" mass="0.792592" euler="1.5708 0 0" diaginertia="0.3 0.3 0.3"/>-->
+
+                    </body>1 0 0"
+                </body>
+            </body>
+        </body>
+
+    </worldbody>
+
+    <actuator>
+        <!--        leg1-->
+        <motor name="motor:coxa1" joint="joint:coxa1"/>
+        <motor name="motor:femur1" joint="joint:femur1"/>
+        <motor name="motor:tibia1" joint="joint:tibia1"/>
+        <!--        leg2-->
+        <motor name="motor:coxa2" joint="joint:coxa2"/>
+        <motor name="motor:femur2" joint="joint:femur2"/>
+        <motor name="motor:tibia2" joint="joint:tibia2"/>
+        <!--        leg3-->
+        <motor name="motor:coxa3" joint="joint:coxa3"/>
+        <motor name="motor:femur3" joint="joint:femur3"/>
+        <motor name="motor:tibia3" joint="joint:tibia3"/>
+        <!--        leg4-->
+        <motor name="motor:coxa4" joint="joint:coxa4"/>
+        <motor name="motor:femur4" joint="joint:femur4"/>
+        <motor name="motor:tibia4" joint="joint:tibia4"/>
+        <!--        leg5-->
+        <motor name="motor:coxa5" joint="joint:coxa5"/>
+        <motor name="motor:femur5" joint="joint:femur5"/>
+        <motor name="motor:tibia5" joint="joint:tibia5"/>
+        <!--        leg6-->
+        <motor name="motor:coxa6" joint="joint:coxa6"/>
+        <motor name="motor:femur6" joint="joint:femur6"/>
+        <motor name="motor:tibia6" joint="joint:tibia6"/>
+    </actuator>
+
+</mujoco>
