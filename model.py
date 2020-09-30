@@ -7,7 +7,8 @@ class Model:
         self.mjc_model = mjc.load_model_from_path(xml_path)
 
     def visualize(self):
-        simulation = mjc.MjSim(self.mjc_model)
-        viewer = mjc.MjViewer(simulation)
+        simulation: mjc.MjSim = mjc.MjSim(self.mjc_model)
+        viewer: mjc.MjViewer = mjc.MjViewer(simulation)
         while True:
+            simulation.step()
             viewer.render()
