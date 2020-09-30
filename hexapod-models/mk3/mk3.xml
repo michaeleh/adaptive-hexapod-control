@@ -59,17 +59,17 @@
 
             <!--            mid-right-->
             <body name="body:coxa_RM" pos="0 0 0">
-                <joint ref="90" name="joint:coxa_RM" pos="0 0 0" axis="0 0 1"/>
+                <joint ref="90" name="joint:coxa_RM" pos="0 0 0" range="-45 45" type="hinge"  axis="0 0 1"/>
                 <geom name="coxa_RM" type="mesh" mesh="coxa" pos="0 0 0" material="black"/>
 
 
                 <body name="body:femur_RM" pos="0 0 0">
-                    <joint ref="90" name="joint:femur_RM" pos="0 0 0" axis="0 1 0"/>
+                    <joint ref="90" name="joint:femur_RM" pos="0 0 0" range="-45 45" type="hinge" axis="0 0 1"/>
                     <geom name="femur_RM" type="mesh" mesh="femur" pos="0 0 0" material="black"/>
 
 
                     <body name="body:tibia_RM" pos="0 0 0">
-                        <joint ref="90" name="joint:tibia_RM" pos="0 0 0" axis="0 1 0"/>
+                        <joint ref="90" name="joint:tibia_RM" pos="0 0 0" range="-45 45" type="hinge" axis="0 0 1"/>
                         <geom name="tibia_RM" type="mesh" mesh="tibia" pos="0 0 0" material="black"/>
 
 
@@ -83,12 +83,12 @@
 
 
                 <body name="body:femur_RF" pos="0 0 0">
-                    <joint ref="90" name="joint:femur_RF" pos="0 0 0" axis="0 1 0"/>
+                    <joint ref="90" name="joint:femur_RF" pos="0 0 0" axis="0 0 1"/>
                     <geom name="femur_RF" type="mesh" mesh="femur" pos="0 0 0" material="black"/>
 
 
                     <body name="body:tibia_RF" pos="0 0 0">
-                        <joint ref="90" name="joint:tibia_RF" pos="0 0 0" axis="0 1 0"/>
+                        <joint ref="90" name="joint:tibia_RF" pos="0 0 0" axis="0 0 1"/>
                         <geom name="tibia_RF" type="mesh" mesh="tibia" pos="0 0 0" material="black"/>
 
 
@@ -102,12 +102,12 @@
 
 
                 <body name="body:femur_RR" pos="0 0 0">
-                    <joint ref="90" name="joint:femur_RR" pos="0 0 0" axis="0 1 0"/>
+                    <joint ref="90" name="joint:femur_RR" pos="0 0 0" axis="0 0 1"/>
                     <geom name="femur_RR" type="mesh" mesh="femur" pos="0 0 0" material="black"/>
 
 
                     <body name="body:tibia_RR" pos="0 0 0">
-                        <joint ref="90" name="joint:tibia_RR" pos="0 0 0" axis="0 1 0"/>
+                        <joint ref="90" name="joint:tibia_RR" pos="0 0 0" axis="0 0 1"/>
                         <geom name="tibia_RR" type="mesh" mesh="tibia" pos="0 0 0" material="black"/>
 
 
@@ -121,12 +121,12 @@
 
 
                 <body name="body:femur_LM" pos="0 0 0">
-                    <joint ref="90" name="joint:femur_LM" pos="0 0 0" axis="0 1 0"/>
+                    <joint ref="90" name="joint:femur_LM" pos="0 0 0" axis="0 0 1"/>
                     <geom name="femur_LM" type="mesh" mesh="femur" pos="0 0 0" material="black"/>
 
 
                     <body name="body:tibia_LM" pos="0 0 0">
-                        <joint ref="90" name="joint:tibia_LM" pos="0 0 0" axis="0 1 0"/>
+                        <joint ref="90" name="joint:tibia_LM" pos="0 0 0" axis="0 0 1"/>
                         <geom name="tibia_LM" type="mesh" mesh="tibia" pos="0 0 0" material="black"/>
 
 
@@ -140,12 +140,12 @@
 
 
                 <body name="body:femur_LR" pos="0 0 0">
-                    <joint ref="90" name="joint:femur_LR" pos="0 0 0" axis="0 1 0"/>
+                    <joint ref="90" name="joint:femur_LR" pos="0 0 0" axis="0 0 1"/>
                     <geom name="femur_LR" type="mesh" mesh="femur" pos="0 0 0" material="black"/>
 
 
                     <body name="body:tibia_LR" pos="0 0 0">
-                        <joint ref="90" name="joint:tibia_LR" pos="0 0 0" axis="0 1 0"/>
+                        <joint ref="90" name="joint:tibia_LR" pos="0 0 0" axis="0 0 1"/>
                         <geom name="tibia_LR" type="mesh" mesh="tibia" pos="0 0 0" material="black"/>
 
 
@@ -159,12 +159,12 @@
 
 
                 <body name="body:femur_LF" pos="0 0 0">
-                    <joint ref="90" name="joint:femur_LF" pos="0 0 0" axis="0 1 0"/>
+                    <joint ref="90" name="joint:femur_LF" pos="0 0 0" axis="0 0 1"/>
                     <geom name="femur_LF" type="mesh" mesh="femur" pos="0 0 0" material="black"/>
 
 
                     <body name="body:tibia_LF" pos="0 0 0">
-                        <joint ref="-90" name="joint:tibia_LF" pos="0 0 0" axis="0 1 0"/>
+                        <joint ref="-90" name="joint:tibia_LF" pos="0 0 0" axis="0 0 1"/>
                         <geom name="tibia_LF" type="mesh" mesh="tibia" pos="0 0 0" material="black"/>
 
                     </body>
