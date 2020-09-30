@@ -8,21 +8,21 @@
         <mesh file="femur.stl"/>
         <mesh file="tibia.stl"/>
         <texture name="floor_tile" file="meshes/floor_tile.png" width="3000" height="3000" type="2d"/>
-        <material name="tile" texture="floor_tile" specular="0" shininess="0" reflectance="0" emission="1"/>
+        <material name="tile" texture="floor_tile" specular="0" shininess="0" reflectance="0.5" emission="1"/>
 
         <material name="black" specular="1" shininess="1" reflectance="1" rgba="0.08 0.08 0.08 1" emission="1"/>
     </asset>
 
     <contact>
         <!--leg1 and body-->
-        <exclude body1="body:torso" body2="body:coxa_MR"/>
-        <exclude body1="body:coxa_MR" body2="body:femur_MR"/>
-        <exclude body1="body:femur_MR" body2="body:tibia_MR"/>
+        <exclude body1="body:torso" body2="body:coxa_RM"/>
+        <exclude body1="body:coxa_RM" body2="body:femur_RM"/>
+        <exclude body1="body:femur_RM" body2="body:tibia_RM"/>
 
         <!--leg2 and body-->
-        <exclude body1="body:torso" body2="body:coxa_FR"/>
-        <exclude body1="body:coxa_FR" body2="body:femur_FR"/>
-        <exclude body1="body:femur_FR" body2="body:tibia_FR"/>
+        <exclude body1="body:torso" body2="body:coxa_RF"/>
+        <exclude body1="body:coxa_RF" body2="body:femur_RF"/>
+        <exclude body1="body:femur_RF" body2="body:tibia_RF"/>
 
         <!--leg3 and body-->
         <exclude body1="body:torso" body2="body:coxa_RR"/>
@@ -30,142 +30,143 @@
         <exclude body1="body:femur_RR" body2="body:tibia_RR"/>
 
         <!--leg4 and body-->
-        <exclude body1="body:torso" body2="body:coxa_ML"/>
-        <exclude body1="body:coxa_ML" body2="body:femur_ML"/>
-        <exclude body1="body:femur_ML" body2="body:tibia_ML"/>
+        <exclude body1="body:torso" body2="body:coxa_LM"/>
+        <exclude body1="body:coxa_LM" body2="body:femur_LM"/>
+        <exclude body1="body:femur_LM" body2="body:tibia_LM"/>
 
         <!--leg5 and body-->
-        <exclude body1="body:torso" body2="body:coxa_RL"/>
-        <exclude body1="body:coxa_RL" body2="body:femur_RL"/>
-        <exclude body1="body:femur_RL" body2="body:tibia_RL"/>
+        <exclude body1="body:torso" body2="body:coxa_LR"/>
+        <exclude body1="body:coxa_LR" body2="body:femur_LR"/>
+        <exclude body1="body:femur_LR" body2="body:tibia_LR"/>
 
         <!--leg6 and body-->
-        <exclude body1="body:torso" body2="body:coxa_FL"/>
-        <exclude body1="body:coxa_FL" body2="body:femur_FL"/>
-        <exclude body1="body:femur_FL" body2="body:tibia_FL"/>
+        <exclude body1="body:torso" body2="body:coxa_LF"/>
+        <exclude body1="body:coxa_LF" body2="body:femur_LF"/>
+        <exclude body1="body:femur_LF" body2="body:tibia_LF"/>
     </contact>
 
     <worldbody>
 
         <camera fovy="45" pos="1 1 1"/>
-        <light pos="0 0 2000" dir="0 0 -1" diffuse="1 1 -1"/>
-        <geom name="floor_grey_tile" pos="0 0 -0.001" size="5000 5000 10" type="plane" material="tile"/>
+        <light pos="0 0 2000" dir="0 0 -1" diffuse="1 1 1"/>
+        <geom name="floor_tile_grey_tile" pos="0 0 -1" size="5000 5000 10" type="plane" material="tile"/>
 
         <!--        Body of hexapod-->
         <body name="body:torso" pos="0 0 0">
             <geom name="body" type="mesh" mesh="body" pos="0 0 0" material="black"/>
-            <inertial pos="0 0 0" mass="1.94003" diaginertia="0.0628118 0.0329645 0.032962"/>
+            <joint armature="0" damping="0" limited="false" margin="0.01" name="root" pos="0 0 0" type="free"/>
+
 
             <!--            mid-right-->
-            <body name="body:coxa_MR" pos="0 0 0">
-                <joint range="-45 45" type="hinge" name="joint:coxa_MR" pos="0 0 0.5`" axis="0 0 1"/>
-                <geom name="coxa_MR" type="mesh" mesh="coxa" pos="0 0 0" material="black"/>
-                <inertial pos="0 0 0" mass="0.06196" diaginertia="8.8248e-05 6.265e-05 6.265e-05"/>
+            <body name="body:coxa_RM" pos="0 0 0">
+                <joint ref="90" name="joint:coxa_RM" pos="0 0 0" axis="0 0 1"/>
+                <geom name="coxa_RM" type="mesh" mesh="coxa" pos="0 0 0" material="black"/>
 
-                <body name="body:femur_MR" pos="0 0 0">
-                    <joint range="-45 45" type="hinge" name="joint:femur_MR" pos="0 0 0" axis="0 1 0"/>
-                    <geom name="femur_MR" type="mesh" mesh="femur" pos="0 0 0" material="black"/>
-                    <inertial pos="0 0 0" mass="0.36917" diaginertia="0.00311354 0.0029635 0.000293065"/>
 
-                    <body name="body:tibia_MR" pos="0 0 0">
-                        <joint range="-45 45" type="hinge" name="joint:tibia_MR" pos="0 0 0" axis="0 1 0"/>
-                        <geom name="tibia_MR" type="mesh" mesh="tibia" pos="0 0 0" material="black"/>
-                        <inertial pos="0 0 0" mass="0.11462" diaginertia="0.0022169 0.0021771 5.0466e-05"/>
+                <body name="body:femur_RM" pos="0 0 0">
+                    <joint ref="90" name="joint:femur_RM" pos="0 0 0" axis="0 1 0"/>
+                    <geom name="femur_RM" type="mesh" mesh="femur" pos="0 0 0" material="black"/>
+
+
+                    <body name="body:tibia_RM" pos="0 0 0">
+                        <joint ref="90" name="joint:tibia_RM" pos="0 0 0" axis="0 1 0"/>
+                        <geom name="tibia_RM" type="mesh" mesh="tibia" pos="0 0 0" material="black"/>
+
 
                     </body>
                 </body>
             </body>
-            <!--            front right-->
-            <body name="body:coxa_FR" pos="172 -22 0" euler="0 0 45">
-                <joint range="-45 45" type="hinge" name="joint:coxa_FR" pos="0 0 0" axis="0 0 1"/>
-                <geom name="coxa_FR" type="mesh" mesh="coxa" pos="0 0 0" material="black"/>
-                <inertial pos="0 0 0" mass="0.06196" diaginertia="8.8248e-05 6.265e-05 6.265e-05"/>
+            <!--            RFont right-->
+            <body name="body:coxa_RF" pos="172 -22 0" euler="0 0 45">
+                <joint ref="90" name="joint:coxa_RF" pos="0 0 0" axis="0 0 1"/>
+                <geom name="coxa_RF" type="mesh" mesh="coxa" pos="0 0 0" material="black"/>
 
-                <body name="body:femur_FR" pos="0 0 0">
-                    <joint range="-45 45" type="hinge" name="joint:femur_FR" pos="0 0 0" axis="0 1 0"/>
-                    <geom name="femur_FR" type="mesh" mesh="femur" pos="0 0 0" material="black"/>
-                    <inertial pos="0 0 0" mass="0.36917" diaginertia="0.00311354 0.0029635 0.000293065"/>
 
-                    <body name="body:tibia_FR" pos="0 0 0">
-                        <joint range="-45 45" type="hinge" name="joint:tibia_FR" pos="0 0 0" axis="0 1 0"/>
-                        <geom name="tibia_FR" type="mesh" mesh="tibia" pos="0 0 0" material="black"/>
-                        <inertial pos="0 0 0" mass="0.11462" diaginertia="0.0022169 0.0021771 5.0466e-05"/>
+                <body name="body:femur_RF" pos="0 0 0">
+                    <joint ref="90" name="joint:femur_RF" pos="0 0 0" axis="0 1 0"/>
+                    <geom name="femur_RF" type="mesh" mesh="femur" pos="0 0 0" material="black"/>
+
+
+                    <body name="body:tibia_RF" pos="0 0 0">
+                        <joint ref="90" name="joint:tibia_RF" pos="0 0 0" axis="0 1 0"/>
+                        <geom name="tibia_RF" type="mesh" mesh="tibia" pos="0 0 0" material="black"/>
+
 
                     </body>
                 </body>
             </body>
             <!--            back right -->
             <body name="body:coxa_RR" pos="-87 130 0" euler="0 0 -45">
-                <joint range="-45 45" type="hinge" name="joint:coxa_RR" pos="0 0 0" axis="0 0 1"/>
+                <joint ref="90" name="joint:coxa_RR" pos="0 0 0" axis="0 0 1"/>
                 <geom name="coxa_RR" type="mesh" mesh="coxa" pos="0 0 0" material="black"/>
-                <inertial pos="0 0 0" mass="0.06196" diaginertia="8.8248e-05 6.265e-05 6.265e-05"/>
+
 
                 <body name="body:femur_RR" pos="0 0 0">
-                    <joint range="-45 45" type="hinge" name="joint:femur_RR" pos="0 0 0" axis="0 1 0"/>
+                    <joint ref="90" name="joint:femur_RR" pos="0 0 0" axis="0 1 0"/>
                     <geom name="femur_RR" type="mesh" mesh="femur" pos="0 0 0" material="black"/>
-                    <inertial pos="0 0 0" mass="0.36917" diaginertia="0.00311354 0.0029635 0.000293065"/>
+
 
                     <body name="body:tibia_RR" pos="0 0 0">
-                        <joint range="-45 45" type="hinge" name="joint:tibia_RR" pos="0 0 0" axis="0 1 0"/>
+                        <joint ref="90" name="joint:tibia_RR" pos="0 0 0" axis="0 1 0"/>
                         <geom name="tibia_RR" type="mesh" mesh="tibia" pos="0 0 0" material="black"/>
-                        <inertial pos="0 0 0" mass="0.11462" diaginertia="0.0022169 0.0021771 5.0466e-05"/>
+
 
                     </body>
                 </body>
             </body>
             <!--            mid left -->
-            <body name="body:coxa_ML" pos="357 365 0" euler="0 0 180">
-                <joint range="-45 45" type="hinge" name="joint:coxa_ML" pos="0 0 0" axis="0 0 1"/>
-                <geom name="coxa_ML" type="mesh" mesh="coxa" pos="0 0 0" material="black"/>
-                <inertial pos="0 0 0" mass="0.06196" diaginertia="8.8248e-05 6.265e-05 6.265e-05"/>
+            <body name="body:coxa_LM" pos="357 365 0" euler="0 0 180">
+                <joint ref="90" name="joint:coxa_LM" pos="0 0 0" axis="0 0 1"/>
+                <geom name="coxa_LM" type="mesh" mesh="coxa" pos="0 0 0" material="black"/>
 
-                <body name="body:femur_ML" pos="0 0 0">
-                    <joint range="-45 45" type="hinge" name="joint:femur_ML" pos="0 0 0" axis="0 1 0"/>
-                    <geom name="femur_ML" type="mesh" mesh="femur" pos="0 0 0" material="black"/>
-                    <inertial pos="0 0 0" mass="0.36917" diaginertia="0.00311354 0.0029635 0.000293065"/>
 
-                    <body name="body:tibia_ML" pos="0 0 0">
-                        <joint range="-45 45" type="hinge" name="joint:tibia_ML" pos="0 0 0" axis="0 1 0"/>
-                        <geom name="tibia_ML" type="mesh" mesh="tibia" pos="0 0 0" material="black"/>
-                        <inertial pos="0 0 0" mass="0.11462" diaginertia="0.0022169 0.0021771 5.0466e-05"/>
+                <body name="body:femur_LM" pos="0 0 0">
+                    <joint ref="90" name="joint:femur_LM" pos="0 0 0" axis="0 1 0"/>
+                    <geom name="femur_LM" type="mesh" mesh="femur" pos="0 0 0" material="black"/>
+
+
+                    <body name="body:tibia_LM" pos="0 0 0">
+                        <joint ref="90" name="joint:tibia_LM" pos="0 0 0" axis="0 1 0"/>
+                        <geom name="tibia_LM" type="mesh" mesh="tibia" pos="0 0 0" material="black"/>
+
 
                     </body>
                 </body>
             </body>
             <!--            back left-->
-            <body name="body:coxa_RL" pos="187 388 0" euler="0 0 225">
-                <joint range="-45 45" type="hinge" name="joint:coxa_RL" pos="0 0 0" axis="0 0 1"/>
-                <geom name="coxa_RL" type="mesh" mesh="coxa" pos="0 0 0" material="black"/>
-                <inertial pos="0 0 0" mass="0.06196" diaginertia="8.8248e-05 6.265e-05 6.265e-05"/>
+            <body name="body:coxa_LR" pos="187 388 0" euler="0 0 225">
+                <joint ref="90" name="joint:coxa_LR" pos="0 0 0" axis="0 0 1"/>
+                <geom name="coxa_LR" type="mesh" mesh="coxa" pos="0 0 0" material="black"/>
 
-                <body name="body:femur_RL" pos="0 0 0">
-                    <joint range="-45 45" type="hinge" name="joint:femur_RL" pos="0 0 0" axis="0 1 0"/>
-                    <geom name="femur_RL" type="mesh" mesh="femur" pos="0 0 0" material="black"/>
-                    <inertial pos="0 0 0" mass="0.36917" diaginertia="0.00311354 0.0029635 0.000293065"/>
 
-                    <body name="body:tibia_RL" pos="0 0 0">
-                        <joint range="-45 45" type="hinge" name="joint:tibia_RL" pos="0 0 0" axis="0 1 0"/>
-                        <geom name="tibia_RL" type="mesh" mesh="tibia" pos="0 0 0" material="black"/>
-                        <inertial pos="0 0 0" mass="0.11462" diaginertia="0.0022169 0.0021771 5.0466e-05"/>
+                <body name="body:femur_LR" pos="0 0 0">
+                    <joint ref="90" name="joint:femur_LR" pos="0 0 0" axis="0 1 0"/>
+                    <geom name="femur_LR" type="mesh" mesh="femur" pos="0 0 0" material="black"/>
+
+
+                    <body name="body:tibia_LR" pos="0 0 0">
+                        <joint ref="90" name="joint:tibia_LR" pos="0 0 0" axis="0 1 0"/>
+                        <geom name="tibia_LR" type="mesh" mesh="tibia" pos="0 0 0" material="black"/>
+
 
                     </body>
                 </body>
             </body>
-            <!--            front left -->
-            <body name="body:coxa_FL" pos="445 234 0" euler="0 0 -225">
-                <joint range="-45 45" type="hinge" name="joint:coxa_FL" pos="0 0 0" axis="0 0 1"/>
-                <geom name="coxa_FL" type="mesh" mesh="coxa" pos="0 0 0" material="black"/>
-                <inertial pos="0 0 0" mass="0.06196" diaginertia="8.8248e-05 6.265e-05 6.265e-05"/>
+            <!--            RFont left -->
+            <body name="body:coxa_LF" pos="445 234 0" euler="0 0 -225">
+                <joint ref="90" name="joint:coxa_LF" pos="0 0 0" axis="0 0 1"/>
+                <geom name="coxa_LF" type="mesh" mesh="coxa" pos="0 0 0" material="black"/>
 
-                <body name="body:femur_FL" pos="0 0 0">
-                    <joint range="-45 45" type="hinge" name="joint:femur_FL" pos="0 0 0" axis="0 1 0"/>
-                    <geom name="femur_FL" type="mesh" mesh="femur" pos="0 0 0" material="black"/>
-                    <inertial pos="0 0 0" mass="0.36917" diaginertia="0.00311354 0.0029635 0.000293065"/>
 
-                    <body name="body:tibia_FL" pos="0 0 0">
-                        <joint range="-45 45" type="hinge" name="joint:tibia_FL" pos="0 0 0" axis="0 1 0"/>
-                        <geom name="tibia_FL" type="mesh" mesh="tibia" pos="0 0 0" material="black"/>
-                        <inertial pos="0 0 0" mass="0.11462" diaginertia="0.0022169 0.0021771 5.0466e-05"/>
+                <body name="body:femur_LF" pos="0 0 0">
+                    <joint ref="90" name="joint:femur_LF" pos="0 0 0" axis="0 1 0"/>
+                    <geom name="femur_LF" type="mesh" mesh="femur" pos="0 0 0" material="black"/>
+
+
+                    <body name="body:tibia_LF" pos="0 0 0">
+                        <joint ref="-90" name="joint:tibia_LF" pos="0 0 0" axis="0 1 0"/>
+                        <geom name="tibia_LF" type="mesh" mesh="tibia" pos="0 0 0" material="black"/>
+
                     </body>
                 </body>
             </body>
@@ -175,29 +176,29 @@
 
     <actuator>
         <!--        leg1-->
-        <motor ctrllimited="true" ctrlrange="-1.0 1.0" name="motor:coxa_MR" joint="joint:coxa_MR"/>
-        <motor ctrllimited="true" ctrlrange="-1.0 1.0" name="motor:femur_MR" joint="joint:femur_MR"/>
-        <motor ctrllimited="true" ctrlrange="-1.0 1.0" name="motor:tibia_MR" joint="joint:tibia_MR"/>
+        <motor  name="motor:coxa_RM" joint="joint:coxa_RM"/>
+        <motor  name="motor:femur_RM" joint="joint:femur_RM"/>
+        <motor  name="motor:tibia_RM" joint="joint:tibia_RM"/>
         <!--        leg2-->
-        <motor ctrllimited="true" ctrlrange="-1.0 1.0" name="motor:coxa_FR" joint="joint:coxa_FR"/>
-        <motor ctrllimited="true" ctrlrange="-1.0 1.0" name="motor:femur_FR" joint="joint:femur_FR"/>
-        <motor ctrllimited="true" ctrlrange="-1.0 1.0" name="motor:tibia_FR" joint="joint:tibia_FR"/>
+        <motor  name="motor:coxa_RF" joint="joint:coxa_RF"/>
+        <motor  name="motor:femur_RF" joint="joint:femur_RF"/>
+        <motor  name="motor:tibia_RF" joint="joint:tibia_RF"/>
         <!--        leg3-->
-        <motor ctrllimited="true" ctrlrange="-1.0 1.0" name="motor:coxa_RR" joint="joint:coxa_RR"/>
-        <motor ctrllimited="true" ctrlrange="-1.0 1.0" name="motor:femur_RR" joint="joint:femur_RR"/>
-        <motor ctrllimited="true" ctrlrange="-1.0 1.0" name="motor:tibia_RR" joint="joint:tibia_RR"/>
+        <motor  name="motor:coxa_RR" joint="joint:coxa_RR"/>
+        <motor  name="motor:femur_RR" joint="joint:femur_RR"/>
+        <motor  name="motor:tibia_RR" joint="joint:tibia_RR"/>
         <!--        leg4-->
-        <motor ctrllimited="true" ctrlrange="-1.0 1.0" name="motor:coxa_ML" joint="joint:coxa_ML"/>
-        <motor ctrllimited="true" ctrlrange="-1.0 1.0" name="motor:femur_ML" joint="joint:femur_ML"/>
-        <motor ctrllimited="true" ctrlrange="-1.0 1.0" name="motor:tibia_ML" joint="joint:tibia_ML"/>
+        <motor  name="motor:coxa_LM" joint="joint:coxa_LM"/>
+        <motor  name="motor:femur_LM" joint="joint:femur_LM"/>
+        <motor  name="motor:tibia_LM" joint="joint:tibia_LM"/>
         <!--        leg5-->
-        <motor ctrllimited="true" ctrlrange="-1.0 1.0" name="motor:coxa_RL" joint="joint:coxa_RL"/>
-        <motor ctrllimited="true" ctrlrange="-1.0 1.0" name="motor:femur_RL" joint="joint:femur_RL"/>
-        <motor ctrllimited="true" ctrlrange="-1.0 1.0" name="motor:tibia_RL" joint="joint:tibia_RL"/>
+        <motor  name="motor:coxa_LR" joint="joint:coxa_LR"/>
+        <motor  name="motor:femur_LR" joint="joint:femur_LR"/>
+        <motor  name="motor:tibia_LR" joint="joint:tibia_LR"/>
         <!--        leg6-->
-        <motor ctrllimited="true" ctrlrange="-1.0 1.0" name="motor:coxa_FL" joint="joint:coxa_FL"/>
-        <motor ctrllimited="true" ctrlrange="-1.0 1.0" name="motor:femur_FL" joint="joint:femur_FL"/>
-        <motor ctrllimited="true" ctrlrange="-1.0 1.0" name="motor:tibia_FL" joint="joint:tibia_FL"/>
+        <motor  name="motor:coxa_LF" joint="joint:coxa_LF"/>
+        <motor  name="motor:femur_LF" joint="joint:femur_LF"/>
+        <motor  name="motor:tibia_LF" joint="joint:tibia_LF"/>
     </actuator>
 
 </mujoco>
