@@ -49,7 +49,7 @@
 
         <camera fovy="45" pos="1 1 1"/>
         <light pos="0 0 2000" dir="0 0 -1" diffuse="1 1 1"/>
-        <geom name="floor_tile_grey_tile" pos="0 0 -0.1" size="5000 5000 10" type="plane" material="tile"/>
+        <geom name="floor_tile_grey_tile" pos="0 0 0" size="5000 5000 10" type="plane" material="tile"/>
 
         <!--        Body of hexapod-->
         <body name="body:torso" pos="0 0 0">

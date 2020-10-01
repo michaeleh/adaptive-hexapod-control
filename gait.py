@@ -1,5 +1,3 @@
-from enum import Enum
-
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -30,8 +28,8 @@ class Gait:
                 self.tibia_angle -= dt
             elif self.femur_angle >= 0:
                 self.femur_angle -= dt
-            # elif self.coxa_angle >= 0:
-            #     self.coxa_angle -= dt
+            elif self.coxa_angle >= 0:
+                self.coxa_angle -= dt
             else:
                 self.legup = True
                 self.finished = True
@@ -42,15 +40,6 @@ class Gait:
             tibia=self.tibia_angle,
             finished=self.finished
         )
-
-
-class GaitStage(Enum):
-    STAGE1 = 'stage1'
-    STAGE2 = 'stage2'
-    STAGE3 = 'stage2'
-    STAGE4 = 'stage2'
-    STAGE5 = 'stage2'
-    STAGE6 = 'stage2'
 
 
 if __name__ == "__main__":
