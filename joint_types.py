@@ -20,3 +20,4 @@ class JointNames(Enum):
     TIBIA_LF = 'joint:tibia_LF'
     TIBIA_LM = 'joint:tibia_LM'
     TIBIA_LR = 'joint:tibia_LR'
+
