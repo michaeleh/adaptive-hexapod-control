@@ -12,7 +12,7 @@ class Gait:
         self.tibia_angle = 0
 
     def generate_action(self):
-        dt = 0.005
+        dt = 0.01
         if self.legup:
             self.finished = False
             if self.tibia_angle <= self.angle:
