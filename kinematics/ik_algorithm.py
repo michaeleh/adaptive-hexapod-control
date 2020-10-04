@@ -18,7 +18,8 @@ class Optimizer(Enum):
     DLS = 2
 
 
-def goto_target(model: HexapodLegKinematic, target, max_iter=100, error_thold=0.001, kp=0.1, verbose=False, optimizer=Optimizer.STD):
+def goto_target(model: HexapodLegKinematic, target, max_iter=100, error_thold=0.001, kp=0.1, verbose=False,
+                optimizer=Optimizer.STD):
     """
     Giving arm object, a target and optimizer, provides the required set of control signals
 

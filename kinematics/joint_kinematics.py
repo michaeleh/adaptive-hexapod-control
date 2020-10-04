@@ -80,7 +80,7 @@ class KinematicSymbolicImpl(HexapodLegKinematic):
         """
         return np.array(matrix.subs([('q_body_coxa', q[0]),
                                      ('q_coxa_femur', q[1]),
-                                     ('q_femur_tibia', q[2])]), dtype=np.float).flatten()[:-1]  # array of only x,y,z
+                                     ('q_femur_tibia', q[2])]), dtype=np.float)
 
     def calc_xyz(self, q: List[float]):
         """
@@ -88,7 +88,7 @@ class KinematicSymbolicImpl(HexapodLegKinematic):
         :param q: q0 = boxy coxa angle, q1 = coxa femur angle, q2 = femur tibia angle
         :return: final foot-tip position xyz
         """
-        return self._evaluate_symbols(self.Tx, q)
+        return self._evaluate_symbols(self.Tx, q).flatten()[:-1]  # array of only x,y,z
 
     def calc_J(self, q: List[float]):
         return self._evaluate_symbols(self.J, q)
