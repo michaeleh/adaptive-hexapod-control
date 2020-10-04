@@ -1,3 +1,4 @@
+from abc import ABC, abstractmethod
 from typing import List
 
 import numpy as np
@@ -7,7 +8,18 @@ from numpy import sin, cos
 from kinematics.constants import DeltaLengths
 
 
-class JointKinematics:
+class HexapodLegKinematic(ABC):
+    n_joints = 3
+
+    @abstractmethod
+    def calc_xyz(self, q):
+        pass
+
+    def calc_J(self, q):
+        pass
+
+
+class KinematicSymbolicImpl(HexapodLegKinematic):
 
     def __init__(self) -> None:
         super().__init__()
@@ -70,7 +82,7 @@ class JointKinematics:
                                      ('q_coxa_femur', q[1]),
                                      ('q_femur_tibia', q[2])]), dtype=np.float).flatten()[:-1]  # array of only x,y,z
 
-    def calc_tx_symbolically(self, q: List[float]):
+    def calc_xyz(self, q: List[float]):
         """
         list of angles to calculate foot-tip xyz
         :param q: q0 = boxy coxa angle, q1 = coxa femur angle, q2 = femur tibia angle
@@ -78,7 +90,7 @@ class JointKinematics:
         """
         return self._evaluate_symbols(self.Tx, q)
 
-    def calc_J_symbolically(self, q: List[float]):
+    def calc_J(self, q: List[float]):
         return self._evaluate_symbols(self.J, q)
 
     def _build_J(self):
@@ -95,62 +107,70 @@ class JointKinematics:
         return J
 
 
-def calc_tx_numerically(q):
-    q_body_coxa = q[0]
-    q_coxa_femur = q[1]
-    q_femur_tibia = q[2]
+class KinematicNumericImpl(HexapodLegKinematic):
+    def calc_xyz(self, q):
+        """
+        :param q: In radians
+        :return:
+        """
+        q_body_coxa = q[0]
+        q_coxa_femur = q[1]
+        q_femur_tibia = q[2]
 
-    return np.array([
+        return np.array([
 
-        [-DeltaLengths.TIBIA_END_X * sin(q_coxa_femur) * sin(q_femur_tibia) * cos(
-            q_body_coxa) + DeltaLengths.TIBIA_END_Z * sin(q_coxa_femur) * cos(
-            q_body_coxa) * cos(q_femur_tibia) + DeltaLengths.TIBIA_END_Z * sin(q_femur_tibia) * cos(
-            q_body_coxa) * cos(
-            q_coxa_femur) + DeltaLengths.TIBIA_END_X * cos(q_body_coxa) * cos(q_coxa_femur) * cos(
-            q_femur_tibia) + DeltaLengths.FEMUR_TIBIA_X * cos(
-            q_body_coxa) * cos(q_coxa_femur) + DeltaLengths.COXA_FEMUR_X * cos(q_body_coxa)],
+            [-DeltaLengths.TIBIA_END_X * sin(q_coxa_femur) * sin(q_femur_tibia) * cos(
+                q_body_coxa) + DeltaLengths.TIBIA_END_Z * sin(q_coxa_femur) * cos(
+                q_body_coxa) * cos(q_femur_tibia) + DeltaLengths.TIBIA_END_Z * sin(q_femur_tibia) * cos(
+                q_body_coxa) * cos(
+                q_coxa_femur) + DeltaLengths.TIBIA_END_X * cos(q_body_coxa) * cos(q_coxa_femur) * cos(
+                q_femur_tibia) + DeltaLengths.FEMUR_TIBIA_X * cos(
+                q_body_coxa) * cos(q_coxa_femur) + DeltaLengths.COXA_FEMUR_X * cos(q_body_coxa)],
 
-        [-DeltaLengths.TIBIA_END_X * sin(q_body_coxa) * sin(q_coxa_femur) * sin(
-            q_femur_tibia) + DeltaLengths.TIBIA_END_Z * sin(q_body_coxa) * sin(
-            q_coxa_femur) * cos(q_femur_tibia) + DeltaLengths.TIBIA_END_Z * sin(q_body_coxa) * sin(
-            q_femur_tibia) * cos(
-            q_coxa_femur) + DeltaLengths.TIBIA_END_X * sin(q_body_coxa) * cos(q_coxa_femur) * cos(
-            q_femur_tibia) + DeltaLengths.FEMUR_TIBIA_X * sin(
-            q_body_coxa) * cos(q_coxa_femur) + DeltaLengths.COXA_FEMUR_X * sin(q_body_coxa)],
+            [-DeltaLengths.TIBIA_END_X * sin(q_body_coxa) * sin(q_coxa_femur) * sin(
+                q_femur_tibia) + DeltaLengths.TIBIA_END_Z * sin(q_body_coxa) * sin(
+                q_coxa_femur) * cos(q_femur_tibia) + DeltaLengths.TIBIA_END_Z * sin(q_body_coxa) * sin(
+                q_femur_tibia) * cos(
+                q_coxa_femur) + DeltaLengths.TIBIA_END_X * sin(q_body_coxa) * cos(q_coxa_femur) * cos(
+                q_femur_tibia) + DeltaLengths.FEMUR_TIBIA_X * sin(
+                q_body_coxa) * cos(q_coxa_femur) + DeltaLengths.COXA_FEMUR_X * sin(q_body_coxa)],
 
-        [-DeltaLengths.TIBIA_END_Z * sin(q_coxa_femur) * sin(q_femur_tibia) - DeltaLengths.TIBIA_END_X * sin(
-            q_coxa_femur) * cos(q_femur_tibia) - DeltaLengths.FEMUR_TIBIA_X * sin(
-            q_coxa_femur) - DeltaLengths.TIBIA_END_X * sin(q_femur_tibia) * cos(
-            q_coxa_femur) + DeltaLengths.TIBIA_END_Z * cos(q_coxa_femur) * cos(
-            q_femur_tibia)]]).flatten()
+            [-DeltaLengths.TIBIA_END_Z * sin(q_coxa_femur) * sin(q_femur_tibia) - DeltaLengths.TIBIA_END_X * sin(
+                q_coxa_femur) * cos(q_femur_tibia) - DeltaLengths.FEMUR_TIBIA_X * sin(
+                q_coxa_femur) - DeltaLengths.TIBIA_END_X * sin(q_femur_tibia) * cos(
+                q_coxa_femur) + DeltaLengths.TIBIA_END_Z * cos(q_coxa_femur) * cos(
+                q_femur_tibia)]]).flatten()
 
+    def calc_J(self, q):
+        """
+        :param q: In radians
+        :return:
+        """
+        q_body_coxa = q[0]
+        q_coxa_femur = q[1]
+        q_femur_tibia = q[2]
 
-def calc_J_numerically(q):
-    q_body_coxa = q[0]
-    q_coxa_femur = q[1]
-    q_femur_tibia = q[2]
+        return np.array([
+            [-(DeltaLengths.TIBIA_END_Z * sin(q_coxa_femur + q_femur_tibia) + DeltaLengths.FEMUR_TIBIA_X * cos(
+                q_coxa_femur) + DeltaLengths.TIBIA_END_X * cos(
+                q_coxa_femur + q_femur_tibia) + DeltaLengths.COXA_FEMUR_X) * sin(q_body_coxa), (
+                     -DeltaLengths.FEMUR_TIBIA_X * sin(q_coxa_femur) - DeltaLengths.TIBIA_END_X *
+                     sin(q_coxa_femur + q_femur_tibia) + DeltaLengths.TIBIA_END_Z *
+                     cos(q_coxa_femur + q_femur_tibia)) * cos(q_body_coxa),
+             (-DeltaLengths.TIBIA_END_X * sin(q_coxa_femur + q_femur_tibia) + DeltaLengths.TIBIA_END_Z * cos(
+                 q_coxa_femur + q_femur_tibia)) * cos(q_body_coxa)],
 
-    return np.array([
-        [-(DeltaLengths.TIBIA_END_Z * sin(q_coxa_femur + q_femur_tibia) + DeltaLengths.FEMUR_TIBIA_X * cos(
-            q_coxa_femur) + DeltaLengths.TIBIA_END_X * cos(
-            q_coxa_femur + q_femur_tibia) + DeltaLengths.COXA_FEMUR_X) * sin(q_body_coxa), (
-                 -DeltaLengths.FEMUR_TIBIA_X * sin(q_coxa_femur) - DeltaLengths.TIBIA_END_X *
-                 sin(q_coxa_femur + q_femur_tibia) + DeltaLengths.TIBIA_END_Z *
-                 cos(q_coxa_femur + q_femur_tibia)) * cos(q_body_coxa),
-         (-DeltaLengths.TIBIA_END_X * sin(q_coxa_femur + q_femur_tibia) + DeltaLengths.TIBIA_END_Z * cos(
-             q_coxa_femur + q_femur_tibia)) * cos(q_body_coxa)],
+            [(DeltaLengths.TIBIA_END_Z * sin(q_coxa_femur + q_femur_tibia) + DeltaLengths.FEMUR_TIBIA_X * cos(
+                q_coxa_femur) + DeltaLengths.TIBIA_END_X * cos(
+                q_coxa_femur + q_femur_tibia) + DeltaLengths.COXA_FEMUR_X) * cos(q_body_coxa), (
+                     -DeltaLengths.FEMUR_TIBIA_X * sin(q_coxa_femur) - DeltaLengths.TIBIA_END_X *
+                     sin(q_coxa_femur + q_femur_tibia) + DeltaLengths.TIBIA_END_Z *
+                     cos(q_coxa_femur + q_femur_tibia)) * sin(q_body_coxa),
+             (-DeltaLengths.TIBIA_END_X * sin(q_coxa_femur + q_femur_tibia) + DeltaLengths.TIBIA_END_Z * cos(
+                 q_coxa_femur + q_femur_tibia)) * sin(q_body_coxa)],
 
-        [(DeltaLengths.TIBIA_END_Z * sin(q_coxa_femur + q_femur_tibia) + DeltaLengths.FEMUR_TIBIA_X * cos(
-            q_coxa_femur) + DeltaLengths.TIBIA_END_X * cos(
-            q_coxa_femur + q_femur_tibia) + DeltaLengths.COXA_FEMUR_X) * cos(q_body_coxa), (
-                 -DeltaLengths.FEMUR_TIBIA_X * sin(q_coxa_femur) - DeltaLengths.TIBIA_END_X *
-                 sin(q_coxa_femur + q_femur_tibia) + DeltaLengths.TIBIA_END_Z *
-                 cos(q_coxa_femur + q_femur_tibia)) * sin(q_body_coxa),
-         (-DeltaLengths.TIBIA_END_X * sin(q_coxa_femur + q_femur_tibia) + DeltaLengths.TIBIA_END_Z * cos(
-             q_coxa_femur + q_femur_tibia)) * sin(q_body_coxa)],
-
-        [0,
-         -DeltaLengths.TIBIA_END_Z * sin(q_coxa_femur + q_femur_tibia) - DeltaLengths.FEMUR_TIBIA_X * cos(
-             q_coxa_femur) - DeltaLengths.TIBIA_END_X * cos(q_coxa_femur + q_femur_tibia),
-         -DeltaLengths.TIBIA_END_Z * sin(q_coxa_femur + q_femur_tibia) - DeltaLengths.TIBIA_END_X * cos(
-             q_coxa_femur + q_femur_tibia)]])
+            [0,
+             -DeltaLengths.TIBIA_END_Z * sin(q_coxa_femur + q_femur_tibia) - DeltaLengths.FEMUR_TIBIA_X * cos(
+                 q_coxa_femur) - DeltaLengths.TIBIA_END_X * cos(q_coxa_femur + q_femur_tibia),
+             -DeltaLengths.TIBIA_END_Z * sin(q_coxa_femur + q_femur_tibia) - DeltaLengths.TIBIA_END_X * cos(
+                 q_coxa_femur + q_femur_tibia)]])
