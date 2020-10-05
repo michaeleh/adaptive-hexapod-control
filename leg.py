@@ -1,18 +1,20 @@
+import numpy as np
+
 from joint_types import JointNames
 
 
 class Leg:
-    def __init__(self, coxa: JointNames, femur: JointNames, tibia: JointNames, left_side=False):
-        self.left_side = left_side
+    def __init__(self, coxa: JointNames, femur: JointNames, tibia: JointNames, rotate: int):
+        self.theta = np.deg2rad(rotate)
         self.coxa = coxa.value
         self.femur = femur.value
         self.tibia = tibia.value
 
-    def coxa_sign(self):
-        return -1 if self.left_side else 1
-
-    def tibia_sign(self):
-        return -1
-
-    def femur_sign(self):
-        return -1
+    def rotate(self, target=np.array):
+        x, y, z = target
+        theta = self.theta
+        return np.array([
+            x * np.cos(theta) - y * np.sin(theta),
+            x * np.sin(theta) + y * np.cos(theta),
+            z
+        ])

@@ -12,3 +12,8 @@ class DeltaLengths:
     COXA_FEMUR_X = 83
     COXA_FEMUR_Y = 0
     COXA_FEMUR_Z = 0
+
+
+class JointIdx:
+    COXA, FEMUR, TIBIA = range(3)
+

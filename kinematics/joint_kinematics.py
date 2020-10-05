@@ -5,7 +5,7 @@ import numpy as np
 import sympy as sp
 from numpy import sin, cos
 
-from kinematics.constants import DeltaLengths
+from kinematics.constants import DeltaLengths, JointIdx
 
 
 class HexapodLegKinematic(ABC):
@@ -113,9 +113,9 @@ class KinematicNumericImpl(HexapodLegKinematic):
         :param q: In radians
         :return:
         """
-        q_body_coxa = q[0]
-        q_coxa_femur = q[1]
-        q_femur_tibia = q[2]
+        q_body_coxa = q[JointIdx.COXA]
+        q_coxa_femur = q[JointIdx.FEMUR]
+        q_femur_tibia = q[JointIdx.TIBIA]
 
         return np.array([
 
@@ -146,9 +146,9 @@ class KinematicNumericImpl(HexapodLegKinematic):
         :param q: In radians
         :return:
         """
-        q_body_coxa = q[0]
-        q_coxa_femur = q[1]
-        q_femur_tibia = q[2]
+        q_body_coxa = q[JointIdx.COXA]
+        q_coxa_femur = q[JointIdx.FEMUR]
+        q_femur_tibia = q[JointIdx.TIBIA]
 
         return np.array([
             [-(DeltaLengths.TIBIA_END_Z * sin(q_coxa_femur + q_femur_tibia) + DeltaLengths.FEMUR_TIBIA_X * cos(
