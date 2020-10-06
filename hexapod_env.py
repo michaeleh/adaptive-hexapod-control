@@ -1,7 +1,10 @@
+import numpy as np
 from gym.envs.mujoco import MujocoEnv
 
 from joint_types import JointNames
-import numpy as np
+
+np.set_printoptions(suppress=True)
+
 
 class HexapodEnv(MujocoEnv):
 
@@ -12,14 +15,13 @@ class HexapodEnv(MujocoEnv):
         return self._get_obs()
 
     def step(self, action):
-        ee = self.sim.data.get_body_xpos("EE_RR")
-        print(ee)
-        self.sim.data.set_mocap_pos("target", ee)
         qpos = action
         qvel = self.sim.data.qvel
-        if qpos.shape == (self.model.nq,) and qvel.shape == (self.model.nv,):
+
+        if qpos.shape == (self.model.nq,):
             self.set_state(qpos, qvel)
-        self.sim.step()
+            self.sim.step()
+
         observation = self._get_obs()
         reward = 0
         done = False
@@ -27,7 +29,7 @@ class HexapodEnv(MujocoEnv):
         return observation, reward, done, info
 
     def _get_obs(self):
-        return self.sim.data.qpos
+        return self.sim.data.qpos.copy()
 
     def map_joint_pos(self):
         return {joint.value: self.model.get_joint_qpos_addr(joint.value) for joint in JointNames}

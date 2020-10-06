@@ -10,7 +10,7 @@ class Leg:
         self.femur = femur.value
         self.tibia = tibia.value
 
-    def rotate(self, target=np.array):
+    def rotate(self, target: np.array):
         x, y, z = target
         theta = self.theta
         return np.array([

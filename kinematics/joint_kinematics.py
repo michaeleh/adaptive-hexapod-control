@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from pprint import pprint
 from typing import List
 
 import numpy as np
@@ -118,28 +119,22 @@ class KinematicNumericImpl(HexapodLegKinematic):
         q_femur_tibia = q[JointIdx.TIBIA]
 
         return np.array([
+            [-1.34484027 * sin(q_body_coxa) + 10 * sin(q_coxa_femur) * sin(q_femur_tibia) * cos(
+                q_body_coxa) - 97.29 * sin(q_coxa_femur) * cos(q_body_coxa) * cos(q_femur_tibia) + 43.06314346 * sin(
+                q_coxa_femur) * cos(q_body_coxa) - 97.29 * sin(q_femur_tibia) * cos(q_body_coxa) * cos(
+                q_coxa_femur) - 10 * cos(q_body_coxa) * cos(q_coxa_femur) * cos(q_femur_tibia) - 52.77667098 * cos(
+                q_body_coxa) * cos(q_coxa_femur) - 63.548631 * cos(q_body_coxa)],
 
-            [-DeltaLengths.TIBIA_END_X * sin(q_coxa_femur) * sin(q_femur_tibia) * cos(
-                q_body_coxa) + DeltaLengths.TIBIA_END_Z * sin(q_coxa_femur) * cos(
-                q_body_coxa) * cos(q_femur_tibia) + DeltaLengths.TIBIA_END_Z * sin(q_femur_tibia) * cos(
-                q_body_coxa) * cos(
-                q_coxa_femur) + DeltaLengths.TIBIA_END_X * cos(q_body_coxa) * cos(q_coxa_femur) * cos(
-                q_femur_tibia) + DeltaLengths.FEMUR_TIBIA_X * cos(
-                q_body_coxa) * cos(q_coxa_femur) + DeltaLengths.COXA_FEMUR_X * cos(q_body_coxa)],
+            [10 * sin(q_body_coxa) * sin(q_coxa_femur) * sin(q_femur_tibia) - 97.29 * sin(q_body_coxa) * sin(
+                q_coxa_femur) * cos(q_femur_tibia) + 43.06314346 * sin(q_body_coxa) * sin(q_coxa_femur) - 97.29 * sin(
+                q_body_coxa) * sin(q_femur_tibia) * cos(q_coxa_femur) - 10 * sin(q_body_coxa) * cos(q_coxa_femur) * cos(
+                q_femur_tibia) - 52.77667098 * sin(q_body_coxa) * cos(q_coxa_femur) - 63.548631 * sin(
+                q_body_coxa) + 1.34484027 * cos(q_body_coxa)],
 
-            [-DeltaLengths.TIBIA_END_X * sin(q_body_coxa) * sin(q_coxa_femur) * sin(
-                q_femur_tibia) + DeltaLengths.TIBIA_END_Z * sin(q_body_coxa) * sin(
-                q_coxa_femur) * cos(q_femur_tibia) + DeltaLengths.TIBIA_END_Z * sin(q_body_coxa) * sin(
-                q_femur_tibia) * cos(
-                q_coxa_femur) + DeltaLengths.TIBIA_END_X * sin(q_body_coxa) * cos(q_coxa_femur) * cos(
-                q_femur_tibia) + DeltaLengths.FEMUR_TIBIA_X * sin(
-                q_body_coxa) * cos(q_coxa_femur) + DeltaLengths.COXA_FEMUR_X * sin(q_body_coxa)],
-
-            [-DeltaLengths.TIBIA_END_Z * sin(q_coxa_femur) * sin(q_femur_tibia) - DeltaLengths.TIBIA_END_X * sin(
-                q_coxa_femur) * cos(q_femur_tibia) - DeltaLengths.FEMUR_TIBIA_X * sin(
-                q_coxa_femur) - DeltaLengths.TIBIA_END_X * sin(q_femur_tibia) * cos(
-                q_coxa_femur) + DeltaLengths.TIBIA_END_Z * cos(q_coxa_femur) * cos(
-                q_femur_tibia)]]).flatten()
+            [97.29 * sin(q_coxa_femur) * sin(q_femur_tibia) + 10 * sin(q_coxa_femur) * cos(
+                q_femur_tibia) + 52.77667098 * sin(q_coxa_femur) + 10 * sin(q_femur_tibia) * cos(
+                q_coxa_femur) - 97.29 * cos(q_coxa_femur) * cos(q_femur_tibia) + 43.06314346 * cos(
+                q_coxa_femur) - 4.80630595]]).flatten()
 
     def calc_J(self, q):
         """
@@ -151,26 +146,20 @@ class KinematicNumericImpl(HexapodLegKinematic):
         q_femur_tibia = q[JointIdx.TIBIA]
 
         return np.array([
-            [-(DeltaLengths.TIBIA_END_Z * sin(q_coxa_femur + q_femur_tibia) + DeltaLengths.FEMUR_TIBIA_X * cos(
-                q_coxa_femur) + DeltaLengths.TIBIA_END_X * cos(
-                q_coxa_femur + q_femur_tibia) + DeltaLengths.COXA_FEMUR_X) * sin(q_body_coxa), (
-                     -DeltaLengths.FEMUR_TIBIA_X * sin(q_coxa_femur) - DeltaLengths.TIBIA_END_X *
-                     sin(q_coxa_femur + q_femur_tibia) + DeltaLengths.TIBIA_END_Z *
-                     cos(q_coxa_femur + q_femur_tibia)) * cos(q_body_coxa),
-             (-DeltaLengths.TIBIA_END_X * sin(q_coxa_femur + q_femur_tibia) + DeltaLengths.TIBIA_END_Z * cos(
-                 q_coxa_femur + q_femur_tibia)) * cos(q_body_coxa)],
-
-            [(DeltaLengths.TIBIA_END_Z * sin(q_coxa_femur + q_femur_tibia) + DeltaLengths.FEMUR_TIBIA_X * cos(
-                q_coxa_femur) + DeltaLengths.TIBIA_END_X * cos(
-                q_coxa_femur + q_femur_tibia) + DeltaLengths.COXA_FEMUR_X) * cos(q_body_coxa), (
-                     -DeltaLengths.FEMUR_TIBIA_X * sin(q_coxa_femur) - DeltaLengths.TIBIA_END_X *
-                     sin(q_coxa_femur + q_femur_tibia) + DeltaLengths.TIBIA_END_Z *
-                     cos(q_coxa_femur + q_femur_tibia)) * sin(q_body_coxa),
-             (-DeltaLengths.TIBIA_END_X * sin(q_coxa_femur + q_femur_tibia) + DeltaLengths.TIBIA_END_Z * cos(
-                 q_coxa_femur + q_femur_tibia)) * sin(q_body_coxa)],
-
-            [0,
-             -DeltaLengths.TIBIA_END_Z * sin(q_coxa_femur + q_femur_tibia) - DeltaLengths.FEMUR_TIBIA_X * cos(
-                 q_coxa_femur) - DeltaLengths.TIBIA_END_X * cos(q_coxa_femur + q_femur_tibia),
-             -DeltaLengths.TIBIA_END_Z * sin(q_coxa_femur + q_femur_tibia) - DeltaLengths.TIBIA_END_X * cos(
-                 q_coxa_femur + q_femur_tibia)]])
+            [-43.06314346 * sin(q_body_coxa) * sin(q_coxa_femur) + 97.29 * sin(q_body_coxa) * sin(
+                q_coxa_femur + q_femur_tibia) + 52.77667098 * sin(q_body_coxa) * cos(q_coxa_femur) + 10.0 * sin(
+                q_body_coxa) * cos(q_coxa_femur + q_femur_tibia) + 63.548631 * sin(q_body_coxa) - 1.34484027 * cos(
+                q_body_coxa), (
+                         52.77667098 * sin(q_coxa_femur) + 10.0 * sin(q_coxa_femur + q_femur_tibia) + 43.06314346 * cos(
+                     q_coxa_femur) - 97.29 * cos(q_coxa_femur + q_femur_tibia)) * cos(q_body_coxa),
+             (10.0 * sin(q_coxa_femur + q_femur_tibia) - 97.29 * cos(q_coxa_femur + q_femur_tibia)) * cos(q_body_coxa)],
+            [-1.34484027 * sin(q_body_coxa) + 43.06314346 * sin(q_coxa_femur) * cos(q_body_coxa) - 97.29 * sin(
+                q_coxa_femur + q_femur_tibia) * cos(q_body_coxa) - 52.77667098 * cos(q_body_coxa) * cos(
+                q_coxa_femur) - 10.0 * cos(q_body_coxa) * cos(q_coxa_femur + q_femur_tibia) - 63.548631 * cos(
+                q_body_coxa), (
+                         52.77667098 * sin(q_coxa_femur) + 10.0 * sin(q_coxa_femur + q_femur_tibia) + 43.06314346 * cos(
+                     q_coxa_femur) - 97.29 * cos(q_coxa_femur + q_femur_tibia)) * sin(q_body_coxa),
+             (10.0 * sin(q_coxa_femur + q_femur_tibia) - 97.29 * cos(q_coxa_femur + q_femur_tibia)) * sin(q_body_coxa)],
+            [0, -43.06314346 * sin(q_coxa_femur) + 97.29 * sin(q_coxa_femur + q_femur_tibia) + 52.77667098 * cos(
+                q_coxa_femur) + 10.0 * cos(q_coxa_femur + q_femur_tibia),
+             97.29 * sin(q_coxa_femur + q_femur_tibia) + 10.0 * cos(q_coxa_femur + q_femur_tibia)]])

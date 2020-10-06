@@ -18,18 +18,25 @@ class Model:
         self.left_rear = Leg(JointNames.COXA_LR, JointNames.FEMUR_LR, JointNames.TIBIA_LR, rotate=-45)
 
         self.legs_per_stage = {
-            0: [self.right_rear],
-            1: [self.right_mid],
-            2: [self.right_front],
-            3: [self.left_rear],
-            4: [self.left_mid],
-            5: [self.left_front]
+            0: [self.right_front],
+            1: [self.left_front],
+            2: [self.right_mid],
+            3: [self.left_mid],
+            4: [self.right_rear],
+            5: [self.left_rear]
         }
         self.n_stages = len(self.legs_per_stage)
+        self.swing_phase = 0
 
     def generate_action(self, obs):
+        # return np.array([])
         new_pos = obs.copy()
-        target = np.array(([0, 1, 0]))
+        step = 10
+        if self.swing_phase == 0:
+            target = np.array(([0, 0, -step]))
+        if self.swing_phase == 1:
+            target = np.array(([0, -step, step]))
+
         legs = self.legs_per_stage[self.stage]
         for leg in legs:
             coxa = self.joint_pos_dict[leg.coxa]
@@ -44,7 +51,9 @@ class Model:
             new_pos[femur] = new_q[JointIdx.FEMUR]
             new_pos[tibia] = new_q[JointIdx.TIBIA]
 
-        self.switch_stage()
+        self.swing_phase = (self.swing_phase + 1) % 2
+        if self.swing_phase == 0:
+            self.switch_stage()
         return new_pos
 
     def switch_stage(self):
