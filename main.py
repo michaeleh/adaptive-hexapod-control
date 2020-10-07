@@ -9,7 +9,7 @@ BASE_DIR = os.path.dirname(__file__)
 
 model_name = 'mk3'
 xml_path = os.path.join(BASE_DIR, f'hexapod-models/{model_name}/{model_name}.xml')
-frame_skip = 60
+frame_skip = 2
 env = HexapodEnv(xml_path, frame_skip)
 
 model = Model(joint_pos_dict=env.map_joint_pos())
