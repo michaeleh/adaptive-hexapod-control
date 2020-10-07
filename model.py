@@ -1,59 +1,52 @@
-import numpy as np
+import math
+from enum import Enum
+from itertools import cycle
 
 from kinematics.ik_algorithm import angles_to_target
-from kinematics.joint_kinematics import KinematicNumericImpl
-from leg import LegRF, LegLR, LegRR, LegLM, LegRM, LegLF
+from leg import LegRM, LegRF, LegLF, LegLR, LegRR, LegLM
 
 
 class Model:
     def __init__(self, joint_pos_dict):
         self.joint_pos_dict = joint_pos_dict
-        self.stage = 0
-
-        self.legs_per_stage = [
-            [LegRF()],
-            [],
-            [LegLF()],
-            [],
-            [LegRM()],
-            [],
-            [LegLM()],
-            [],
-            [LegRR()],
-            [],
-            [LegLR()],
-            [],
-
-        ]
-        self.n_stages = len(self.legs_per_stage)
-        self.swing_phase = 0
-        self.k = KinematicNumericImpl()
+        self.cycle = _StageCycle()
 
     def generate_action(self, obs):
         new_pos = obs.copy()
-        if self.stage == len(self.legs_per_stage):
-            self.switch_stage()
-            return np.zeros_like(obs)
+        legs, stage = self.cycle.get_next()
 
-        legs = self.legs_per_stage[self.stage]
         for leg in legs:
             coxa = self.joint_pos_dict[leg.coxa.value]
             femur = self.joint_pos_dict[leg.femur.value]
             tibia = self.joint_pos_dict[leg.tibia.value]
-
             joint_pos = [coxa, femur, tibia]
-            if self.swing_phase == 0:
-                target = leg.target_up
-            if self.swing_phase == 1:
-                target = leg.target_forward
 
-            new_pos[joint_pos] = angles_to_target(q=obs[joint_pos], target=target, max_iter=10000,
-                                                  error_thold=1e-10)
+            if stage == _StageType.UP:
+                new_pos[joint_pos] = angles_to_target(q=obs[joint_pos], target=leg.target_up)
 
-        self.switch_stage()
+            if stage == _StageType.ROTATE:
+                new_pos[coxa] = math.radians(10)
+
+            if stage == _StageType.DOWN:
+                new_pos[joint_pos] = angles_to_target(q=obs[joint_pos], target=-leg.target_up)
+
         return new_pos
 
-    def switch_stage(self):
-        self.swing_phase = (self.swing_phase + 1) % 2
-        if self.swing_phase == 0:
-            self.stage = (self.stage + 1) % self.n_stages
+
+class _StageType(Enum):
+    UP, ROTATE, DOWN = range(3)
+
+
+class _StageCycle:
+    def __init__(self):
+        self.stages_cycle = cycle([state for state in _StageType])
+        self.legs_cycle = cycle([[LegRF(), LegRR(), LegLM()],
+                                 [LegLF(), LegLR(), LegRM()]])
+        self.legs = next(self.legs_cycle)
+        self.stage = _StageType.UP
+
+    def get_next(self):
+        self.stage = next(self.stages_cycle)
+        if self.stage == _StageType.UP:
+            self.legs = next(self.legs_cycle)
+        return self.legs, self.stage

@@ -8,7 +8,7 @@
         <mesh file="femur.stl"/>
         <mesh file="tibia.stl"/>
         <texture name="floor_tile" file="meshes/floor_tile.png" width="3000" height="3000" type="2d"/>
-        <material name="tile" texture="floor_tile" specular="0" shininess="0" reflectance="0.5" emission="1"/>
+        <material name="tile" texture="floor_tile" specular="0" shininess="0" reflectance="0" emission="1"/>
 
         <material name="black" specular="1" shininess="1" reflectance="1" rgba="0.08 0.08 0.08 1" emission="1"/>
     </asset>
@@ -53,40 +53,40 @@
         <geom name="floor_tile_grey_tile" pos="0 0 0" size="5000 5000 1" type="plane" material="tile"/>
 
         <!--        Body of hexapod-->
-        <body name="body:torso" pos="0 0 0" >
+        <body name="body:torso" pos="0 0 0">
+            <joint armature="0" damping="0" limited="false" margin="0.01" name="root" pos="0 0 0" type="free"/>
             <geom name="body" type="mesh" mesh="body" pos="0 0 0" material="black"/>
-            <joint armature="0" damping="0" limited="false"  margin="0.01" name="root" pos="0 0 0" type="free"/>
 
 
             <!--                        mid-right-->
             <body name="body:coxa_RM" pos="0 0 0">
-                <geom name="coxa_RM" type="mesh" mesh="coxa" pos="10 0 0" material="black"/>
-                <joint limited="true" range="-0.2 0.2"  name="joint:coxa_RM" pos="200 200 0"  axis="0 0 1 "/>
-
+                <joint limited="true" range="-20 20" name="joint:coxa_RM" pos="250 180 150" axis="0 0 1 "/>
+                <geom name="coxa_RM" type="mesh" mesh="coxa" pos="0 0 0" material="black"/>
 
 
                 <body name="body:femur_RM" pos="0 0 0">
                     <geom name="femur_RM" type="mesh" mesh="femur" pos="0 0 0" material="black"/>
-                    <joint limited="true" range="-0.2 0.2"  name="joint:femur_RM" pos="335 0 140"  axis="0 1 0"/>
+                    <joint name="joint:femur_RM" pos="335 180 140" axis="0 1 0"/>
 
 
                     <body name="body:tibia_RM" pos="0 0 0">
                         <geom name="tibia_RM" type="mesh" mesh="tibia" pos="0 0 0" material="black"/>
-                        <joint limited="true" range="-0.2 0.2"  name="joint:tibia_RM" pos="400 0 140"  axis="0 1 0"/>
+                        <joint name="joint:tibia_RM" pos="400 180 140" axis="0 1 0"/>
+
                     </body>
                 </body>
             </body>
             <!--            RFont right-->
             <body name="body:coxa_RF" pos="172 -22 0" euler="0 0 45">
-                <joint limited="true" range="-0.2 0.2"  name="joint:coxa_RF" pos="200 200 0"  axis="0 0 1 "/>
+                <joint limited="true" range="-20 20" name="joint:coxa_RF" pos="250 180 150" axis="0 0 1 "/>
                 <geom name="coxa_RF" type="mesh" mesh="coxa" pos="0 0 0" material="black"/>
 
                 <body name="body:femur_RF" pos="0 0 0">
-                    <joint limited="true" range="-0.2 0.2"  name="joint:femur_RF" pos="335 0 140"  axis="0 1 0"/>
+                    <joint name="joint:femur_RF" pos="335 180 140" axis="0 1 0"/>
                     <geom name="femur_RF" type="mesh" mesh="femur" pos="0 0 0" material="black"/>
 
                     <body name="body:tibia_RF" pos="0 0 0">
-                        <joint limited="true" range="-0.2 0.2"  name="joint:tibia_RF" pos="400 0 140"  axis="0 1 0"/>
+                        <joint name="joint:tibia_RF" pos="400 180 140" axis="0 1 0"/>
                         <geom name="tibia_RF" type="mesh" mesh="tibia" pos="0 0 0" material="black"/>
 
 
@@ -95,13 +95,13 @@
             </body>
             <!--            back right -->
             <body name="body:coxa_RR" pos="-87 130 0" euler="0 0 -45">
-                <joint limited="true" range="-0.2 0.2"  name="joint:coxa_RR" pos="200 200 0"  axis="0 0 1 "/>
+                <joint limited="true" range="-20 20" name="joint:coxa_RR" pos="250 180 150" axis="0 0 1 "/>
                 <geom name="coxa_RR" type="mesh" mesh="coxa" pos="0 0 0" material="black"/>
                 <body name="body:femur_RR" pos="0 0 0">
-                    <joint limited="true" range="-0.2 0.2"  name="joint:femur_RR" pos="335 0 140"  axis="0 1 0"/>
+                    <joint name="joint:femur_RR" pos="335 180 140" axis="0 1 0"/>
                     <geom name="femur_RR" type="mesh" mesh="femur" pos="0 0 0" material="black"/>
                     <body name="body:tibia_RR" pos="0 0 0">
-                        <joint limited="true" range="-0.2 0.2"  name="joint:tibia_RR" pos="400 0 140"  axis="0 1 0"/>
+                        <joint name="joint:tibia_RR" pos="400 180 140" axis="0 1 0"/>
                         <geom name="tibia_RR" type="mesh" mesh="tibia" pos="0 0 0" material="black"/>
 
 
@@ -110,13 +110,13 @@
             </body>
             <!--            mid left -->
             <body name="body:coxa_LM" pos="357 365 0" euler="0 0 180">
-                <joint limited="true" range="-0.2 0.2"  name="joint:coxa_LM" pos="200 200 0"  axis="0 0 -1 "/>
+                <joint limited="true" range="-20 20" name="joint:coxa_LM" pos="250 180 150" axis="0 0 -1 "/>
                 <geom name="coxa_LM" type="mesh" mesh="coxa" pos="0 0 0" material="black"/>
                 <body name="body:femur_LM" pos="0 0 0">
-                    <joint limited="true" range="-0.2 0.2"  name="joint:femur_LM" pos="335 0 140"  axis="0 1 0"/>
+                    <joint name="joint:femur_LM" pos="335 180 140" axis="0 1 0"/>
                     <geom name="femur_LM" type="mesh" mesh="femur" pos="0 0 0" material="black"/>
                     <body name="body:tibia_LM" pos="0 0 0">
-                        <joint limited="true" range="-0.2 0.2"  name="joint:tibia_LM" pos="400 0 140"  axis="0 1 0"/>
+                        <joint name="joint:tibia_LM" pos="400 180 140" axis="0 1 0"/>
                         <geom name="tibia_LM" type="mesh" mesh="tibia" pos="0 0 0" material="black"/>
 
 
@@ -125,13 +125,13 @@
             </body>
             <!--            back left-->
             <body name="body:coxa_LR" pos="187 388 0" euler="0 0 225">
-                <joint limited="true" range="-0.2 0.2"  name="joint:coxa_LR" pos="200 200 0"  axis="0 0 -1 "/>
+                <joint limited="true" range="-20 20" name="joint:coxa_LR" pos="250 180 150" axis="0 0 -1 "/>
                 <geom name="coxa_LR" type="mesh" mesh="coxa" pos="0 0 0" material="black"/>
                 <body name="body:femur_LR" pos="0 0 0">
-                    <joint limited="true" range="-0.2 0.2"  name="joint:femur_LR" pos="335 0 140"  axis="0 1 0"/>
+                    <joint name="joint:femur_LR" pos="335 180 140" axis="0 1 0"/>
                     <geom name="femur_LR" type="mesh" mesh="femur" pos="0 0 0" material="black"/>
                     <body name="body:tibia_LR" pos="0 0 0">
-                        <joint limited="true" range="-0.2 0.2"  name="joint:tibia_LR" pos="400 0 140"  axis="0 1 0"/>
+                        <joint name="joint:tibia_LR" pos="400 180 140" axis="0 1 0"/>
                         <geom name="tibia_LR" type="mesh" mesh="tibia" pos="0 0 0" material="black"/>
 
 
@@ -140,13 +140,13 @@
             </body>
             <!--            RFont left -->
             <body name="body:coxa_LF" pos="445 234 0" euler="0 0 -225">
-                <joint limited="true" range="-0.2 0.2"  name="joint:coxa_LF" pos="200 200 0"  axis="0 0 -1 "/>
+                <joint limited="true" range="-20 20" name="joint:coxa_LF" pos="250 180 150" axis="0 0 -1 "/>
                 <geom name="coxa_LF" type="mesh" mesh="coxa" pos="0 0 0" material="black"/>
                 <body name="body:femur_LF" pos="0 0 0">
-                    <joint limited="true" range="-0.2 0.2"  name="joint:femur_LF" pos="335 0 140"  axis="0 1 0"/>
+                    <joint name="joint:femur_LF" pos="335 180 140" axis="0 1 0"/>
                     <geom name="femur_LF" type="mesh" mesh="femur" pos="0 0 0" material="black"/>
                     <body name="body:tibia_LF" pos="0 0 0">
-                        <joint limited="true" range="-0.2 0.2"  name="joint:tibia_LF" pos="400 0 140"  axis="0 1 0"/>
+                        <joint name="joint:tibia_LF" pos="400 180 140" axis="0 1 0"/>
                         <geom name="tibia_LF" type="mesh" mesh="tibia" pos="0 0 0" material="black"/>
 
 
