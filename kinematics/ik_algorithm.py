@@ -35,7 +35,7 @@ def angles_to_target(q, target, model: HexapodLegKinematic = KinematicNumericImp
     :param optimizer: Optimizer from enum.
     :return: 3 joint angles to achieve target.
     """
-
+    q = q.copy()
     pos_ee = model.calc_xyz(q)  # Current operational position of the arm
     pos_target = pos_ee + target  # Target operational position
     for step in range(max_iter):
@@ -59,4 +59,6 @@ def angles_to_target(q, target, model: HexapodLegKinematic = KinematicNumericImp
         # Stop when within 1mm accurancy (arm mechanical accurancy limit)
         if error < error_thold:
             break
+    if error > 1:
+        print('error', error)
     return q, error

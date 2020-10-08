@@ -29,11 +29,11 @@ class Leg:
 
 class LegRM(Leg):
     coxa, femur, tibia = JointNames.COXA_RM, JointNames.FEMUR_RM, JointNames.TIBIA_RM
-
+    # target_forward = forward_vec*2
 
 class LegLM(Leg):
     coxa, femur, tibia = JointNames.COXA_LM, JointNames.FEMUR_LM, JointNames.TIBIA_LM
-
+    # target_forward = forward_vec*2
 
 class LegRF(Leg):
     coxa, femur, tibia = JointNames.COXA_RF, JointNames.FEMUR_RF, JointNames.TIBIA_RF

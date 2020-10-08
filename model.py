@@ -28,14 +28,14 @@ class Model:
 
             if stage == _StageType.DOWN:
                 new_pos[joint_pos], e = angles_to_target(q=obs[joint_pos], target=-leg.target_up)
-            if e > 0.1:
-                new_pos[joint_pos] = 0
 
+            if stage == _StageType.BACK:
+                new_pos[joint_pos] = 0
         return new_pos
 
 
 class _StageType(Enum):
-    UP, ROTATE, DOWN = range(3)
+    UP, ROTATE, DOWN, BACK = range(4)
 
 
 class _StageCycle:
