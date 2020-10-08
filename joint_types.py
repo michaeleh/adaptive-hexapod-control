@@ -21,3 +21,24 @@ class JointNames(Enum):
     TIBIA_LM = 'joint:tibia_LM'
     TIBIA_LR = 'joint:tibia_LR'
 
+
+motors = [
+    'joint:coxa_RM',
+    'joint:femur_RM',
+    'joint:tibia_RM',
+    'joint:coxa_RF',
+    'joint:femur_RF',
+    'joint:tibia_RF',
+    'joint:coxa_RR',
+    'joint:femur_RR',
+    'joint:tibia_RR',
+    'joint:coxa_LM',
+    'joint:femur_LM',
+    'joint:tibia_LM',
+    'joint:coxa_LR',
+    'joint:femur_LR',
+    'joint:tibia_LR',
+    'joint:coxa_LF',
+    'joint:femur_LF',
+    'joint:tibia_LF'
+]

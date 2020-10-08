@@ -12,24 +12,36 @@ class HexapodEnv(MujocoEnv):
         super().__init__(model_path, frame_skip)
 
     def reset_model(self):
-        return self._get_obs()
+        self.set_state(np.zeros_like(self.sim.data.qpos), np.zeros_like(self.sim.data.qvel))
+        return self.get_obs()
 
     def step(self, action):
-        qpos = action
-        qvel = self.sim.data.qvel
+        if action.shape == (self.model.nq,):
 
-        if qpos.shape == (self.model.nq,):
-            self.set_state(qpos, qvel)
-            self.sim.step()
+            qvel = np.zeros_like(self.sim.data.qvel.copy())
+            diff_pos = action - self.get_obs()
+            qvel_id = self.map_joint_qvel()
+            for joint, idx in self.map_joint_qpos().items():
+                qvel[qvel_id[joint]] = 0.002 * diff_pos[idx] / self.frame_skip
 
-        observation = self._get_obs()
+            self.set_state(action, qvel)
+            for _ in range(self.frame_skip):
+                self.sim.step()
+
         reward = 0
         done = False
         info = dict()
-        return observation, reward, done, info
+        return self.get_obs(), reward, done, info
 
-    def _get_obs(self):
+    def get_obs(self):
         return self.sim.data.qpos.copy()
 
-    def map_joint_pos(self):
+    def map_joint_qpos(self):
         return {joint.value: self.model.get_joint_qpos_addr(joint.value) for joint in JointNames}
+
+    def map_joint_qvel(self):
+        return {joint.value: self.model.get_joint_qvel_addr(joint.value) for joint in JointNames}
+
+    @property
+    def qvel(self):
+        return self.sim.data.qvel.copy()

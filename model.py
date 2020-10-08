@@ -1,4 +1,3 @@
-import math
 from enum import Enum
 from itertools import cycle
 
@@ -22,13 +21,15 @@ class Model:
             joint_pos = [coxa, femur, tibia]
 
             if stage == _StageType.UP:
-                new_pos[joint_pos] = angles_to_target(q=obs[joint_pos], target=leg.target_up)
+                new_pos[joint_pos], e = angles_to_target(q=obs[joint_pos], target=leg.target_up)
 
             if stage == _StageType.ROTATE:
-                new_pos[coxa] = math.radians(10)
+                new_pos[joint_pos], e = angles_to_target(q=obs[joint_pos], target=leg.target_forward)
 
             if stage == _StageType.DOWN:
-                new_pos[joint_pos] = angles_to_target(q=obs[joint_pos], target=-leg.target_up)
+                new_pos[joint_pos], e = angles_to_target(q=obs[joint_pos], target=-leg.target_up)
+            if e > 0.1:
+                new_pos[joint_pos] = 0
 
         return new_pos
 
