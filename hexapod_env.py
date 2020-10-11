@@ -18,11 +18,12 @@ class HexapodEnv(MujocoEnv):
     def step(self, action):
         if action.shape == (self.model.nq,):
             qvel = np.zeros_like(self.sim.data.qvel.copy())
+
             diff_pos = action - self.get_obs()
             qvel_id = self.map_joint_qvel()
             for joint, idx in self.map_joint_qpos().items():
                 qvel[qvel_id[joint]] = diff_pos[idx]
-
+            qvel[1] = np.linalg.norm(qvel)
             self.set_state(action, qvel)
             for _ in range(self.frame_skip):
                 self.sim.step()
