@@ -1,6 +1,6 @@
 import numpy as np
 
-from joint_types import JointNames
+from model.joint_types import JointNames
 
 step_size = 40
 forward_vec = np.array([0, step_size, 0])
@@ -29,11 +29,11 @@ class Leg:
 
 class LegRM(Leg):
     coxa, femur, tibia = JointNames.COXA_RM, JointNames.FEMUR_RM, JointNames.TIBIA_RM
-    # target_forward = forward_vec*2
+
 
 class LegLM(Leg):
     coxa, femur, tibia = JointNames.COXA_LM, JointNames.FEMUR_LM, JointNames.TIBIA_LM
-    # target_forward = forward_vec*2
+
 
 class LegRF(Leg):
     coxa, femur, tibia = JointNames.COXA_RF, JointNames.FEMUR_RF, JointNames.TIBIA_RF

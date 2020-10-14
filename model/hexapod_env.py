@@ -1,7 +1,7 @@
 import numpy as np
 from gym.envs.mujoco import MujocoEnv
 
-from joint_types import JointNames
+from model.joint_types import JointNames
 
 np.set_printoptions(suppress=True)
 
@@ -23,7 +23,12 @@ class HexapodEnv(MujocoEnv):
             qvel_id = self.map_joint_qvel()
             for joint, idx in self.map_joint_qpos().items():
                 qvel[qvel_id[joint]] = diff_pos[idx]
-            qvel[1] = np.linalg.norm(qvel)
+
+            '''
+            'root' joint is a free joint of the body, thus velocity need to be adjusted accordingly to the other joints.
+             velocity coordinates: translational (qvel[0]~qvel[2]) and rotational (qvel[3]~qvel[5]).
+            '''
+            qvel[1] = np.linalg.norm(qvel)  # setting y axis for now
             self.set_state(action, qvel)
             for _ in range(self.frame_skip):
                 self.sim.step()
@@ -46,3 +51,7 @@ class HexapodEnv(MujocoEnv):
     @property
     def qvel(self):
         return self.sim.data.qvel.copy()
+
+    @property
+    def qpos(self):
+        return self.sim.data.qpos.copy()
