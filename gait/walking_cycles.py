@@ -2,11 +2,14 @@ from abc import ABC, abstractmethod
 from enum import Enum
 from itertools import cycle
 
-from model.leg import LegRF, LegLF, LegRR, LegLM, LegLR, LegRM
+from model.leg import leg_rf, leg_rm, leg_rr, leg_lf, leg_lm, leg_lr
 
 
 class StageType(Enum):
-    UP, ROTATE, DOWN, BACK = range(4)
+    UP, ROTATE, DOWN, SYNC = range(4)
+
+
+ROTATION_ANGLE = 2
 
 
 class _Cycle(ABC):
@@ -28,29 +31,30 @@ class _Cycle(ABC):
 
 
 class _3LegCycle(_Cycle):
+
     def get_legs_cycle(self):
         return cycle([
-            [LegRF(), LegRR(), LegLM()],
-            [LegLF(), LegLR(), LegRM()]
+            [leg_rf, leg_rr, leg_lm],
+            [leg_lf, leg_lr, leg_rm]
         ])
 
 
 class _1LegCycle(_Cycle):
     def get_legs_cycle(self):
         return cycle([
-            [LegRF()],
-            [LegRM()],
-            [LegRR()],
-            [LegLF()],
-            [LegLM()],
-            [LegLR()]
+            [leg_rf],
+            [leg_rm],
+            [leg_rr],
+            [leg_lf],
+            [leg_lm],
+            [leg_lr]
         ])
 
 
 class _2LegCycle(_Cycle):
     def get_legs_cycle(self):
         return cycle([
-            [LegRM(), LegLR()],
-            [LegRF(), LegLM()],
-            [LegLF(), LegRR()]
+            [leg_rm, leg_lr],
+            [leg_rf, leg_lm],
+            [leg_lf, leg_rr]
         ])

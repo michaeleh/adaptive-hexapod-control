@@ -1,7 +1,9 @@
 import numpy as np
 from gym.envs.mujoco import MujocoEnv
 
+from kinematics.quaternion import transform, inverse, rotation_vec
 from model.joint_types import JointNames
+from model.leg import forward_vec
 
 np.set_printoptions(suppress=True)
 
@@ -17,18 +19,21 @@ class HexapodEnv(MujocoEnv):
 
     def step(self, action):
         if action.shape == (self.model.nq,):
-            qvel = np.zeros_like(self.sim.data.qvel.copy())
-
+            qvel = np.zeros_like(self.qvel)
             diff_pos = action - self.get_obs()
             qvel_id = self.map_joint_qvel()
             for joint, idx in self.map_joint_qpos().items():
-                qvel[qvel_id[joint]] = diff_pos[idx]
+                qvel[qvel_id[joint]] = diff_pos[idx] / self.dt
 
             '''
-            'root' joint is a free joint of the body, thus velocity need to be adjusted accordingly to the other joints.
-             velocity coordinates: translational (qvel[0]~qvel[2]) and rotational (qvel[3]~qvel[5]).
+            qpos[0]~qpos[6] corresponds to the 'root' joint cartesian position (qpos[0]~qpos[2]) and orientation (qpos[3]~qpos[6]),
+            and qvel[0]~qvel[5] correspond to the 'root' joint velocity,
+            translational (qvel[0]~qvel[2]) and rotational (qvel[3]~qvel[5]).
+            Note that for orientation you follow the quaternion notation thus need four element
+            but for velocity you use angular velocity which consists of 3 elements.
             '''
-            qvel[1] = np.linalg.norm(qvel)  # setting y axis for now
+
+            qvel[0:3] = diff_pos[0:3]
             self.set_state(action, qvel)
             for _ in range(self.frame_skip):
                 self.sim.step()
@@ -40,7 +45,7 @@ class HexapodEnv(MujocoEnv):
         return self.get_obs(), reward, done, info
 
     def get_obs(self):
-        return self.sim.data.qpos.copy()
+        return self.qpos
 
     def map_joint_qpos(self):
         return {joint.value: self.model.get_joint_qpos_addr(joint.value) for joint in JointNames}

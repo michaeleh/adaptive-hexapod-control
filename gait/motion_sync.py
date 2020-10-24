@@ -1,0 +1,39 @@
+import numpy as np
+from typing import Dict, List
+
+from kinematics.ik_algorithm import angles_to_target
+from model.leg import Leg, all_legs
+
+
+class MotionSync:
+    def __init__(self, joint_pos_dict: Dict):
+        """
+
+        :param joint_pos_dict: mapping between joint and qpos
+        """
+        self.joint_pos_dict = joint_pos_dict
+        self.body_xyz = [0, 1, 2]
+
+    def sync_movement(self, qpos, legs_to_move: Dict[Leg, np.array]):
+        """
+        move legs and sync body movement and other legs using inverse kinematics
+        :param qpos: current qpos of the model
+        :param legs_to_move: dict from leg 2 move to destination in NED coordinates where foot-tip is the center.
+        :return: new qpos synchronized with all aspects
+        """
+        new_qpos = qpos.copy()
+        legs_to_stay = [leg for leg in all_legs if leg not in legs_to_move.keys()]
+
+        legs_delta_pos = [np.zeros(3)] * len(legs_to_stay) + list(legs_to_move.values())
+        avg_vector_movement = np.array(legs_delta_pos).mean(axis=0)
+        # move body in the average direction
+        new_qpos[self.body_xyz] += avg_vector_movement
+        # adjust other legs to make foot tip still
+        for leg in legs_to_stay:
+            coxa = self.joint_pos_dict[leg.coxa.value]
+            femur = self.joint_pos_dict[leg.femur.value]
+            tibia = self.joint_pos_dict[leg.tibia.value]
+            joint_pos = [coxa, femur, tibia]
+            new_qpos[joint_pos], e = angles_to_target(q=qpos[joint_pos], target=leg.rotate(-avg_vector_movement))
+
+        return new_qpos

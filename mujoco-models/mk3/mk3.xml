@@ -57,13 +57,13 @@
 
         <!--        Body of hexapod-->
         <body name="body:torso" pos="0 0 0">
-            <joint limited="false" name="root" pos="0 0 0" type="free"/>
+            <joint limited="false" name="root" pos="180 180 150" type="free"/>
             <geom name="body" type="mesh" mesh="body" pos="0 0 0" material="black"/>
 
 
             <!--                        mid-right-->
             <body name="body:coxa_RM" pos="0 0 0">
-                <joint name="joint:coxa_RM" limited="true" range="-0 0.00001" pos="250 180 150" axis="0 0 1 "/>
+                <joint name="joint:coxa_RM"  pos="250 180 150" axis="0 0 1 "/>
                 <geom name="coxa_RM" type="mesh" mesh="coxa" pos="0 0 0" material="black"/>
 
 
@@ -80,12 +80,12 @@
             </body>
             <!--            RFont right-->
             <body name="body:coxa_RF" pos="172 -22 0" euler="0 0 45">
-                <joint name="joint:coxa_RF" limited="true" range="-0 0.00001" pos="250 180 150" axis="0 0 1 "/>
+                <joint name="joint:coxa_RF"  pos="250 180 150" axis="0 0 1 "/>
                 <geom name="coxa_RF" type="mesh" mesh="coxa" pos="0 0 0" material="black"/>
 
 
                 <body name="body:femur_RF" pos="0 0 0">
-                    <joint name="joint:femur_RF"  pos="335 180 140" axis="0 1 0"/>
+                    <joint name="joint:femur_RF" pos="335 180 140" axis="0 1 0"/>
                     <geom name="femur_RF" type="mesh" mesh="femur" pos="0 0 0" material="black"/>
 
 
@@ -99,7 +99,7 @@
             </body>
             <!--            back right -->
             <body name="body:coxa_RR" pos="-87 130 0" euler="0 0 -45">
-                <joint name="joint:coxa_RR" limited="true" range="-0 0.00001" pos="250 180 150" axis="0 0 1 "/>
+                <joint name="joint:coxa_RR"  pos="250 180 150" axis="0 0 1 "/>
                 <geom name="coxa_RR" type="mesh" mesh="coxa" pos="0 0 0" material="black"/>
 
 
@@ -118,7 +118,7 @@
             </body>
             <!--            mid left -->
             <body name="body:coxa_LM" pos="357 365 0" euler="0 0 180">
-                <joint name="joint:coxa_LM"  limited="true" range="-0 0.00001" pos="250 180 150" axis="0 0 -1 "/>
+                <joint name="joint:coxa_LM"  pos="250 180 150" axis="0 0 -1 "/>
                 <geom name="coxa_LM" type="mesh" mesh="coxa" pos="0 0 0" material="black"/>
 
 
@@ -137,7 +137,7 @@
             </body>
             <!--            back left-->
             <body name="body:coxa_LR" pos="187 388 0" euler="0 0 225">
-                <joint name="joint:coxa_LR"  limited="true" range="-0 0.00001" pos="250 180 150" axis="0 0 -1 "/>
+                <joint name="joint:coxa_LR"  pos="250 180 150" axis="0 0 -1 "/>
                 <geom name="coxa_LR" type="mesh" mesh="coxa" pos="0 0 0" material="black"/>
 
 
@@ -156,7 +156,7 @@
             </body>
             <!--            RFont left -->
             <body name="body:coxa_LF" pos="445 234 0" euler="0 0 -225">
-                <joint name="joint:coxa_LF" limited="true" range="-0 0.00001" pos="250 180 150" axis="0 0 -1 "/>
+                <joint name="joint:coxa_LF"  pos="250 180 150" axis="0 0 -1 "/>
                 <geom name="coxa_LF" type="mesh" mesh="coxa" pos="0 0 0" material="black"/>
 
 
@@ -179,29 +179,29 @@
 
     <actuator>
         <!--        leg1-->
-        <motor  name="motor:coxa_RM" joint="joint:coxa_RM"/>
-        <motor  name="motor:femur_RM" joint="joint:femur_RM"/>
-        <motor  name="motor:tibia_RM" joint="joint:tibia_RM"/>
+        <motor name="motor:coxa_RM" joint="joint:coxa_RM"/>
+        <motor name="motor:femur_RM" joint="joint:femur_RM"/>
+        <motor name="motor:tibia_RM" joint="joint:tibia_RM"/>
         <!--        leg2-->
-        <motor  name="motor:coxa_RF" joint="joint:coxa_RF"/>
-        <motor  name="motor:femur_RF" joint="joint:femur_RF"/>
-        <motor  name="motor:tibia_RF" joint="joint:tibia_RF"/>
+        <motor name="motor:coxa_RF" joint="joint:coxa_RF"/>
+        <motor name="motor:femur_RF" joint="joint:femur_RF"/>
+        <motor name="motor:tibia_RF" joint="joint:tibia_RF"/>
         <!--        leg3-->
-        <motor  name="motor:coxa_RR" joint="joint:coxa_RR"/>
-        <motor  name="motor:femur_RR" joint="joint:femur_RR"/>
-        <motor  name="motor:tibia_RR" joint="joint:tibia_RR"/>
+        <motor name="motor:coxa_RR" joint="joint:coxa_RR"/>
+        <motor name="motor:femur_RR" joint="joint:femur_RR"/>
+        <motor name="motor:tibia_RR" joint="joint:tibia_RR"/>
         <!--        leg4-->
-        <motor  name="motor:coxa_LM" joint="joint:coxa_LM"/>
-        <motor  name="motor:femur_LM" joint="joint:femur_LM"/>
-        <motor  name="motor:tibia_LM" joint="joint:tibia_LM"/>
+        <motor name="motor:coxa_LM" joint="joint:coxa_LM"/>
+        <motor name="motor:femur_LM" joint="joint:femur_LM"/>
+        <motor name="motor:tibia_LM" joint="joint:tibia_LM"/>
         <!--        leg5-->
-        <motor  name="motor:coxa_LR" joint="joint:coxa_LR"/>
-        <motor  name="motor:femur_LR" joint="joint:femur_LR"/>
-        <motor  name="motor:tibia_LR" joint="joint:tibia_LR"/>
+        <motor name="motor:coxa_LR" joint="joint:coxa_LR"/>
+        <motor name="motor:femur_LR" joint="joint:femur_LR"/>
+        <motor name="motor:tibia_LR" joint="joint:tibia_LR"/>
         <!--        leg6-->
-        <motor  name="motor:coxa_LF" joint="joint:coxa_LF"/>
-        <motor  name="motor:femur_LF" joint="joint:femur_LF"/>
-        <motor  name="motor:tibia_LF" joint="joint:tibia_LF"/>
+        <motor name="motor:coxa_LF" joint="joint:coxa_LF"/>
+        <motor name="motor:femur_LF" joint="joint:femur_LF"/>
+        <motor name="motor:tibia_LF" joint="joint:tibia_LF"/>
     </actuator>
 
 </mujoco>

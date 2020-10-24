@@ -25,6 +25,11 @@ def rotate_vec(vec, deg):
 class Leg:
     target_up = np.array([0, 0, step_size])
     target_forward = forward_vec.copy()
+    coxa, femur, tibia = '', '', ''
+    angle = 0
+
+    def rotate(self, vec):
+        return rotate_vec(vec, self.angle)
 
 
 class LegRM(Leg):
@@ -37,19 +42,32 @@ class LegLM(Leg):
 
 class LegRF(Leg):
     coxa, femur, tibia = JointNames.COXA_RF, JointNames.FEMUR_RF, JointNames.TIBIA_RF
-    target_forward = rotate_vec(forward_vec, -45)
+    angle = -45
+    target_forward = rotate_vec(forward_vec, angle)
 
 
 class LegLF(Leg):
     coxa, femur, tibia = JointNames.COXA_LF, JointNames.FEMUR_LF, JointNames.TIBIA_LF
-    target_forward = rotate_vec(forward_vec, -45)
+    angle = -45
+    target_forward = rotate_vec(forward_vec, angle)
 
 
 class LegRR(Leg):
     coxa, femur, tibia = JointNames.COXA_RR, JointNames.FEMUR_RR, JointNames.TIBIA_RR
-    target_forward = rotate_vec(forward_vec, 45)
+    angle = 45
+    target_forward = rotate_vec(forward_vec, angle)
 
 
 class LegLR(Leg):
     coxa, femur, tibia = JointNames.COXA_LR, JointNames.FEMUR_LR, JointNames.TIBIA_LR
-    target_forward = rotate_vec(forward_vec, 45)
+    angle = 45
+    target_forward = rotate_vec(forward_vec, angle)
+
+
+leg_rf = LegRF()
+leg_rm = LegRM()
+leg_rr = LegRR()
+leg_lf = LegLF()
+leg_lm = LegLM()
+leg_lr = LegLR()
+all_legs = [leg_rf, leg_rm, leg_rr, leg_lf, leg_lm, leg_lr]
