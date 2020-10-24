@@ -42,12 +42,12 @@ class _3LegCycle(_Cycle):
 class _1LegCycle(_Cycle):
     def get_legs_cycle(self):
         return cycle([
+            [leg_lr],
             [leg_rf],
             [leg_rm],
             [leg_rr],
             [leg_lf],
-            [leg_lm],
-            [leg_lr]
+            [leg_lm]
         ])
 
 
