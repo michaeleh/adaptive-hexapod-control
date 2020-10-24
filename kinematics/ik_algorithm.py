@@ -23,7 +23,7 @@ def angles_to_target(q, target, model: HexapodLegKinematic = KinematicNumericImp
     """
     Giving arm object, a target and optimizer, provides the required set of control signals
 
-    Returns the optimizing trajectory, error trace and arm configurazion to achieve the target.
+    Returns the optimizing trajectory, error trace and arm configuration to achieve the target.
     Target is defined in relative to the EE null position
 
     :param q: angles of joints 3x1 np array
@@ -47,7 +47,7 @@ def angles_to_target(q, target, model: HexapodLegKinematic = KinematicNumericImp
         ux = pos_diff * kp  # direction of movement
         J_x = model.calc_J(q)  # Calculate the jacobian
 
-        # Solve inverse kinematics accorting to the designated optimizaer
+        # Solve inverse kinematics according to the designated optimizer
         if optimizer is Optimizer.STD:  # Standard resolved motion
             u = np.dot(np.linalg.pinv(J_x), ux)
 

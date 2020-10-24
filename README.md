@@ -2,8 +2,8 @@
 adaptive control and simulation for hexapod mk-III
 
 ## Model
-Stl files was extracted from the complete hexapod model using fusion 360 and broght together using mojuco's xml.\
-The body was seperated from the legs and each leg was separated to 3 pieces according the joints.\
+Stl files was extracted from the complete hexapod model using fusion 360 and brought together using mojuco's xml.\
+The body was separated from the legs and each leg was separated to 3 pieces according the joints.\
 <img src="images/legstructure.jpg" width=200>
 
 ### Hexapod mk-III model
@@ -20,7 +20,7 @@ The simulation is based on the following loop as seen in main.py:<br/>
 1. load mujoco model from xml.
 2. get state
 3. generate action (joints target angles)
-4. step hexpod into this direction and calculate joint's speed.
+4. step hexapod into this direction and calculate joint's speed.
 5. goto 2.
 
 ## Structure

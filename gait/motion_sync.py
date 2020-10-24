@@ -1,5 +1,5 @@
 import numpy as np
-from typing import Dict, List
+from typing import Dict
 
 from kinematics.ik_algorithm import angles_to_target
 from model.leg import Leg, all_legs

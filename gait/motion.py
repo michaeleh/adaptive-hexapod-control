@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from gait.motion_sync import MotionSync
 from kinematics.ik_algorithm import angles_to_target
 from gait.walking_cycles import _Cycle, StageType, _3LegCycle, _1LegCycle, _2LegCycle
-from model.leg import all_legs, forward_vec
+from model.leg import forward_vec
 
 
 class _Motion(ABC):

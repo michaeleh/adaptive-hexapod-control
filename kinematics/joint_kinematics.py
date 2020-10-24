@@ -147,15 +147,15 @@ class KinematicNumericImpl(HexapodLegKinematic):
             [5.712 * sin(q_body_coxa) * sin(q_coxa_femur) + 137.168 * sin(q_body_coxa) * sin(
                 q_coxa_femur + q_femur_tibia) - 67.744 * sin(q_body_coxa) * cos(q_coxa_femur) + 11.671 * sin(
                 q_body_coxa) * cos(q_coxa_femur + q_femur_tibia) - 62.451 * sin(q_body_coxa) - 12.468 * cos(
-                q_body_coxa), (-67.744 * sin(q_coxa_femur) + 11.671 * sin(q_coxa_femur + q_femur_tibia) - 5.712 * cos(
-                q_coxa_femur) - 137.168 * cos(q_coxa_femur + q_femur_tibia)) * cos(q_body_coxa),
+                q_body_coxa), (-67.744 * sin(q_coxa_femur) + 11.671 * sin(q_coxa_femur + q_femur_tibia) - 5.712 *
+                               cos(q_coxa_femur) - 137.168 * cos(q_coxa_femur + q_femur_tibia)) * cos(q_body_coxa),
              (11.671 * sin(q_coxa_femur + q_femur_tibia) - 137.168 * cos(q_coxa_femur + q_femur_tibia)) * cos(
                  q_body_coxa)],
             [-12.468 * sin(q_body_coxa) - 5.712 * sin(q_coxa_femur) * cos(q_body_coxa) - 137.168 * sin(
                 q_coxa_femur + q_femur_tibia) * cos(q_body_coxa) + 67.744 * cos(q_body_coxa) * cos(
                 q_coxa_femur) - 11.671 * cos(q_body_coxa) * cos(q_coxa_femur + q_femur_tibia) + 62.451 * cos(
-                q_body_coxa), (-67.744 * sin(q_coxa_femur) + 11.671 * sin(q_coxa_femur + q_femur_tibia) - 5.712 * cos(
-                q_coxa_femur) - 137.168 * cos(q_coxa_femur + q_femur_tibia)) * sin(q_body_coxa),
+                q_body_coxa), (-67.744 * sin(q_coxa_femur) + 11.671 * sin(q_coxa_femur + q_femur_tibia) - 5.712 *
+                               cos(q_coxa_femur) - 137.168 * cos(q_coxa_femur + q_femur_tibia)) * sin(q_body_coxa),
              (11.671 * sin(q_coxa_femur + q_femur_tibia) - 137.168 * cos(q_coxa_femur + q_femur_tibia)) * sin(
                  q_body_coxa)],
             [0, 5.712 * sin(q_coxa_femur) + 137.168 * sin(q_coxa_femur + q_femur_tibia) - 67.744 * cos(
