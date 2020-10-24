@@ -21,7 +21,7 @@ start_time = time.time()
 while True:
     curr_time = time.time()
     # reset and change model
-    if curr_time - start_time > 8:  # 8 seconds passed
+    if curr_time - start_time > 10:  # 8 seconds passed
         model = next(models)
         start_time = curr_time
         env.set_state(np.zeros_like(env.qpos), np.zeros_like(env.qvel))

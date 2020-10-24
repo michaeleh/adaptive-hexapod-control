@@ -2,7 +2,7 @@ import numpy as np
 
 from model.joint_types import JointNames
 
-step_size = 40
+step_size = 80
 forward_vec = np.array([0, step_size, 0])
 
 
@@ -23,7 +23,7 @@ def rotate_vec(vec, deg):
 
 
 class Leg:
-    target_up = np.array([0, 0, step_size])
+    target_up = np.array([0, 0, 10])
     target_forward = forward_vec.copy()
     coxa, femur, tibia = '', '', ''
     angle = 0
