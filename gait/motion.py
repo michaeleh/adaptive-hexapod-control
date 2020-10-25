@@ -1,3 +1,4 @@
+import numpy as np
 from abc import ABC, abstractmethod
 from gait.motion_sync import MotionSync
 from kinematics.ik_algorithm import angles_to_target
@@ -28,14 +29,14 @@ class _Motion(ABC):
                 new_pos[joint_pos], e = angles_to_target(q=obs[joint_pos], target=leg.target_up)
 
             if stage == StageType.ROTATE:
-                new_pos[joint_pos], e = angles_to_target(q=obs[joint_pos], target=leg.target_forward)
+                # set new angles in relation to base position not in relation to current one
+                new_pos[joint_pos], e = angles_to_target(q=np.zeros(3), target=leg.target_forward)
 
             if stage == StageType.DOWN:
                 new_pos[joint_pos], e = angles_to_target(q=obs[joint_pos], target=-leg.target_up)
 
         if stage == StageType.SYNC:
             # sync body and all the legs toward direction of interest
-
             new_pos = self.motion_sync.sync_movement(
                 qpos=obs,
                 legs_to_move={leg: forward_vec for leg in legs}
