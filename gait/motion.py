@@ -30,7 +30,7 @@ class _Motion(ABC):
 
             if stage == StageType.ROTATE:
                 # set new angles in relation to base position not in relation to current one
-                new_pos[joint_pos], e = angles_to_target(q=np.zeros(3), target=leg.target_forward)
+                new_pos[joint_pos], e = angles_to_target(q=np.zeros(3), target=leg.target_forward + leg.target_up)
 
             if stage == StageType.DOWN:
                 new_pos[joint_pos], e = angles_to_target(q=obs[joint_pos], target=-leg.target_up)

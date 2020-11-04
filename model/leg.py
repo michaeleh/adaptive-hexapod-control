@@ -4,7 +4,7 @@ from model.joint_types import JointNames
 
 step_size = 80
 up_vec = np.array([0, 0, 10])
-forward_vec = np.array([0, step_size, 0]) + up_vec
+forward_vec = np.array([0, step_size, 0])
 
 
 def rotate_vec(vec, deg):
