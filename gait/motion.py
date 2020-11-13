@@ -1,8 +1,10 @@
-import numpy as np
 from abc import ABC, abstractmethod
+
+import numpy as np
+
 from gait.motion_sync import MotionSync
-from kinematics.ik_algorithm import angles_to_target
 from gait.walking_cycles import _Cycle, StageType, _3LegCycle, _1LegCycle, _2LegCycle
+from kinematics.ik_algorithm import angles_to_target
 from model.leg import forward_vec
 
 
@@ -17,9 +19,13 @@ class _Motion(ABC):
         pass
 
     def generate_action(self, obs):
+        """
+        Generate action according to current cycle and leg group
+        """
         new_pos = obs.copy()
         legs, stage = self.cycle.get_next()
         for leg in legs:
+            # get qpos of each joint
             coxa = self.joint_pos_dict[leg.coxa.value]
             femur = self.joint_pos_dict[leg.femur.value]
             tibia = self.joint_pos_dict[leg.tibia.value]
@@ -45,7 +51,6 @@ class _Motion(ABC):
 
 
 class TripodMotion(_Motion):
-
     def get_cycle(self) -> _Cycle:
         return _3LegCycle()
 

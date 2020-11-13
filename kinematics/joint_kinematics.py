@@ -111,7 +111,7 @@ class KinematicSymbolicImpl(HexapodLegKinematic):
 class KinematicNumericImpl(HexapodLegKinematic):
     def calc_xyz(self, q):
         """
-        :param q: In radians
+        :param q: Joints in radians
         :return:
         """
         q_body_coxa = q[JointIdx.COXA]
@@ -136,8 +136,7 @@ class KinematicNumericImpl(HexapodLegKinematic):
 
     def calc_J(self, q):
         """
-        :param q: In radians
-        :return:
+        :param q: Joints in radians
         """
         q_body_coxa = q[JointIdx.COXA]
         q_coxa_femur = q[JointIdx.FEMUR]
@@ -164,6 +163,11 @@ class KinematicNumericImpl(HexapodLegKinematic):
 
 
 if __name__ == '__main__':
+    """
+    Check if symbolic and numeric implementations are the same
+    """
+
+
     def print_symbolic():
         k = KinematicSymbolicImpl()
         pprint(k.Tx)

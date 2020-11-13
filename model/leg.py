@@ -3,8 +3,8 @@ import numpy as np
 from model.joint_types import JointNames
 
 step_size = 80
-up_vec = np.array([0, 0, 10])
-forward_vec = np.array([0, step_size, 0])
+up_vec = np.array([0, 0, 10])  # up vector
+forward_vec = np.array([0, step_size, 0])  # direction vector
 
 
 def rotate_vec(vec, deg):
@@ -24,6 +24,9 @@ def rotate_vec(vec, deg):
 
 
 class Leg:
+    """
+    Legs creation for joint names, and rotated direction vector
+    """
     target_up = up_vec.copy()
     target_forward = forward_vec.copy()
     coxa, femur, tibia = '', '', ''

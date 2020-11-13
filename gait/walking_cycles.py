@@ -13,13 +13,20 @@ ROTATION_ANGLE = 2
 
 
 class _Cycle(ABC):
+    """
+    Defining leg groups for gaits cycle.
+    """
+
     def __init__(self):
-        self.stages_cycle = cycle([state for state in StageType])
+        self.stages_cycle = cycle([state for state in StageType])  # leg swing cycle
         self.legs_cycle = self.get_legs_cycle()
         self.legs = next(self.legs_cycle)
         self.stage = StageType.UP
 
     def get_next(self):
+        """
+        switch swing stage and leg group (if necessary)
+        """
         self.stage = next(self.stages_cycle)
         if self.stage == StageType.UP:
             self.legs = next(self.legs_cycle)
@@ -31,6 +38,9 @@ class _Cycle(ABC):
 
 
 class _3LegCycle(_Cycle):
+    """
+    tripod
+    """
 
     def get_legs_cycle(self):
         return cycle([
@@ -40,6 +50,10 @@ class _3LegCycle(_Cycle):
 
 
 class _1LegCycle(_Cycle):
+    """
+    wave
+    """
+
     def get_legs_cycle(self):
         return cycle([
             [leg_lr],
@@ -52,6 +66,10 @@ class _1LegCycle(_Cycle):
 
 
 class _2LegCycle(_Cycle):
+    """
+    ripple
+    """
+
     def get_legs_cycle(self):
         return cycle([
             [leg_rm, leg_lr],

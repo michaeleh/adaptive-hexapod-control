@@ -1,3 +1,6 @@
+"""
+Distances between parts of the hexapod
+"""
 class DeltaLengths:
     TIBIA_END_X = -11.671
     TIBIA_END_Y = 12.468

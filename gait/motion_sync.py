@@ -1,18 +1,23 @@
-import numpy as np
 from typing import Dict
+
+import numpy as np
 
 from kinematics.ik_algorithm import angles_to_target
 from model.leg import Leg, all_legs
 
 
 class MotionSync:
+    """
+    Syncing the body position to the leg placement and movement
+    """
+
     def __init__(self, joint_pos_dict: Dict):
         """
 
         :param joint_pos_dict: mapping between joint and qpos
         """
         self.joint_pos_dict = joint_pos_dict
-        self.body_xyz = [0, 1, 2]
+        self.body_xyz = [0, 1, 2]  # joint position in qpos
 
     def sync_movement(self, qpos, legs_to_move: Dict[Leg, np.array]):
         """
@@ -21,6 +26,7 @@ class MotionSync:
         :param legs_to_move: dict from leg 2 move to destination in NED coordinates where foot-tip is the center.
         :return: new qpos synchronized with all aspects
         """
+        # mean direction vector
         new_qpos = qpos.copy()
         n_legs_to_stay = len(all_legs) - len(legs_to_move)
         legs_delta_pos = [np.zeros(3)] * n_legs_to_stay + list(legs_to_move.values())
