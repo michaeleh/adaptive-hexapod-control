@@ -14,6 +14,7 @@
         <material name="tile" texture="floor_tile" specular="0" shininess="0" reflectance="0" emission="1"/>
 
         <material name="black" specular="1" shininess="1" reflectance="1" rgba="0.08 0.08 0.08 1" emission="1"/>
+        <texture builtin="gradient" height="100" rgb1="1 1 1" rgb2="0 0 0" type="skybox" width="100"/>
     </asset>
 
     <contact>
