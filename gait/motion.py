@@ -1,12 +1,12 @@
 from abc import ABC, abstractmethod
 
 import numpy as np
+from scipy.spatial.transform import Rotation
 
 from gait.motion_sync import MotionSync
 from gait.walking_cycles import _Cycle, StageType, _3LegCycle, _1LegCycle, _2LegCycle, _RotationCycle
-from kinematics import quaternion
 from kinematics.ik_algorithm import angles_to_target
-from model.leg import forward_vec, all_legs
+from model.leg import all_legs
 
 
 class _Motion(ABC):
@@ -70,7 +70,7 @@ class RippleMotion(_Motion):
 class RotationMotion(_Motion):
     def __init__(self, joint_pos_dict):
         super().__init__(joint_pos_dict)
-        self.angle = np.deg2rad(-10)
+        self.angle = 7
 
     def get_cycle(self) -> _Cycle:
         return _RotationCycle()
@@ -98,7 +98,9 @@ class RotationMotion(_Motion):
             new_pos[joint_pos], e = angles_to_target(q=np.zeros_like(obs[joint_pos]), target=-2 * leg.target_up)
 
         # and orientation (qpos[3]~qpos[6])
-        qv = quaternion.transform(*[0, 1, 0], self.angle)
-        new_pos[3:7] = qv
         self.angle *= -1
+
+        rot = Rotation.from_euler('xyz', [0, self.angle, 0], degrees=True)
+        x, y, z, w = rot.as_quat()
+        new_pos[3:7] = [w, x, y, z]
         return new_pos

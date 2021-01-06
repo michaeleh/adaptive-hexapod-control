@@ -1,10 +1,8 @@
 from typing import Dict
 
-import numpy as np
 
-from kinematics import quaternion
 from kinematics.ik_algorithm import angles_to_target
-from model.leg import Leg, all_legs
+from model.leg import all_legs
 
 
 class MotionSync:

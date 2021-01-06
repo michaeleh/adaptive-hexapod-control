@@ -37,6 +37,7 @@ class HexapodEnv(MujocoEnv):
             but for velocity you use angular velocity which consists of 3 elements.
             '''
             qvel[0:3] = diff_pos[0:3]  # set xyz velocity
+
             self.set_state(action, qvel)
             # apply physics simulation steps
             for _ in range(self.frame_skip):

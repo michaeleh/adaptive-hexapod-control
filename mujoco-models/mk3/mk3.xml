@@ -63,18 +63,18 @@
 
 
         <camera fovy="45" pos="1 1 1"/>
-        <light pos="0 0 2000" dir="0 -1 -1" diffuse="1 1 1"/>
+        <light pos="0 0 2000" dir="0 0 -1" diffuse=".5 .5 .5"/>
         <!--        <geom name="floor_tile_grey_tile" pos="0 0 0" size="5000 5000 1" type="plane" material="tile"/>-->
         <geom name='floor' pos='0 0 0' size='3000 3000 10' type='plane' material="tile" condim='3'/>
 
         <!--        Body of hexapod-->
         <body name="body:torso" pos="0 0 0">
-            <joint limited="false" name="root" pos="180 180 150" type="free"/>
-            <geom name="body" type="mesh" mesh="body" pos="0 0 0" material="black"/>
+            <joint limited="false" name="root" pos="0 0 0" type="free"/>
+            <geom name="body" type="mesh" mesh="body" pos="-180 -180 0" material="black"/>
 
 
             <!--                        mid-right-->
-            <body name="body:coxa_RM" pos="0 0 0">
+            <body name="body:coxa_RM" pos="-180 -180 0">
                 <joint name="joint:coxa_RM" pos="250 180 150" axis="0 0 1 "/>
                 <geom name="coxa_RM" type="mesh" mesh="coxa" pos="0 0 0" material="black"/>
 
@@ -92,7 +92,7 @@
                 </body>
             </body>
             <!--            RFont right-->
-            <body name="body:coxa_RF" pos="172 -22 0" euler="0 0 45">
+            <body name="body:coxa_RF" pos="-8 -202 0" euler="0 0 45">
                 <joint name="joint:coxa_RF" pos="250 180 150" axis="0 0 1 "/>
                 <geom name="coxa_RF" type="mesh" mesh="coxa" pos="0 0 0" material="black"/>
 
@@ -113,7 +113,7 @@
                 </body>
             </body>
             <!--            back right -->
-            <body name="body:coxa_RR" pos="-87 130 0" euler="0 0 -45">
+            <body name="body:coxa_RR" pos="-267 -50 0" euler="0 0 -45">
                 <joint name="joint:coxa_RR" pos="250 180 150" axis="0 0 1 "/>
                 <geom name="coxa_RR" type="mesh" mesh="coxa" pos="0 0 0" material="black"/>
 
@@ -133,7 +133,7 @@
                 </body>
             </body>
             <!--            mid left -->
-            <body name="body:coxa_LM" pos="357 365 0" euler="0 0 180">
+            <body name="body:coxa_LM" pos="177 185 0" euler="0 0 180">
                 <joint name="joint:coxa_LM" pos="250 180 150" axis="0 0 -1 "/>
                 <geom name="coxa_LM" type="mesh" mesh="coxa" pos="0 0 0" material="black"/>
 
@@ -153,7 +153,7 @@
                 </body>
             </body>
             <!--            back left-->
-            <body name="body:coxa_LR" pos="187 388 0" euler="0 0 225">
+            <body name="body:coxa_LR" pos="7 208 0" euler="0 0 225">
                 <joint name="joint:coxa_LR" pos="250 180 150" axis="0 0 -1 "/>
                 <geom name="coxa_LR" type="mesh" mesh="coxa" pos="0 0 0" material="black"/>
 
@@ -173,7 +173,7 @@
                 </body>
             </body>
             <!--            RFont left -->
-            <body name="body:coxa_LF" pos="445 234 0" euler="0 0 -225">
+            <body name="body:coxa_LF" pos="265 54 0" euler="0 0 -225">
                 <joint name="joint:coxa_LF" pos="250 180 150" axis="0 0 -1 "/>
                 <geom name="coxa_LF" type="mesh" mesh="coxa" pos="0 0 0" material="black"/>
 
