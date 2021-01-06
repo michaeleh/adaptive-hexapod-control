@@ -1,3 +1,6 @@
+import pickle
+
+import matplotlib.pyplot as plt
 import os
 import time
 from itertools import cycle
@@ -6,6 +9,7 @@ from numpy import linspace
 
 from gait.motion import RotationMotion
 from model.hexapod_env import HexapodEnv
+from model.joint_types import JointNames
 
 '''
 Loading model and environment
@@ -23,10 +27,19 @@ qpos_map = env.map_joint_qpos()
 model = RotationMotion(qpos_map)
 obs = env.reset()
 space_size = 10  # how many state to interpolate
-
-while True:
+pos = []
+start = time.time()
+while time.time() - start < 30:
     # get model action
     goal = model.generate_action(obs, env.axis_change())
     # interpolate
     for state in linspace(env.get_obs(), goal, space_size):
         obs, reward, done, info = env.step(state)
+        pos.append(
+            max(env.data.body_xpos[env.index_of_body(JointNames.COXA_RM.value.replace('joint', 'body'))][2],
+                env.data.body_xpos[env.index_of_body(JointNames.COXA_LM.value.replace('joint', 'body'))][2])
+        )
+env.close()
+print(len(pos))
+with open('neuro/hexa_h.pkl', 'wb') as fp:
+    pickle.dump(pos, fp)

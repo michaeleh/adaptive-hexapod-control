@@ -1,5 +1,6 @@
 import numpy as np
 from gym.envs.mujoco import MujocoEnv
+from scipy.spatial.transform import Rotation
 
 from model.joint_types import JointNames, EENames
 
@@ -37,6 +38,11 @@ class HexapodEnv(MujocoEnv):
             but for velocity you use angular velocity which consists of 3 elements.
             '''
             qvel[0:3] = diff_pos[0:3]  # set xyz velocity
+            w1, x1, y1, z1 = action[3:7]
+            w2, x2, y2, z2 = self.get_obs()[3:7]
+            q1 = Rotation.from_quat([x1, y1, z1, w1])
+            q2 = Rotation.from_quat([x2, y2, z2, w2])
+            qvel[3:6] = q1.as_euler('xyz', degrees=False) - q2.as_euler('xyz', degrees=False)
 
             self.set_state(action, qvel)
             # apply physics simulation steps
