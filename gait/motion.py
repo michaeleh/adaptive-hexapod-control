@@ -4,6 +4,7 @@ import numpy as np
 
 from gait.motion_sync import MotionSync
 from gait.walking_cycles import _Cycle, StageType, _3LegCycle, _1LegCycle, _2LegCycle, _RotationCycle
+from kinematics import quaternion
 from kinematics.ik_algorithm import angles_to_target
 from model.leg import forward_vec, all_legs
 
@@ -24,7 +25,6 @@ class _Motion(ABC):
         """
         new_pos = obs.copy()
         legs, stage = self.cycle.get_next()
-        print(stage)
         for leg in legs:
             # get qpos of each joint
             coxa = self.joint_pos_dict[leg.coxa.value]
@@ -68,10 +68,14 @@ class RippleMotion(_Motion):
 
 
 class RotationMotion(_Motion):
+    def __init__(self, joint_pos_dict):
+        super().__init__(joint_pos_dict)
+        self.angle = np.deg2rad(-10)
+
     def get_cycle(self) -> _Cycle:
         return _RotationCycle()
 
-    def generate_action(self, obs):
+    def generate_action(self, obs, axis_diff):
         """
         Generate action according to current cycle and leg group
         """
@@ -83,7 +87,7 @@ class RotationMotion(_Motion):
             femur = self.joint_pos_dict[leg.femur.value]
             tibia = self.joint_pos_dict[leg.tibia.value]
             joint_pos = [coxa, femur, tibia]
-            new_pos[joint_pos], e = angles_to_target(q=np.zeros_like(obs[joint_pos]), target=leg.target_up)
+            new_pos[joint_pos], e = angles_to_target(q=np.zeros_like(obs[joint_pos]), target=2 * leg.target_up)
         other_legs = [leg for leg in all_legs if leg not in legs]
         for leg in other_legs:
             # get qpos of each joint
@@ -91,5 +95,10 @@ class RotationMotion(_Motion):
             femur = self.joint_pos_dict[leg.femur.value]
             tibia = self.joint_pos_dict[leg.tibia.value]
             joint_pos = [coxa, femur, tibia]
-            new_pos[joint_pos], e = angles_to_target(q=np.zeros_like(obs[joint_pos]), target=-leg.target_up)
+            new_pos[joint_pos], e = angles_to_target(q=np.zeros_like(obs[joint_pos]), target=-2 * leg.target_up)
+
+        # and orientation (qpos[3]~qpos[6])
+        qv = quaternion.transform(*[0, 1, 0], self.angle)
+        new_pos[3:7] = qv
+        self.angle *= -1
         return new_pos

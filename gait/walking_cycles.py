@@ -79,6 +79,12 @@ class _2LegCycle(_Cycle):
 
 
 class _RotationCycle(_Cycle):
+    def __init__(self):
+        self.stages_cycle = cycle([StageType.UP])  # leg swing cycle
+        self.legs_cycle = self.get_legs_cycle()
+        self.legs = next(self.legs_cycle)
+        self.stage = StageType.UP
+
     def get_legs_cycle(self):
         return cycle([
             [leg_rm, leg_rr, leg_rf],

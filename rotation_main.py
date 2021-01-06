@@ -26,7 +26,7 @@ space_size = 10  # how many state to interpolate
 
 while True:
     # get model action
-    goal = model.generate_action(obs)
+    goal = model.generate_action(obs, env.axis_change())
     # interpolate
     for state in linspace(env.get_obs(), goal, space_size):
         obs, reward, done, info = env.step(state)

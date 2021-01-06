@@ -2,6 +2,7 @@ from typing import Dict
 
 import numpy as np
 
+from kinematics import quaternion
 from kinematics.ik_algorithm import angles_to_target
 from model.leg import Leg, all_legs
 
@@ -30,7 +31,8 @@ class MotionSync:
         # move body in the average direction
         new_qpos = qpos.copy()
         mean_dir = axis_change / len(all_legs)
-        print(mean_dir)
+
+        # forward motion on the ground
         new_qpos[self.body_xyz] += mean_dir
         # adjust other legs to make foot tip still
         for leg in all_legs:
@@ -39,4 +41,5 @@ class MotionSync:
             tibia = self.joint_pos_dict[leg.tibia.value]
             joint_pos = [coxa, femur, tibia]
             new_qpos[joint_pos], e = angles_to_target(q=qpos[joint_pos], target=-leg.rotate(mean_dir))
+
         return new_qpos

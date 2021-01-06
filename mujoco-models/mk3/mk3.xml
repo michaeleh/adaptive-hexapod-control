@@ -9,12 +9,11 @@
         <mesh file="coxa.stl"/>
         <mesh file="femur.stl"/>
         <mesh file="tibia.stl"/>
-        <texture name="floor_tile" file="meshes/floor_tile.png" width="3000 3000 3000" height="3000 3000 3000"
-                 type="2d"/>
+        <texture name="floor_tile" file="meshes/woodtile.png" type="2d"/>
         <material name="tile" texture="floor_tile" specular="0" shininess="0" reflectance="0" emission="1"/>
         <texture name="texplane" type="2d" builtin="checker" rgb1=".2 .3 .4" rgb2=".1 0.15 0.2"
                  width="512" height="512"/>
-        <material name="black" specular="1" shininess="1" reflectance="1" rgba="0.08 0.08 0.08 1" emission="1"/>
+        <material name="black" specular="1" shininess="1" reflectance="1" rgba="0.08 0.08 0.08 0.8" emission="1"/>
         <material name='MatPlane' reflectance='0.5' texture="texplane" texrepeat="1 1" texuniform="true"/>
 
         <texture type="skybox" file="meshes/mountains.png" gridlayout=".U..LFRB.D.." gridsize="3 4"/>
@@ -64,9 +63,9 @@
 
 
         <camera fovy="45" pos="1 1 1"/>
-        <light pos="0 0 2000" dir="0 0 -1" diffuse="1 1 1"/>
+        <light pos="0 0 2000" dir="0 -1 -1" diffuse="1 1 1"/>
         <!--        <geom name="floor_tile_grey_tile" pos="0 0 0" size="5000 5000 1" type="plane" material="tile"/>-->
-        <geom name='floor' pos='0 0 0' size='3000 3000 10' type='plane' material="MatPlane" condim='3'/>
+        <geom name='floor' pos='0 0 0' size='3000 3000 10' type='plane' material="tile" condim='3'/>
 
         <!--        Body of hexapod-->
         <body name="body:torso" pos="0 0 0">
