@@ -1,7 +1,7 @@
 import numpy as np
 from gym.envs.mujoco import MujocoEnv
 
-from model.joint_types import JointNames
+from model.joint_types import JointNames, EENames
 
 np.set_printoptions(suppress=True)
 
@@ -16,6 +16,8 @@ class HexapodEnv(MujocoEnv):
         reset model to zero state
         """
         self.set_state(np.zeros_like(self.sim.data.qpos), np.zeros_like(self.sim.data.qvel))
+        self.body_names = list(self.model.body_names)
+        self.initial_ee_pos = np.array([self.sim.data.body_xpos[self.index_of_body(b.value)] for b in EENames])
         return self.get_obs()
 
     def step(self, action):
@@ -25,7 +27,7 @@ class HexapodEnv(MujocoEnv):
             diff_pos = action - self.get_obs()  # difference in position is velocity
             qvel_id = self.map_joint_qvel()
             for joint, idx in self.map_joint_qpos().items():
-                qvel[qvel_id[joint]] = diff_pos[idx] / self.dt  # apply velocity for each joint
+                qvel[qvel_id[joint]] = diff_pos[idx] * self.dt  # apply velocity for each joint
 
             '''
             qpos[0]~qpos[6] corresponds to the 'root' joint cartesian position (qpos[0]~qpos[2]) and orientation
@@ -71,3 +73,15 @@ class HexapodEnv(MujocoEnv):
     @property
     def qpos(self):
         return self.sim.data.qpos.copy()
+
+    def index_of_body(self, name):
+        return self.body_names.index(name)
+
+    def axis_change(self):
+        torso_current = self.sim.data.body_xpos[self.index_of_body('body:torso')]
+        ee_pos = np.array([self.sim.data.body_xpos[self.index_of_body(b.value)] for b in EENames])
+
+        relative_pos = ee_pos - torso_current
+        diff = relative_pos - self.initial_ee_pos
+
+        return diff.sum(axis=0)

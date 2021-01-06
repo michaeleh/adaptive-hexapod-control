@@ -76,3 +76,11 @@ class _2LegCycle(_Cycle):
             [leg_rf, leg_lm],
             [leg_lf, leg_rr]
         ])
+
+
+class _RotationCycle(_Cycle):
+    def get_legs_cycle(self):
+        return cycle([
+            [leg_rm, leg_rr, leg_rf],
+            [leg_lm, leg_lr, leg_lf]
+        ])

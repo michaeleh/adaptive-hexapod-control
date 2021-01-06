@@ -13,11 +13,11 @@
                  type="2d"/>
         <material name="tile" texture="floor_tile" specular="0" shininess="0" reflectance="0" emission="1"/>
         <texture name="texplane" type="2d" builtin="checker" rgb1=".2 .3 .4" rgb2=".1 0.15 0.2"
-            width="512" height="512"/>
+                 width="512" height="512"/>
         <material name="black" specular="1" shininess="1" reflectance="1" rgba="0.08 0.08 0.08 1" emission="1"/>
         <material name='MatPlane' reflectance='0.5' texture="texplane" texrepeat="1 1" texuniform="true"/>
 
-        <texture type="skybox" file="meshes/mountains.png"  gridlayout = ".U..LFRB.D.." gridsize = "3 4"/>
+        <texture type="skybox" file="meshes/mountains.png" gridlayout=".U..LFRB.D.." gridsize="3 4"/>
     </asset>
 
     <contact>
@@ -25,31 +25,39 @@
         <exclude body1="body:torso" body2="body:coxa_RM"/>
         <exclude body1="body:coxa_RM" body2="body:femur_RM"/>
         <exclude body1="body:femur_RM" body2="body:tibia_RM"/>
+        <exclude body1="body:eeRM" body2="body:tibia_RM"/>
 
         <!--leg2 and body-->
         <exclude body1="body:torso" body2="body:coxa_RF"/>
         <exclude body1="body:coxa_RF" body2="body:femur_RF"/>
         <exclude body1="body:femur_RF" body2="body:tibia_RF"/>
+        <exclude body1="body:eeRM" body2="body:tibia_RF"/>
         <!---->
         <!--leg3 and body-->
         <exclude body1="body:torso" body2="body:coxa_RR"/>
         <exclude body1="body:coxa_RR" body2="body:femur_RR"/>
         <exclude body1="body:femur_RR" body2="body:tibia_RR"/>
+        <exclude body1="body:eeRR" body2="body:tibia_RR"/>
         <!---->
         <!--leg4 and body-->
         <exclude body1="body:torso" body2="body:coxa_LM"/>
         <exclude body1="body:coxa_LM" body2="body:femur_LM"/>
         <exclude body1="body:femur_LM" body2="body:tibia_LM"/>
+        <exclude body1="body:eeLM" body2="body:tibia_LM"/>
         <!---->
         <!--leg5 and body-->
         <exclude body1="body:torso" body2="body:coxa_LR"/>
         <exclude body1="body:coxa_LR" body2="body:femur_LR"/>
         <exclude body1="body:femur_LR" body2="body:tibia_LR"/>
+        <exclude body1="body:eeLR" body2="body:tibia_LR"/>
         <!---->
         <!--leg6 and body-->
         <exclude body1="body:torso" body2="body:coxa_LF"/>
         <exclude body1="body:coxa_LF" body2="body:femur_LF"/>
         <exclude body1="body:femur_LF" body2="body:tibia_LF"/>
+        <exclude body1="body:eeLF" body2="body:tibia_LF"/>
+
+
     </contact>
 
     <worldbody>
@@ -57,8 +65,8 @@
 
         <camera fovy="45" pos="1 1 1"/>
         <light pos="0 0 2000" dir="0 0 -1" diffuse="1 1 1"/>
-<!--        <geom name="floor_tile_grey_tile" pos="0 0 0" size="5000 5000 1" type="plane" material="tile"/>-->
-		<geom name='floor' pos='0 0 0' size='3000 3000 10' type='plane' material="MatPlane" condim='3'/>
+        <!--        <geom name="floor_tile_grey_tile" pos="0 0 0" size="5000 5000 1" type="plane" material="tile"/>-->
+        <geom name='floor' pos='0 0 0' size='3000 3000 10' type='plane' material="MatPlane" condim='3'/>
 
         <!--        Body of hexapod-->
         <body name="body:torso" pos="0 0 0">
@@ -68,7 +76,7 @@
 
             <!--                        mid-right-->
             <body name="body:coxa_RM" pos="0 0 0">
-                <joint name="joint:coxa_RM"  pos="250 180 150" axis="0 0 1 "/>
+                <joint name="joint:coxa_RM" pos="250 180 150" axis="0 0 1 "/>
                 <geom name="coxa_RM" type="mesh" mesh="coxa" pos="0 0 0" material="black"/>
 
 
@@ -80,12 +88,13 @@
                     <body name="body:tibia_RM" pos="0 0 0">
                         <geom name="tibia_RM" type="mesh" mesh="tibia" pos="0 0 0" material="black"/>
                         <joint name="joint:tibia_RM" pos="400 180 140" axis="0 1 0"/>
+                        <body name="body:eeRM" pos="400 180 0"/>
                     </body>
                 </body>
             </body>
             <!--            RFont right-->
             <body name="body:coxa_RF" pos="172 -22 0" euler="0 0 45">
-                <joint name="joint:coxa_RF"  pos="250 180 150" axis="0 0 1 "/>
+                <joint name="joint:coxa_RF" pos="250 180 150" axis="0 0 1 "/>
                 <geom name="coxa_RF" type="mesh" mesh="coxa" pos="0 0 0" material="black"/>
 
 
@@ -97,6 +106,8 @@
                     <body name="body:tibia_RF" pos="0 0 0">
                         <joint name="joint:tibia_RF" pos="400 180 140" axis="0 1 0"/>
                         <geom name="tibia_RF" type="mesh" mesh="tibia" pos="0 0 0" material="black"/>
+                        <body name="body:eeRF" pos="400 180 0">
+                        </body>
 
 
                     </body>
@@ -104,7 +115,7 @@
             </body>
             <!--            back right -->
             <body name="body:coxa_RR" pos="-87 130 0" euler="0 0 -45">
-                <joint name="joint:coxa_RR"  pos="250 180 150" axis="0 0 1 "/>
+                <joint name="joint:coxa_RR" pos="250 180 150" axis="0 0 1 "/>
                 <geom name="coxa_RR" type="mesh" mesh="coxa" pos="0 0 0" material="black"/>
 
 
@@ -116,14 +127,15 @@
                     <body name="body:tibia_RR" pos="0 0 0">
                         <joint name="joint:tibia_RR" pos="400 180 140" axis="0 1 0"/>
                         <geom name="tibia_RR" type="mesh" mesh="tibia" pos="0 0 0" material="black"/>
-
+                        <body name="body:eeRR" pos="400 180 0">
+                        </body>
 
                     </body>
                 </body>
             </body>
             <!--            mid left -->
             <body name="body:coxa_LM" pos="357 365 0" euler="0 0 180">
-                <joint name="joint:coxa_LM"  pos="250 180 150" axis="0 0 -1 "/>
+                <joint name="joint:coxa_LM" pos="250 180 150" axis="0 0 -1 "/>
                 <geom name="coxa_LM" type="mesh" mesh="coxa" pos="0 0 0" material="black"/>
 
 
@@ -135,14 +147,15 @@
                     <body name="body:tibia_LM" pos="0 0 0">
                         <joint name="joint:tibia_LM" pos="400 180 140" axis="0 1 0"/>
                         <geom name="tibia_LM" type="mesh" mesh="tibia" pos="0 0 0" material="black"/>
-
+                        <body name="body:eeLM" pos="400 180 0">
+                        </body>
 
                     </body>
                 </body>
             </body>
             <!--            back left-->
             <body name="body:coxa_LR" pos="187 388 0" euler="0 0 225">
-                <joint name="joint:coxa_LR"  pos="250 180 150" axis="0 0 -1 "/>
+                <joint name="joint:coxa_LR" pos="250 180 150" axis="0 0 -1 "/>
                 <geom name="coxa_LR" type="mesh" mesh="coxa" pos="0 0 0" material="black"/>
 
 
@@ -154,14 +167,15 @@
                     <body name="body:tibia_LR" pos="0 0 0">
                         <joint name="joint:tibia_LR" pos="400 180 140" axis="0 1 0"/>
                         <geom name="tibia_LR" type="mesh" mesh="tibia" pos="0 0 0" material="black"/>
-
+                        <body name="body:eeLR" pos="400 180 0">
+                        </body>
 
                     </body>
                 </body>
             </body>
             <!--            RFont left -->
             <body name="body:coxa_LF" pos="445 234 0" euler="0 0 -225">
-                <joint name="joint:coxa_LF"  pos="250 180 150" axis="0 0 -1 "/>
+                <joint name="joint:coxa_LF" pos="250 180 150" axis="0 0 -1 "/>
                 <geom name="coxa_LF" type="mesh" mesh="coxa" pos="0 0 0" material="black"/>
 
 
@@ -173,7 +187,8 @@
                     <body name="body:tibia_LF" pos="0 0 0">
                         <joint name="joint:tibia_LF" pos="400 180 140" axis="0 1 0"/>
                         <geom name="tibia_LF" type="mesh" mesh="tibia" pos="0 0 0" material="black"/>
-
+                        <body name="body:eeLF" pos="400 180 0">
+                        </body>
 
                     </body>
                 </body>

@@ -25,3 +25,12 @@ class JointNames(Enum):
     TIBIA_LM = 'joint:tibia_LM'
     TIBIA_LR = 'joint:tibia_LR'
 
+
+class EENames(Enum):
+    EE_RM = 'body:eeRM'
+    EE_RF = 'body:eeRF'
+    EE_RR = 'body:eeRR'
+
+    EE_LM = 'body:eeLM'
+    EE_LF = 'body:eeLF'
+    EE_LR = 'body:eeLR'
