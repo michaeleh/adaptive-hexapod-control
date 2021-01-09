@@ -70,7 +70,7 @@ class RippleMotion(_Motion):
 class RotationMotion(_Motion):
     def __init__(self, joint_pos_dict):
         super().__init__(joint_pos_dict)
-        self.angle = 7
+        self.angle = 20
 
     def get_cycle(self) -> _Cycle:
         return _RotationCycle()
@@ -87,7 +87,7 @@ class RotationMotion(_Motion):
             femur = self.joint_pos_dict[leg.femur.value]
             tibia = self.joint_pos_dict[leg.tibia.value]
             joint_pos = [coxa, femur, tibia]
-            new_pos[joint_pos], e = angles_to_target(q=np.zeros_like(obs[joint_pos]), target=2 * leg.target_up)
+            new_pos[joint_pos], e = angles_to_target(q=np.zeros_like(obs[joint_pos]), target=5 * leg.target_up)
         other_legs = [leg for leg in all_legs if leg not in legs]
         for leg in other_legs:
             # get qpos of each joint
@@ -95,7 +95,7 @@ class RotationMotion(_Motion):
             femur = self.joint_pos_dict[leg.femur.value]
             tibia = self.joint_pos_dict[leg.tibia.value]
             joint_pos = [coxa, femur, tibia]
-            new_pos[joint_pos], e = angles_to_target(q=np.zeros_like(obs[joint_pos]), target=-2 * leg.target_up)
+            new_pos[joint_pos], e = angles_to_target(q=np.zeros_like(obs[joint_pos]), target=-5 * leg.target_up)
 
         # and orientation (qpos[3]~qpos[6])
         self.angle *= -1

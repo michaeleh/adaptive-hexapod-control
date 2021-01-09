@@ -1,15 +1,11 @@
-import pickle
-
 import matplotlib.pyplot as plt
 import os
-import time
-from itertools import cycle
 
 from numpy import linspace
 
 from gait.motion import RotationMotion
 from model.hexapod_env import HexapodEnv
-from model.joint_types import JointNames
+from neuro.neuro_model import NeuroIntegrator
 
 '''
 Loading model and environment
@@ -17,29 +13,38 @@ Loading model and environment
 BASE_DIR = os.path.dirname(__file__)
 model_name = 'mk3'
 xml_path = os.path.join(BASE_DIR, f'mujoco-models/{model_name}/{model_name}.xml')
-env = HexapodEnv(xml_path, frame_skip=10)
+env = HexapodEnv(xml_path, frame_skip=1)
 
 '''
 Init gaits and other simulation variables
 '''
 qpos_map = env.map_joint_qpos()
 
-model = RotationMotion(qpos_map)
+motion_model = RotationMotion(qpos_map)
 obs = env.reset()
-space_size = 10  # how many state to interpolate
-pos = []
-start = time.time()
-while time.time() - start < 30:
+space_size = 100  # how many state to interpolate
+
+integrator = NeuroIntegrator(env.dt)
+h = env.hexa_h()
+history = []
+
+for _ in range(10):
     # get model action
-    goal = model.generate_action(obs, env.axis_change())
+    goal = motion_model.generate_action(obs, env.axis_change())
     # interpolate
     for state in linspace(env.get_obs(), goal, space_size):
         obs, reward, done, info = env.step(state)
-        pos.append(
-            max(env.data.body_xpos[env.index_of_body(JointNames.COXA_RM.value.replace('joint', 'body'))][2],
-                env.data.body_xpos[env.index_of_body(JointNames.COXA_LM.value.replace('joint', 'body'))][2])
-        )
+        env.render()
+        new_h = env.hexa_h()
+        history.append(new_h)
+        integrator.update(new_h - h)
+        h = new_h
+
 env.close()
-print(len(pos))
-with open('neuro/hexa_h.pkl', 'wb') as fp:
-    pickle.dump(pos, fp)
+plt.title('Integrator estimation of hexapod heights')
+plt.plot(*integrator.get_xy(), label='intergrator')
+plt.plot(integrator.get_xy()[0],  history,linestyle='--', label='real height')
+plt.legend()
+plt.grid()
+plt.savefig('neurotrophic_height.png')
+plt.show()

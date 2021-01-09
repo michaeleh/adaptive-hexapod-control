@@ -48,7 +48,6 @@ class HexapodEnv(MujocoEnv):
             # apply physics simulation steps
             for _ in range(self.frame_skip):
                 self.sim.step()
-                self.render()
 
         reward = 0
         done = False
@@ -92,3 +91,7 @@ class HexapodEnv(MujocoEnv):
         diff = relative_pos - self.initial_ee_pos
 
         return diff.sum(axis=0)
+
+    def hexa_h(self):
+        return max(self.data.body_xpos[self.index_of_body(JointNames.COXA_RM.value.replace('joint', 'body'))][2],
+                   self.data.body_xpos[self.index_of_body(JointNames.COXA_LM.value.replace('joint', 'body'))][2])
