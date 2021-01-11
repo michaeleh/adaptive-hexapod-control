@@ -1,3 +1,5 @@
+import time
+
 import matplotlib.pyplot as plt
 import os
 
@@ -28,7 +30,7 @@ integrator = NeuroIntegrator(env.dt)
 h = env.hexa_h()
 history = []
 
-for _ in range(10):
+for _ in range(15):
     # get model action
     goal = motion_model.generate_action(obs, env.axis_change())
     # interpolate
@@ -39,12 +41,21 @@ for _ in range(10):
         history.append(new_h)
         integrator.update(new_h - h)
         h = new_h
+    start = time.time()
+    # dont move
+    while time.time() - start < 1:
+        obs, reward, done, info = env.step(state)
+        env.render()
+        new_h = env.hexa_h()
+        history.append(new_h)
+        integrator.update(new_h - h)
+        h = new_h
 
 env.close()
 plt.title('Integrator estimation of hexapod heights')
 plt.plot(*integrator.get_xy(), label='intergrator')
-plt.plot(integrator.get_xy()[0],  history,linestyle='--', label='real height')
+plt.plot(integrator.get_xy()[0], history, linestyle='--', label='real height')
 plt.legend()
 plt.grid()
-plt.savefig('neurotrophic_height.png')
-plt.show()
+plt.savefig('neurotrophic_height_dont_move.png')
+# plt.show()

@@ -9,10 +9,10 @@ class NeuroIntegrator:
         with self.model:
             stim = nengo.Node(lambda t: self.values[-1])
 
-            pos = nengo.Ensemble(n_neurons=100, dimensions=1, radius=65)
+            pos = nengo.Ensemble(n_neurons=500, dimensions=1, radius=65)
             nengo.Connection(pos, pos, synapse=1e-2)
             nengo.Connection(stim, pos, transform=5, synapse=1e-2)
-            self.pos_probe = nengo.Probe(pos, synapse=sim_dt)
+            self.pos_probe = nengo.Probe(pos, synapse=1e-2)
 
         self.sim = nengo.Simulator(self.model, dt=sim_dt)
 
