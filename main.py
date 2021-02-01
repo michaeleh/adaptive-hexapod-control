@@ -40,5 +40,5 @@ while True:
         goal = model.generate_action(obs, env.axis_change())
         # interpolate
     for state in linspace(env.get_obs(), goal, space_size):
-        obs, reward, done, info = env.step(state)
+        obs, reward, done, info = env.step(state, render=True)
 env.close()

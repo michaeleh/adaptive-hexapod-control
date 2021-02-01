@@ -21,7 +21,7 @@ class HexapodEnv(MujocoEnv):
         self.initial_ee_pos = np.array([self.sim.data.body_xpos[self.index_of_body(b.value)] for b in EENames])
         return self.get_obs()
 
-    def step(self, action):
+    def step(self, action,render=False):
         if action.shape == (self.model.nq,):
 
             qvel = np.zeros_like(self.qvel)  # copy empty velocity shape
@@ -48,6 +48,8 @@ class HexapodEnv(MujocoEnv):
             # apply physics simulation steps
             for _ in range(self.frame_skip):
                 self.sim.step()
+                if render:
+                    self.render()
 
         reward = 0
         done = False

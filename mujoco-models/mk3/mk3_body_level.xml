@@ -1,0 +1,229 @@
+<mujoco model="mk3">
+
+    <compiler angle="degree" meshdir="meshes"/>
+    <default>
+        <!--        Be careful from this range-->
+        <joint limited="true" damping="1" stiffness="1" range="0 1"/>
+    </default>
+    <asset>
+        <mesh file="body.stl"/>
+        <mesh file="coxa.stl"/>
+        <mesh file="femur.stl"/>
+        <mesh file="tibia.stl"/>
+        <texture name="floor_tile" file="meshes/woodtile.png" type="2d"/>
+        <material name="tile" texture="floor_tile" specular="0" shininess="0" reflectance="0" emission="1"/>
+        <texture name="texplane" type="2d" builtin="checker" rgb1=".2 .3 .4" rgb2=".1 0.15 0.2"
+                 width="512" height="512"/>
+        <material name="black" specular="1" shininess="1" reflectance="1" rgba="0.08 0.08 0.08 0.8" emission="1"/>
+        <material name='MatPlane' reflectance='0.5' texture="texplane" texrepeat="1 1" texuniform="true"/>
+
+        <texture type="skybox" file="meshes/mountains.png" gridlayout=".U..LFRB.D.." gridsize="3 4"/>
+    </asset>
+
+    <!--    <contact>-->
+    <!--        &lt;!&ndash;leg1 and body&ndash;&gt;-->
+    <!--        <exclude body1="body:torso" body2="body:coxa_RM"/>-->
+    <!--        <exclude body1="body:coxa_RM" body2="body:femur_RM"/>-->
+    <!--        <exclude body1="body:femur_RM" body2="body:tibia_RM"/>-->
+    <!--        <exclude body1="body:eeRM" body2="body:tibia_RM"/>-->
+
+    <!--        &lt;!&ndash;leg2 and body&ndash;&gt;-->
+    <!--        <exclude body1="body:torso" body2="body:coxa_RF"/>-->
+    <!--        <exclude body1="body:coxa_RF" body2="body:femur_RF"/>-->
+    <!--        <exclude body1="body:femur_RF" body2="body:tibia_RF"/>-->
+    <!--        <exclude body1="body:eeRM" body2="body:tibia_RF"/>-->
+    <!--        &lt;!&ndash;&ndash;&gt;-->
+    <!--        &lt;!&ndash;leg3 and body&ndash;&gt;-->
+    <!--        <exclude body1="body:torso" body2="body:coxa_RR"/>-->
+    <!--        <exclude body1="body:coxa_RR" body2="body:femur_RR"/>-->
+    <!--        <exclude body1="body:femur_RR" body2="body:tibia_RR"/>-->
+    <!--        <exclude body1="body:eeRR" body2="body:tibia_RR"/>-->
+    <!--        &lt;!&ndash;&ndash;&gt;-->
+    <!--        &lt;!&ndash;leg4 and body&ndash;&gt;-->
+    <!--        <exclude body1="body:torso" body2="body:coxa_LM"/>-->
+    <!--        <exclude body1="body:coxa_LM" body2="body:femur_LM"/>-->
+    <!--        <exclude body1="body:femur_LM" body2="body:tibia_LM"/>-->
+    <!--        <exclude body1="body:eeLM" body2="body:tibia_LM"/>-->
+    <!--        &lt;!&ndash;&ndash;&gt;-->
+    <!--        &lt;!&ndash;leg5 and body&ndash;&gt;-->
+    <!--        <exclude body1="body:torso" body2="body:coxa_LR"/>-->
+    <!--        <exclude body1="body:coxa_LR" body2="body:femur_LR"/>-->
+    <!--        <exclude body1="body:femur_LR" body2="body:tibia_LR"/>-->
+    <!--        <exclude body1="body:eeLR" body2="body:tibia_LR"/>-->
+    <!--        &lt;!&ndash;&ndash;&gt;-->
+    <!--        &lt;!&ndash;leg6 and body&ndash;&gt;-->
+    <!--        <exclude body1="body:torso" body2="body:coxa_LF"/>-->
+    <!--        <exclude body1="body:coxa_LF" body2="body:femur_LF"/>-->
+    <!--        <exclude body1="body:femur_LF" body2="body:tibia_LF"/>-->
+    <!--        <exclude body1="body:eeLF" body2="body:tibia_LF"/>-->
+
+
+    <!--    </contact>-->
+
+    <worldbody>
+
+
+        <camera fovy="45" pos="1 1 1"/>
+        <light pos="0 0 2000" dir="0 0 -1" diffuse=".5 .5 .5"/>
+        <!--        <geom name="floor_tile_grey_tile" pos="0 0 0" size="5000 5000 1" type="plane" material="tile"/>-->
+        <geom name='floor' pos='0 0 0' size='3000 3000 10' type='plane' material="tile" condim='3'/>
+        <body pos="200 0 0">
+            <geom type="box" size="150 500 80" rgba="0.39453125 0.50390625 0.5390625 1"/>
+        </body>
+        <!--        Body of hexapod-->
+        <body name="body:torso" pos="0 0 0">
+            <joint limited="false" name="root" pos="0 0 0" type="free"/>
+            <geom name="body" type="mesh" mesh="body" pos="-180 -180 0" material="black"/>
+
+
+            <!--                        mid-right-->
+            <body name="body:coxa_RM" pos="-180 -180 0">
+                <joint name="joint:coxa_RM" pos="250 180 150" axis="0 0 1 "/>
+                <geom name="coxa_RM" type="mesh" mesh="coxa" pos="0 0 0" material="black"/>
+
+
+                <body name="body:femur_RM" pos="0 0 0">
+                    <geom name="femur_RM" type="mesh" mesh="femur" pos="0 0 0" material="black"/>
+                    <joint name="joint:femur_RM" pos="335 180 140" axis="0 1 0"/>
+
+
+                    <body name="body:tibia_RM" pos="0 0 0">
+                        <geom name="tibia_RM" type="mesh" mesh="tibia" pos="0 0 0" material="black"/>
+                        <joint name="joint:tibia_RM" pos="400 180 140" axis="0 1 0"/>
+                        <body name="body:eeRM" pos="400 180 0"/>
+                    </body>
+                </body>
+            </body>
+            <!--            RFont right-->
+            <body name="body:coxa_RF" pos="-8 -202 0" euler="0 0 45">
+                <joint name="joint:coxa_RF" pos="250 180 150" axis="0 0 1 "/>
+                <geom name="coxa_RF" type="mesh" mesh="coxa" pos="0 0 0" material="black"/>
+
+
+                <body name="body:femur_RF" pos="0 0 0">
+                    <joint name="joint:femur_RF" pos="335 180 140" axis="0 1 0"/>
+                    <geom name="femur_RF" type="mesh" mesh="femur" pos="0 0 0" material="black"/>
+
+
+                    <body name="body:tibia_RF" pos="0 0 0">
+                        <joint name="joint:tibia_RF" pos="400 180 140" axis="0 1 0"/>
+                        <geom name="tibia_RF" type="mesh" mesh="tibia" pos="0 0 0" material="black"/>
+                        <body name="body:eeRF" pos="400 180 0">
+                        </body>
+
+
+                    </body>
+                </body>
+            </body>
+            <!--            back right -->
+            <body name="body:coxa_RR" pos="-267 -50 0" euler="0 0 -45">
+                <joint name="joint:coxa_RR" pos="250 180 150" axis="0 0 1 "/>
+                <geom name="coxa_RR" type="mesh" mesh="coxa" pos="0 0 0" material="black"/>
+
+
+                <body name="body:femur_RR" pos="0 0 0">
+                    <joint name="joint:femur_RR" pos="335 180 140" axis="0 1 0"/>
+                    <geom name="femur_RR" type="mesh" mesh="femur" pos="0 0 0" material="black"/>
+
+
+                    <body name="body:tibia_RR" pos="0 0 0">
+                        <joint name="joint:tibia_RR" pos="400 180 140" axis="0 1 0"/>
+                        <geom name="tibia_RR" type="mesh" mesh="tibia" pos="0 0 0" material="black"/>
+                        <body name="body:eeRR" pos="400 180 0">
+                        </body>
+
+                    </body>
+                </body>
+            </body>
+            <!--            mid left -->
+            <body name="body:coxa_LM" pos="177 185 0" euler="0 0 180">
+                <joint name="joint:coxa_LM" pos="250 180 150" axis="0 0 -1 "/>
+                <geom name="coxa_LM" type="mesh" mesh="coxa" pos="0 0 0" material="black"/>
+
+
+                <body name="body:femur_LM" pos="0 0 0">
+                    <joint name="joint:femur_LM" pos="335 180 140" axis="0 1 0"/>
+                    <geom name="femur_LM" type="mesh" mesh="femur" pos="0 0 0" material="black"/>
+
+
+                    <body name="body:tibia_LM" pos="0 0 0">
+                        <joint name="joint:tibia_LM" pos="400 180 140" axis="0 1 0"/>
+                        <geom name="tibia_LM" type="mesh" mesh="tibia" pos="0 0 0" material="black"/>
+                        <body name="body:eeLM" pos="400 180 0">
+                        </body>
+
+                    </body>
+                </body>
+            </body>
+            <!--            back left-->
+            <body name="body:coxa_LR" pos="7 208 0" euler="0 0 225">
+                <joint name="joint:coxa_LR" pos="250 180 150" axis="0 0 -1 "/>
+                <geom name="coxa_LR" type="mesh" mesh="coxa" pos="0 0 0" material="black"/>
+
+
+                <body name="body:femur_LR" pos="0 0 0">
+                    <joint name="joint:femur_LR" pos="335 180 140" axis="0 1 0"/>
+                    <geom name="femur_LR" type="mesh" mesh="femur" pos="0 0 0" material="black"/>
+
+
+                    <body name="body:tibia_LR" pos="0 0 0">
+                        <joint name="joint:tibia_LR" pos="400 180 140" axis="0 1 0"/>
+                        <geom name="tibia_LR" type="mesh" mesh="tibia" pos="0 0 0" material="black"/>
+                        <body name="body:eeLR" pos="400 180 0">
+                        </body>
+
+                    </body>
+                </body>
+            </body>
+            <!--            RFont left -->
+            <body name="body:coxa_LF" pos="265 54 0" euler="0 0 -225">
+                <joint name="joint:coxa_LF" pos="250 180 150" axis="0 0 -1 "/>
+                <geom name="coxa_LF" type="mesh" mesh="coxa" pos="0 0 0" material="black"/>
+
+
+                <body name="body:femur_LF" pos="0 0 0">
+                    <joint name="joint:femur_LF" pos="335 180 140" axis="0 1 0"/>
+                    <geom name="femur_LF" type="mesh" mesh="femur" pos="0 0 0" material="black"/>
+
+
+                    <body name="body:tibia_LF" pos="0 0 0">
+                        <joint name="joint:tibia_LF" pos="400 180 140" axis="0 1 0"/>
+                        <geom name="tibia_LF" type="mesh" mesh="tibia" pos="0 0 0" material="black"/>
+                        <body name="body:eeLF" pos="400 180 0">
+                        </body>
+
+                    </body>
+                </body>
+            </body>
+        </body>
+
+    </worldbody>
+
+    <actuator>
+        <!--        leg1-->
+        <motor name="motor:coxa_RM" joint="joint:coxa_RM"/>
+        <motor name="motor:femur_RM" joint="joint:femur_RM"/>
+        <motor name="motor:tibia_RM" joint="joint:tibia_RM"/>
+        <!--        leg2-->
+        <motor name="motor:coxa_RF" joint="joint:coxa_RF"/>
+        <motor name="motor:femur_RF" joint="joint:femur_RF"/>
+        <motor name="motor:tibia_RF" joint="joint:tibia_RF"/>
+        <!--        leg3-->
+        <motor name="motor:coxa_RR" joint="joint:coxa_RR"/>
+        <motor name="motor:femur_RR" joint="joint:femur_RR"/>
+        <motor name="motor:tibia_RR" joint="joint:tibia_RR"/>
+        <!--        leg4-->
+        <motor name="motor:coxa_LM" joint="joint:coxa_LM"/>
+        <motor name="motor:femur_LM" joint="joint:femur_LM"/>
+        <motor name="motor:tibia_LM" joint="joint:tibia_LM"/>
+        <!--        leg5-->
+        <motor name="motor:coxa_LR" joint="joint:coxa_LR"/>
+        <motor name="motor:femur_LR" joint="joint:femur_LR"/>
+        <motor name="motor:tibia_LR" joint="joint:tibia_LR"/>
+        <!--        leg6-->
+        <motor name="motor:coxa_LF" joint="joint:coxa_LF"/>
+        <motor name="motor:femur_LF" joint="joint:femur_LF"/>
+        <motor name="motor:tibia_LF" joint="joint:tibia_LF"/>
+    </actuator>
+
+</mujoco>
