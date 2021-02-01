@@ -7,7 +7,7 @@ from numpy import linspace
 
 from gait.motion import RotationMotion
 from model.hexapod_env import HexapodEnv
-from neuro.neuro_model import NeuroIntegrator
+from neuro.height_integrator import NeuroIntegrator
 
 '''
 Loading model and environment

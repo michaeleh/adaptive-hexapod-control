@@ -21,7 +21,7 @@ class HexapodEnv(MujocoEnv):
         self.initial_ee_pos = np.array([self.sim.data.body_xpos[self.index_of_body(b.value)] for b in EENames])
         return self.get_obs()
 
-    def step(self, action,render=False):
+    def step(self, action, render=False):
         if action.shape == (self.model.nq,):
 
             qvel = np.zeros_like(self.qvel)  # copy empty velocity shape
@@ -97,3 +97,6 @@ class HexapodEnv(MujocoEnv):
     def hexa_h(self):
         return max(self.data.body_xpos[self.index_of_body(JointNames.COXA_RM.value.replace('joint', 'body'))][2],
                    self.data.body_xpos[self.index_of_body(JointNames.COXA_LM.value.replace('joint', 'body'))][2])
+
+    def get_pos(self, joint_name):
+        return self.data.body_xpos[self.index_of_body(joint_name.replace('joint', 'body'))]
