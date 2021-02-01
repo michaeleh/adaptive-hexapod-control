@@ -3,7 +3,7 @@
     <compiler angle="degree" meshdir="meshes"/>
     <default>
         <!--        Be careful from this range-->
-        <joint limited="true" damping="1" stiffness="1" range="0 1"/>
+        <joint limited="true" damping="1" stiffness="1" range="-10 10"/>
     </default>
     <asset>
         <mesh file="body.stl"/>

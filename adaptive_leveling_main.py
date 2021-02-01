@@ -1,12 +1,7 @@
 import os
-import time
-from itertools import cycle
 
 import numpy as np
-from numpy import linspace
-from scipy.spatial.transform import Rotation
 
-from gait.motion import TripodMotion, WaveMotion, RippleMotion
 from model.hexapod_env import HexapodEnv
 
 '''
