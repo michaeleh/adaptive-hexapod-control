@@ -10,7 +10,6 @@ from tqdm import tqdm
 from model.hexapod_env import HexapodEnv
 from model.joint_types import JointNames
 from neuro.plane_angles import PlaneRotation
-from neuro.utils import SCALE
 
 '''
 Loading model and environment
@@ -45,15 +44,19 @@ for _ in tqdm(range(1000)):
     env.step(env.qpos, render=False)
     p1 = env.get_pos(joint1)
     p2 = env.get_pos(joint2)
-    idxs = [0, 2]  # x,z axis
+    idxs = [1, 2]  # x,z axis
     neuro_model.update((p1[idxs] - prevp1[idxs]),
                        (p2[idxs] - prevp2[idxs]))
     prevp1, prevp2 = p1.copy(), p2.copy()
-    history.append(np.arctan2(p1[2] - p2[2], p1[0] - p2[0]))
+    w, x, y, z = env.get_obs()[3:7]
+    q = Rotation.from_quat([x, y, z, w])
+    rot = q.as_euler('xyz', degrees=False)
+    history.append(p1[idxs] - p2[idxs])
 env.close()
 
 x, y = neuro_model.get_xy()
-plt.plot(x, y, label='model')
-plt.plot(x, history, label='real', linestyle='--')
+plt.plot(x, y, label=['modelx', 'modely'])
+plt.plot(x, history, label=['realx', 'realy'], linestyle='--')
+# plt.plot(x, history, label='real', linestyle='--')
 plt.legend()
 plt.savefig('gihhg.png')
