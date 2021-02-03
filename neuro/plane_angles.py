@@ -43,7 +43,7 @@ class PlaneRotation:
 
             # find angle
             y_rot = nengo.Ensemble(n_neurons=1000, dimensions=1, radius=np.pi)
-            nengo.Connection(axis_diff, y_rot,synapse=0.1, function=angle)
+            nengo.Connection(axis_diff, y_rot,synapse=0.07, function=angle)
 
             self.probe = nengo.Probe(y_rot, synapse=0.1)
 

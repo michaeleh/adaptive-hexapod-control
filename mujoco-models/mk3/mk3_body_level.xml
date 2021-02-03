@@ -20,45 +20,45 @@
         <texture type="skybox" file="meshes/mountains.png" gridlayout=".U..LFRB.D.." gridsize="3 4"/>
     </asset>
 
-    <!--    <contact>-->
-    <!--        &lt;!&ndash;leg1 and body&ndash;&gt;-->
-    <!--        <exclude body1="body:torso" body2="body:coxa_RM"/>-->
-    <!--        <exclude body1="body:coxa_RM" body2="body:femur_RM"/>-->
-    <!--        <exclude body1="body:femur_RM" body2="body:tibia_RM"/>-->
-    <!--        <exclude body1="body:eeRM" body2="body:tibia_RM"/>-->
+        <contact>
+            <!--leg1 and body-->
+            <exclude body1="body:torso" body2="body:coxa_RM"/>
+            <exclude body1="body:coxa_RM" body2="body:femur_RM"/>
+            <exclude body1="body:femur_RM" body2="body:tibia_RM"/>
+            <exclude body1="body:eeRM" body2="body:tibia_RM"/>
 
-    <!--        &lt;!&ndash;leg2 and body&ndash;&gt;-->
-    <!--        <exclude body1="body:torso" body2="body:coxa_RF"/>-->
-    <!--        <exclude body1="body:coxa_RF" body2="body:femur_RF"/>-->
-    <!--        <exclude body1="body:femur_RF" body2="body:tibia_RF"/>-->
-    <!--        <exclude body1="body:eeRM" body2="body:tibia_RF"/>-->
-    <!--        &lt;!&ndash;&ndash;&gt;-->
-    <!--        &lt;!&ndash;leg3 and body&ndash;&gt;-->
-    <!--        <exclude body1="body:torso" body2="body:coxa_RR"/>-->
-    <!--        <exclude body1="body:coxa_RR" body2="body:femur_RR"/>-->
-    <!--        <exclude body1="body:femur_RR" body2="body:tibia_RR"/>-->
-    <!--        <exclude body1="body:eeRR" body2="body:tibia_RR"/>-->
-    <!--        &lt;!&ndash;&ndash;&gt;-->
-    <!--        &lt;!&ndash;leg4 and body&ndash;&gt;-->
-    <!--        <exclude body1="body:torso" body2="body:coxa_LM"/>-->
-    <!--        <exclude body1="body:coxa_LM" body2="body:femur_LM"/>-->
-    <!--        <exclude body1="body:femur_LM" body2="body:tibia_LM"/>-->
-    <!--        <exclude body1="body:eeLM" body2="body:tibia_LM"/>-->
-    <!--        &lt;!&ndash;&ndash;&gt;-->
-    <!--        &lt;!&ndash;leg5 and body&ndash;&gt;-->
-    <!--        <exclude body1="body:torso" body2="body:coxa_LR"/>-->
-    <!--        <exclude body1="body:coxa_LR" body2="body:femur_LR"/>-->
-    <!--        <exclude body1="body:femur_LR" body2="body:tibia_LR"/>-->
-    <!--        <exclude body1="body:eeLR" body2="body:tibia_LR"/>-->
-    <!--        &lt;!&ndash;&ndash;&gt;-->
-    <!--        &lt;!&ndash;leg6 and body&ndash;&gt;-->
-    <!--        <exclude body1="body:torso" body2="body:coxa_LF"/>-->
-    <!--        <exclude body1="body:coxa_LF" body2="body:femur_LF"/>-->
-    <!--        <exclude body1="body:femur_LF" body2="body:tibia_LF"/>-->
-    <!--        <exclude body1="body:eeLF" body2="body:tibia_LF"/>-->
+            <!--leg2 and body-->
+            <exclude body1="body:torso" body2="body:coxa_RF"/>
+            <exclude body1="body:coxa_RF" body2="body:femur_RF"/>
+            <exclude body1="body:femur_RF" body2="body:tibia_RF"/>
+            <exclude body1="body:eeRM" body2="body:tibia_RF"/>
+            <!---->
+            <!--leg3 and body-->
+            <exclude body1="body:torso" body2="body:coxa_RR"/>
+            <exclude body1="body:coxa_RR" body2="body:femur_RR"/>
+            <exclude body1="body:femur_RR" body2="body:tibia_RR"/>
+            <exclude body1="body:eeRR" body2="body:tibia_RR"/>
+            <!---->
+            <!--leg4 and body-->
+            <exclude body1="body:torso" body2="body:coxa_LM"/>
+            <exclude body1="body:coxa_LM" body2="body:femur_LM"/>
+            <exclude body1="body:femur_LM" body2="body:tibia_LM"/>
+            <exclude body1="body:eeLM" body2="body:tibia_LM"/>
+            <!---->
+            <!--leg5 and body-->
+            <exclude body1="body:torso" body2="body:coxa_LR"/>
+            <exclude body1="body:coxa_LR" body2="body:femur_LR"/>
+            <exclude body1="body:femur_LR" body2="body:tibia_LR"/>
+            <exclude body1="body:eeLR" body2="body:tibia_LR"/>
+            <!---->
+            <!--leg6 and body-->
+            <exclude body1="body:torso" body2="body:coxa_LF"/>
+            <exclude body1="body:coxa_LF" body2="body:femur_LF"/>
+            <exclude body1="body:femur_LF" body2="body:tibia_LF"/>
+            <exclude body1="body:eeLF" body2="body:tibia_LF"/>
 
 
-    <!--    </contact>-->
+        </contact>
 
     <worldbody>
 

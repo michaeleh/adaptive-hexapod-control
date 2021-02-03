@@ -16,7 +16,7 @@ Loading model and environment
 '''
 BASE_DIR = os.path.dirname(__file__)
 xml_path = os.path.join(BASE_DIR, 'mujoco-models/mk3/mk3_body_level.xml')
-env = HexapodEnv(xml_path, frame_skip=1)
+env = HexapodEnv(xml_path, frame_skip=10)
 
 '''
 Init gaits and other simulation variables
@@ -39,24 +39,29 @@ state = env.qpos
 for v in qpos_map.values():
     state[v] = 0
 env.set_state(state, np.zeros_like(env.qvel))
-history = []
+# history = []
+new_pos = env.qpos
 for _ in tqdm(range(1000)):
-    env.step(env.qpos, render=False)
     p1 = env.get_pos(joint1)
     p2 = env.get_pos(joint2)
     idxs = [1, 2]  # x,z axis
     neuro_model.update((p1[idxs] - prevp1[idxs]),
                        (p2[idxs] - prevp2[idxs]))
     prevp1, prevp2 = p1.copy(), p2.copy()
-    w, x, y, z = env.get_obs()[3:7]
-    q = Rotation.from_quat([x, y, z, w])
-    rot = q.as_euler('xyz', degrees=False)
-    history.append(rot[1])
+
+    rot_angle = neuro_model.curr_val
+    new_pos = env.qpos
+    rot = Rotation.from_euler('xyz', [0, -rot_angle, 0], degrees=True)
+    x, y, z, w = rot.as_quat()
+    new_pos[3:7] = [w, x, y, z]
+
+    env.step(new_pos, render=True)
+
 env.close()
 
-x, y = neuro_model.get_xy()
-plt.plot(x, y, label='model')
-plt.plot(x, history, label='real', linestyle='--')
+# x, y = neuro_model.get_xy()
+# plt.plot(x, y, label='model')
 # plt.plot(x, history, label='real', linestyle='--')
-plt.legend()
-plt.savefig('gihhg.png')
+# # plt.plot(x, history, label='real', linestyle='--')
+# plt.legend()
+# plt.savefig('gihhg.png')
