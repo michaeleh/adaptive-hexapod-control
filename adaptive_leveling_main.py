@@ -40,8 +40,7 @@ state = env.qpos
 for v in qpos_map.values():
     state[v] = 0
 env.set_state(state, np.zeros_like(env.qvel))
-history1 = []
-history2 = []
+history = []
 for _ in tqdm(range(1000)):
     env.step(env.qpos, render=False)
     p1 = env.get_pos(joint1)
@@ -50,14 +49,11 @@ for _ in tqdm(range(1000)):
     neuro_model.update((p1[idxs] - prevp1[idxs]),
                        (p2[idxs] - prevp2[idxs]))
     prevp1, prevp2 = p1.copy(), p2.copy()
-    history1.append(p1[idxs])
-    history2.append(p2[idxs])
+    history.append(np.arctan2(p1[2] - p2[2], p1[0] - p2[0]))
 env.close()
 
-x, y1, y2 = neuro_model.get_xy()
-plt.plot(x, y1, label='1', c='g')
-plt.plot(x, y2, label='2', c='b')
-plt.plot(x, history1, label='real1', linestyle='--', c='g')
-plt.plot(x, history2, label='real2', linestyle='--', c='b')
+x, y = neuro_model.get_xy()
+plt.plot(x, y, label='model')
+plt.plot(x, history, label='real', linestyle='--')
 plt.legend()
 plt.savefig('gihhg.png')

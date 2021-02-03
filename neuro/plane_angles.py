@@ -45,8 +45,7 @@ class PlaneRotation:
             y_rot = nengo.Ensemble(n_neurons=1000, dimensions=1, radius=np.pi)
             nengo.Connection(axis_diff, y_rot, function=angle)
 
-            self.probe1 = nengo.Probe(pos1, synapse=0.1)
-            self.probe2 = nengo.Probe(pos2, synapse=0.1)
+            self.probe = nengo.Probe(y_rot, synapse=0.1)
 
         self.sim = nengo.Simulator(self.model, dt=sim_dt)
 
@@ -56,7 +55,7 @@ class PlaneRotation:
         self.sim.step()
 
     def get_xy(self):
-        return self.sim.trange(), self.sim.data[self.probe1], self.sim.data[self.probe2]
+        return self.sim.trange(), self.sim.data[self.probe]
 
     @property
     def curr_val(self):
