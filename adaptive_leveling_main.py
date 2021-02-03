@@ -28,25 +28,36 @@ space_size = 10  # how many state to interpolate
 
 joint1 = JointNames.COXA_RM.value
 joint2 = JointNames.COXA_LM.value
-prevp1 = env.get_pos(joint1)
-prevp2 = env.get_pos(joint2)
-neuro_model = PlaneRotation(sim_dt=env.dt, dist=(prevp1[0] - prevp2[0]))
+
 # warmup physic
 for _ in range(1200):
     env.step(env.qpos, render=False)
+
+neuro_model = PlaneRotation(sim_dt=env.dt)
 
 prevp1 = prevp2 = np.zeros(3)
 state = env.qpos
 for v in qpos_map.values():
     state[v] = 0
 env.set_state(state, np.zeros_like(env.qvel))
+history1 = []
+history2 = []
 for _ in tqdm(range(1000)):
     env.step(env.qpos, render=False)
     p1 = env.get_pos(joint1)
     p2 = env.get_pos(joint2)
-    neuro_model.update((p1[2] - prevp1[2]),
-                       (p2[2] - prevp2[2]))
+    idxs = [0, 2]  # x,z axis
+    neuro_model.update((p1[idxs] - prevp1[idxs]),
+                       (p2[idxs] - prevp2[idxs]))
     prevp1, prevp2 = p1.copy(), p2.copy()
-
+    history1.append(p1[idxs])
+    history2.append(p2[idxs])
 env.close()
 
+x, y1, y2 = neuro_model.get_xy()
+plt.plot(x, y1, label='1', c='g')
+plt.plot(x, y2, label='2', c='b')
+plt.plot(x, history1, label='real1', linestyle='--', c='g')
+plt.plot(x, history2, label='real2', linestyle='--', c='b')
+plt.legend()
+plt.savefig('gihhg.png')

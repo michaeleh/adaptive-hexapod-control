@@ -13,41 +13,40 @@ def angle(inp):
 
 
 class PlaneRotation:
-    def __init__(self, sim_dt, dist):
+    def __init__(self, sim_dt):
         self.model = nengo.Network()
-        self.values1 = [0]
-        self.values2 = [0]
-        self.dist = dist
-        self.sim_dt = sim_dt
+        self.values1 = [[0, 0]]
+        self.values2 = [[0, 0]]  # 2d
 
         with self.model:
             stim1 = nengo.Node(lambda t: self.values1[-1])
             stim2 = nengo.Node(lambda t: self.values2[-1])
 
             # integrator 1
-            pos1 = nengo.Ensemble(n_neurons=500, dimensions=1, radius=SCALE)
+            pos1 = nengo.Ensemble(n_neurons=1000, dimensions=2, radius=SCALE)
             nengo.Connection(pos1, pos1, synapse=1e-1)
             nengo.Connection(stim1, pos1, transform=50, synapse=1e-1)
 
-            # # integrator 2
-            pos2 = nengo.Ensemble(n_neurons=500, dimensions=1, radius=SCALE)
+            # integrator 2
+            pos2 = nengo.Ensemble(n_neurons=1000, dimensions=2, radius=SCALE)
             nengo.Connection(pos2, pos2, synapse=1e-1)
             nengo.Connection(stim2, pos2, transform=50, synapse=1e-1)
 
             # angle of the slop, [x diff (constant), y diff (height)]
             axis_diff = nengo.Ensemble(n_neurons=1000, dimensions=2, radius=200)
 
-            d_stim = nengo.Node([self.dist])  # x distance is constant
-            nengo.Connection(d_stim, axis_diff[0])
+            nengo.Connection(pos1[0], axis_diff[0], synapse=0.1)
+            nengo.Connection(pos2[0], axis_diff[0], transform=-1, synapse=0.1)
 
-            nengo.Connection(pos1, axis_diff[1], synapse=0.1)
-            nengo.Connection(pos2, axis_diff[1], transform=-1, synapse=0.1)
+            nengo.Connection(pos1[1], axis_diff[1], synapse=0.1)
+            nengo.Connection(pos2[1], axis_diff[1], transform=-1, synapse=0.1)
 
             # find angle
             y_rot = nengo.Ensemble(n_neurons=1000, dimensions=1, radius=np.pi)
             nengo.Connection(axis_diff, y_rot, function=angle)
 
-            self.probe = nengo.Probe(y_rot, synapse=0.1)
+            self.probe1 = nengo.Probe(pos1, synapse=0.1)
+            self.probe2 = nengo.Probe(pos2, synapse=0.1)
 
         self.sim = nengo.Simulator(self.model, dt=sim_dt)
 
@@ -57,4 +56,8 @@ class PlaneRotation:
         self.sim.step()
 
     def get_xy(self):
-        return self.sim.trange(), self.sim.data[self.probe]
+        return self.sim.trange(), self.sim.data[self.probe1], self.sim.data[self.probe2]
+
+    @property
+    def curr_val(self):
+        return self.sim.data[self.probe][-1]

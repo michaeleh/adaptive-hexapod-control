@@ -99,4 +99,4 @@ class HexapodEnv(MujocoEnv):
                    self.data.body_xpos[self.index_of_body(JointNames.COXA_LM.value.replace('joint', 'body'))][2])
 
     def get_pos(self, joint_name):
-        return self.data.body_xpos[self.index_of_body(joint_name.replace('joint', 'body'))]
+        return np.array(self.data.body_xpos[self.index_of_body(joint_name.replace('joint', 'body'))])
