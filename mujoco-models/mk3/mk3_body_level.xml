@@ -68,7 +68,7 @@
         <!--        <geom name="floor_tile_grey_tile" pos="0 0 0" size="5000 5000 1" type="plane" material="tile"/>-->
         <geom name='floor' pos='0 0 0' size='3000 3000 10' type='plane' material="tile" condim='3'/>
         <body pos="200 0 0">
-            <geom type="box" size="150 500 80" rgba="0.39453125 0.50390625 0.5390625 1"/>
+            <geom type="box" size="150 500 40" rgba="0.39453125 0.50390625 0.5390625 1"/>
         </body>
         <!--        Body of hexapod-->
         <body name="body:torso" pos="0 0 0">
