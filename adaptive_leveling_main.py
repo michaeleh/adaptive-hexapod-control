@@ -51,12 +51,12 @@ for _ in tqdm(range(1000)):
     w, x, y, z = env.get_obs()[3:7]
     q = Rotation.from_quat([x, y, z, w])
     rot = q.as_euler('xyz', degrees=False)
-    history.append(p1[idxs] - p2[idxs])
+    history.append(rot[1])
 env.close()
 
 x, y = neuro_model.get_xy()
-plt.plot(x, y, label=['modelx', 'modely'])
-plt.plot(x, history, label=['realx', 'realy'], linestyle='--')
+plt.plot(x, y, label='model')
+plt.plot(x, history, label='real', linestyle='--')
 # plt.plot(x, history, label='real', linestyle='--')
 plt.legend()
 plt.savefig('gihhg.png')

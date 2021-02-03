@@ -1,15 +1,15 @@
 import pickle
 
 import numpy as np
-
+import math
 import nengo
-
 
 SCALE = 250
 
+
 def angle(inp):
     x, y = inp
-    return np.arctan2(y, x)
+    return math.atan(y / x)
 
 
 class PlaneRotation:
@@ -42,10 +42,10 @@ class PlaneRotation:
             nengo.Connection(pos2[1], axis_diff[1], transform=-1, synapse=0.1)
 
             # find angle
-            y_rot = nengo.Ensemble(n_neurons=1500, dimensions=1, radius=np.pi)
-            nengo.Connection(axis_diff, y_rot, function=angle)
+            y_rot = nengo.Ensemble(n_neurons=1000, dimensions=1, radius=np.pi)
+            nengo.Connection(axis_diff, y_rot,synapse=0.1, function=angle)
 
-            self.probe = nengo.Probe(axis_diff, synapse=0.1)
+            self.probe = nengo.Probe(y_rot, synapse=0.1)
 
         self.sim = nengo.Simulator(self.model, dt=sim_dt)
 
