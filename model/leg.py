@@ -35,6 +35,13 @@ class Leg:
     def rotate(self, vec):
         return rotate_vec(vec, self.angle)
 
+    def position(self):
+        """
+        :return: [side (Left,Right), Location (Fron, Mid, Rear)]
+        """
+        pos = self.coxa.value.split('_')[1]
+        return list(pos)
+
 
 class LegRM(Leg):
     coxa, femur, tibia = JointNames.COXA_RM, JointNames.FEMUR_RM, JointNames.TIBIA_RM

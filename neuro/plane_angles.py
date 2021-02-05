@@ -59,4 +59,4 @@ class PlaneRotation:
 
     @property
     def curr_val(self):
-        return self.sim.data[self.probe][-1]
+        return self.sim.data[self.probe][-1][0]

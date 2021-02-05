@@ -5,8 +5,10 @@ import numpy as np
 from scipy.spatial.transform import Rotation
 from tqdm import tqdm
 
+from kinematics.constants import DeltaLengths
 from kinematics.ik_algorithm import angles_to_target
 from kinematics.joint_kinematics import KinematicNumericImpl
+from model.coordinates import cartesian_change
 from model.hexapod_env import HexapodEnv
 from model.joint_types import JointNames
 from model.leg import all_legs
@@ -35,6 +37,10 @@ for _ in range(1200):
 
 neuro_model = PlaneRotation(sim_dt=env.dt)
 
+x_length = DeltaLengths.COXA_FEMUR_X + DeltaLengths.FEMUR_TIBIA_X + DeltaLengths.TIBIA_END_X
+y_length = DeltaLengths.COXA_FEMUR_Y + DeltaLengths.FEMUR_TIBIA_Y + DeltaLengths.TIBIA_END_Y
+z_length = DeltaLengths.COXA_FEMUR_Z + DeltaLengths.FEMUR_TIBIA_Z + DeltaLengths.TIBIA_END_Z
+
 prevp1 = prevp2 = np.zeros(3)
 state = env.qpos
 for v in qpos_map.values():
@@ -52,24 +58,34 @@ for _ in tqdm(range(500)):
 
     # rotate
     rot_angle = neuro_model.curr_val
-    new_pos = env.qpos
+    # set orientation
+    qpos = env.qpos
+    new_pos = qpos
     rot = Rotation.from_euler('xyz', [0, -rot_angle, 0], degrees=True)
     x, y, z, w = rot.as_quat()
     new_pos[3:7] = [w, x, y, z]
-    env.set_state(new_pos, 0 * env.qvel)
-    env.render()
+    new_pos[0:3] = [0, 0, 0]
+
     # adjust position
-    # adjustment_pos = env.qpos
-    # adjustment_pos[0:3] = np.zeros(3)
-    # for leg in all_legs:
-    #     coxa = qpos_map[leg.coxa.value]
-    #     femur = qpos_map[leg.femur.value]
-    #     tibia = qpos_map[leg.tibia.value]
-    #     joint_pos = [coxa, femur, tibia]
-    #     adjustment_pos[joint_pos], e = angles_to_target(q=adjustment_pos[joint_pos], target=-leg.rotate(diff))
-    #
-    # env.set_state(adjustment_pos, 0 * env.qvel)
-    # env.render()
+    for leg in all_legs:
+        # get joints
+        coxa = qpos_map[leg.coxa.value]
+        femur = qpos_map[leg.femur.value]
+        tibia = qpos_map[leg.tibia.value]
+        joint_pos = [coxa, femur, tibia]
+        # side of leg effect y axis side a or (a - pi)
+        side, _ = leg.position()
+        src = rot_angle if side == 'R' else rot_angle - np.pi
+        dst = 0 if side == 'R' else -np.pi
+        # y axis rotation
+        r = leg.rotate([x_length, y_length, z_length])
+        r = np.sqrt(r[0] ** 2 + r[2] ** 2)
+        x_change, z_change = cartesian_change(r, src, dst)
+        change = np.array([x_change, 0, z_change])
+        new_pos[joint_pos], e = angles_to_target(q=qpos[joint_pos], target=leg.rotate(-change))
+
+    env.step(new_pos, render=True)
+
 env.close()
 
 # x, y = neuro_model.get_xy()
