@@ -89,7 +89,6 @@ for leg in all_legs:
     r = np.sqrt(r[0] ** 2 + r[2] ** 2)
     x_change, z_change = cartesian_change(r*10, dst, src)  # round for smooth
     change = np.array([x_change, 0, z_change])
-    print(change, side)
     new_pos[joint_pos], e = angles_to_target(q=qpos[joint_pos], target=leg.rotate(change))
 
 env.step(new_pos, render=True)
