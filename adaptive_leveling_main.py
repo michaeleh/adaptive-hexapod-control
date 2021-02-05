@@ -48,43 +48,54 @@ for v in qpos_map.values():
 
 env.set_state(state, np.zeros_like(env.qvel))
 new_pos = state
-for _ in tqdm(range(500)):
+for _ in tqdm(range(100)):
     p1 = env.get_pos(joint1)
     p2 = env.get_pos(joint2)
     idxs = [1, 2]  # x,z axis
     neuro_model.update((p1[idxs] - prevp1[idxs]),
                        (p2[idxs] - prevp2[idxs]))
     prevp1, prevp2 = p1.copy(), p2.copy()
+    env.step(env.qpos, render=True)
 
-    # rotate
-    rot_angle = neuro_model.curr_val
-    # set orientation
-    qpos = env.qpos
-    new_pos = qpos
-    rot = Rotation.from_euler('xyz', [0, -rot_angle, 0], degrees=True)
-    x, y, z, w = rot.as_quat()
-    new_pos[3:7] = [w, x, y, z]
-    new_pos[0:3] = [0, 0, 0]
+# rotate
+rot_angle = neuro_model.curr_val
+# print(rot_angle, np.rad2deg(rot_angle))
+# set orientation
+new_pos = env.qpos
+rot = Rotation.from_euler('xyz', [0, -rot_angle, 0], degrees=False)
+x, y, z, w = rot.as_quat()
+new_pos[3:7] = [w, x, y, z]
+env.step(new_pos, render=True)
+new_pos = env.qpos
+new_pos[0:3] = np.zeros(3)
+env.step(new_pos, render=True)
+new_pos = env.qpos
+qpos = env.qpos
 
-    # adjust position
-    for leg in all_legs:
-        # get joints
-        coxa = qpos_map[leg.coxa.value]
-        femur = qpos_map[leg.femur.value]
-        tibia = qpos_map[leg.tibia.value]
-        joint_pos = [coxa, femur, tibia]
-        # side of leg effect y axis side a or (a - pi)
-        side, _ = leg.position()
-        src = rot_angle if side == 'R' else rot_angle - np.pi
-        dst = 0 if side == 'R' else -np.pi
-        # y axis rotation
-        r = leg.rotate([x_length, y_length, z_length])
-        r = np.sqrt(r[0] ** 2 + r[2] ** 2)
-        x_change, z_change = cartesian_change(r, src, dst)
-        change = np.array([x_change, 0, z_change])
-        new_pos[joint_pos], e = angles_to_target(q=qpos[joint_pos], target=leg.rotate(-change))
+# adjust position
+for leg in all_legs:
+    # get joints
+    coxa = qpos_map[leg.coxa.value]
+    femur = qpos_map[leg.femur.value]
+    tibia = qpos_map[leg.tibia.value]
+    joint_pos = [coxa, femur, tibia]
+    # side of leg effect y axis side a or (a - pi)
+    side, _ = leg.position()
+    src = rot_angle if side == 'R' else rot_angle - np.pi
+    dst = 0 if side == 'R' else -np.pi
 
-    env.step(new_pos, render=True)
+    # y axis rotation
+    r = leg.rotate([x_length, y_length, z_length])
+    r = np.sqrt(r[0] ** 2 + r[2] ** 2)
+    x_change, z_change = cartesian_change(r*10, dst, src)  # round for smooth
+    change = np.array([x_change, 0, z_change])
+    print(change, side)
+    new_pos[joint_pos], e = angles_to_target(q=qpos[joint_pos], target=leg.rotate(change))
+
+env.step(new_pos, render=True)
+for _ in range(5000):
+    env.set_state(new_pos, 0 * env.qvel)
+    env.render()
 
 env.close()
 
