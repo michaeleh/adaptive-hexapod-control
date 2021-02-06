@@ -96,12 +96,12 @@ def adjust_leg_placements():
 
         # side of leg effect y axis side a or (a - pi)
         side, _ = leg.position()
-        src = rot_angle if side == 'R' else rot_angle - np.pi
+        src = real_angle if side == 'R' else real_angle - np.pi
         dst = real_angle - rot_angle if side == 'R' else real_angle - rot_angle - np.pi
 
         # y axis rotation
         r = leg.rotate([x_length, y_length, z_length])
-        r = np.sqrt(r[1] ** 2 + r[2] ** 2)
+        r = np.sqrt(r[0] ** 2 + r[2] ** 2)
         x_change, z_change = cartesian_change(r, src, dst)  # round for smooth
         change = np.array([x_change, 0, z_change])
         new_pos[joint_pos], e = angles_to_target(q=env.qpos[joint_pos], target=leg.rotate(change))
