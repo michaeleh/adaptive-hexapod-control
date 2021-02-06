@@ -14,6 +14,41 @@ from model.joint_types import JointNames
 from model.leg import all_legs
 from neuro.plane_angles import PlaneRotation
 
+
+def rotate_around_origin(new_pos, rot_angle):
+    w2, x2, y2, z2 = env.get_obs()[3:7]
+    q2 = Rotation.from_quat([x2, y2, z2, w2])
+    curr_rot = q2.as_euler('xyz', degrees=False)
+    # set orientation
+    new_rot = np.array([0, rot_angle, 0]) - curr_rot
+    rot = Rotation.from_euler('xyz', new_rot, degrees=False)
+    x, y, z, w = rot.as_quat()
+    new_pos[3:7] = [w, x, y, z]
+    new_pos[0:3] = state[0:3]
+    return curr_rot
+
+
+def adjust_leg_placements(new_pos, rot_angle, dst_angle):
+    for leg in all_legs:
+        # get joints
+        coxa = qpos_map[leg.coxa.value]
+        femur = qpos_map[leg.femur.value]
+        tibia = qpos_map[leg.tibia.value]
+        joint_pos = [coxa, femur, tibia]
+
+        # side of leg effect y axis side a or (a - pi)
+        side, _ = leg.position()
+        src = rot_angle if side == 'R' else rot_angle - np.pi
+        dst = 0 if side == 'R' else -np.pi
+
+        # y axis rotation
+        r = leg.rotate([x_length, y_length, z_length])
+        r = np.sqrt(r[0] ** 2 + r[2] ** 2)
+        x_change, z_change = cartesian_change(r, src, dst)  # round for smooth
+        change = np.array([x_change, 0, z_change])
+        new_pos[joint_pos], e = angles_to_target(q=env.qpos[joint_pos], target=leg.rotate(-change))
+
+
 '''
 Loading model and environment
 '''
@@ -46,61 +81,39 @@ state = env.qpos
 for v in qpos_map.values():
     state[v] = 0
 
-env.set_state(state, np.zeros_like(env.qvel))
+env.set_state(state, 0 * env.qvel)
 new_pos = state
-for _ in tqdm(range(100)):
+
+history = []
+for _ in tqdm(range(5000)):
+    env.step(env.qpos)
     p1 = env.get_pos(joint1)
     p2 = env.get_pos(joint2)
     idxs = [1, 2]  # x,z axis
     neuro_model.update((p1[idxs] - prevp1[idxs]),
                        (p2[idxs] - prevp2[idxs]))
     prevp1, prevp2 = p1.copy(), p2.copy()
-    env.step(env.qpos, render=True)
 
-# rotate
-rot_angle = neuro_model.curr_val
-# print(rot_angle, np.rad2deg(rot_angle))
-# set orientation
-new_pos = env.qpos
-rot = Rotation.from_euler('xyz', [0, -rot_angle, 0], degrees=False)
-x, y, z, w = rot.as_quat()
-new_pos[3:7] = [w, x, y, z]
-env.step(new_pos, render=True)
-new_pos = env.qpos
-new_pos[0:3] = np.zeros(3)
-env.step(new_pos, render=True)
-new_pos = env.qpos
-qpos = env.qpos
-
-# adjust position
-for leg in all_legs:
-    # get joints
-    coxa = qpos_map[leg.coxa.value]
-    femur = qpos_map[leg.femur.value]
-    tibia = qpos_map[leg.tibia.value]
-    joint_pos = [coxa, femur, tibia]
-    # side of leg effect y axis side a or (a - pi)
-    side, _ = leg.position()
-    src = rot_angle if side == 'R' else rot_angle - np.pi
-    dst = 0 if side == 'R' else -np.pi
-
-    # y axis rotation
-    r = leg.rotate([x_length, y_length, z_length])
-    r = np.sqrt(r[0] ** 2 + r[2] ** 2)
-    x_change, z_change = cartesian_change(r*10, dst, src)  # round for smooth
-    change = np.array([x_change, 0, z_change])
-    new_pos[joint_pos], e = angles_to_target(q=qpos[joint_pos], target=leg.rotate(change))
-
-env.step(new_pos, render=True)
-for _ in range(5000):
-    env.set_state(new_pos, 0 * env.qvel)
-    env.render()
-
+    # if _ > 3000:
+    #     # rotate
+    #     new_pos = env.qpos
+    #     rot_angle = neuro_model.curr_val
+    #     curr_rot = rotate_around_origin(new_pos, rot_angle)
+    #     print(curr_rot, rot_angle)
+    #     # adjust position
+    #     adjust_leg_placements(new_pos, rot_angle, curr_rot[1])
+    #
+    #     for _ in np.linspace(env.qpos, new_pos, 10):
+    #         env.step(new_pos, render=True)
+    w, x, y, z = env.get_obs()[3:7]
+    q = Rotation.from_quat([x, y, z, w])
+    rot = q.as_euler('xyz', degrees=False)
+    history.append(p2)
 env.close()
 
-# x, y = neuro_model.get_xy()
-# plt.plot(x, y, label='model')
+x, y = neuro_model.get_xy()
+plt.plot(x, y, label='model')
+plt.plot(x, history, label='real', linestyle='--')
 # plt.plot(x, history, label='real', linestyle='--')
-# # plt.plot(x, history, label='real', linestyle='--')
-# plt.legend()
-# plt.savefig('gihhg.png')
+plt.legend()
+plt.savefig('gihhg.png')
