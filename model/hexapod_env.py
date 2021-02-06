@@ -100,3 +100,9 @@ class HexapodEnv(MujocoEnv):
 
     def get_pos(self, joint_name):
         return np.array(self.data.body_xpos[self.index_of_body(joint_name.replace('joint', 'body'))])
+
+    @property
+    def curr_rot(self):
+        w, x, y, z = self.get_obs()[3:7]  # current orientation
+        q = Rotation.from_quat([x, y, z, w])
+        return q.as_euler('xyz', degrees=False)
