@@ -9,7 +9,7 @@ SCALE = 250
 
 def angle(inp):
     x, y = inp
-    return np.arctan2(y, x)
+    return math.atan(y / x)
 
 
 class PlaneRotation:
@@ -43,9 +43,9 @@ class PlaneRotation:
 
             # find angle
             y_rot = nengo.Ensemble(n_neurons=1000, dimensions=1, radius=np.pi)
-            nengo.Connection(axis_diff, y_rot, synapse=0.07, function=angle)
+            nengo.Connection(axis_diff, y_rot, synapse=0.1, function=angle)
 
-            self.probe = nengo.Probe(pos2, synapse=0.1)
+            self.probe = nengo.Probe(y_rot, synapse=0.1)
 
         self.sim = nengo.Simulator(self.model, dt=sim_dt)
 
@@ -59,4 +59,4 @@ class PlaneRotation:
 
     @property
     def curr_val(self):
-        return self.sim.data[self.probe][-1]
+        return self.sim.data[self.probe][-1][0]
