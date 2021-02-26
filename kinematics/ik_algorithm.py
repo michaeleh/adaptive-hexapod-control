@@ -27,7 +27,7 @@ def angles_to_target(q, target, model: HexapodLegKinematic = KinematicNumericImp
     Target is defined in relative to the EE null position
 
     :param q: angles of joints 3x1 np array
-    :param model: Kinematic model of a leg. inherits from HexapodLegKinematic
+    :param model: Kinematic simulation_model of a leg. inherits from HexapodLegKinematic
     :param target: target pos to get to
     :param max_iter: max iter to perform.
     :param error_thold: continue until reached error threshold

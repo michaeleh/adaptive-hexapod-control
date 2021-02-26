@@ -2,7 +2,7 @@ from typing import Dict
 
 
 from kinematics.ik_algorithm import angles_to_target
-from model.leg import all_legs
+from simulation_model.leg import all_legs
 
 
 class MotionSync:
@@ -21,7 +21,7 @@ class MotionSync:
     def sync_movement(self, qpos, axis_change):
         """
         move legs and sync body movement and other legs using inverse kinematics
-        :param qpos: current qpos of the model
+        :param qpos: current qpos of the simulation_model
         :param legs_to_move: dict from leg 2 move to destination in NED coordinates where foot-tip is the center.
         :return: new qpos synchronized with all aspects
         """

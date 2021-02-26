@@ -6,11 +6,11 @@ import os
 from numpy import linspace
 
 from gait.motion import RotationMotion
-from model.hexapod_env import HexapodEnv
+from simulation_model.hexapod_env import HexapodEnv
 from neuro.height_integrator import NeuroIntegrator
 
 '''
-Loading model and environment
+Loading simulation_model and environment
 '''
 BASE_DIR = os.path.dirname(__file__)
 model_name = 'mk3'
@@ -31,7 +31,7 @@ h = env.hexa_h()
 history = []
 
 for _ in range(15):
-    # get model action
+    # get simulation_model action
     goal = motion_model.generate_action(obs, env.axis_change())
     # interpolate
     for state in linspace(env.get_obs(), goal, space_size):

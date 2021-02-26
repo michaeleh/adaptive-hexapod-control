@@ -1,6 +1,6 @@
 import numpy as np
 
-from model.joint_types import JointNames
+from simulation_model.joint_types import JointNames
 
 step_size = 80
 up_vec = np.array([0, 0, 10])  # up vector

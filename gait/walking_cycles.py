@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from enum import Enum
 from itertools import cycle
 
-from model.leg import leg_rf, leg_rm, leg_rr, leg_lf, leg_lm, leg_lr
+from simulation_model.leg import leg_rf, leg_rm, leg_rr, leg_lf, leg_lm, leg_lr
 
 
 class StageType(Enum):

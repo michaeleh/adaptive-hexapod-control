@@ -6,7 +6,7 @@ from scipy.spatial.transform import Rotation
 from gait.motion_sync import MotionSync
 from gait.walking_cycles import _Cycle, StageType, _3LegCycle, _1LegCycle, _2LegCycle, _RotationCycle
 from kinematics.ik_algorithm import angles_to_target
-from model.leg import all_legs
+from simulation_model.leg import all_legs
 
 
 class _Motion(ABC):
