@@ -2,5 +2,9 @@ from simulation_model.sim_templates.abstract_sim_template import AbstractSimTemp
 
 
 class SimCollision(AbstractSimTemplate):
-    def eval(self, *args, **kwargs):
+    def __init__(self):
+        super().__init__()
+        self.contacts = []
+
+    def eval(self):
         pass

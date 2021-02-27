@@ -25,8 +25,11 @@ obs = env.reset()
 space_size = 10  # how many state to interpolate
 model = next(models)
 start_time = time.time()
-
+for _ in range(1000):
+    env.sim.step()
+obs = env.get_obs()
 while True:
+
     curr_time = time.time()
     # reset and change simulation_model
     if curr_time - start_time > 10:  # 8 seconds passed

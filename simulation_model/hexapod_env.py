@@ -6,7 +6,7 @@ from simulation_model.joint_types import JointNames, EENames
 from simulation_model.sim_templates.sim_balance import SimBalance
 from simulation_model.sim_templates.sim_collision import SimCollision
 from simulation_model.sim_templates.sim_movement import SimMovement
-from simulation_model.sim_templates.sim_orientation import SimOrientation
+from simulation_model.sim_templates.sim_balance import SimBalance
 
 np.set_printoptions(suppress=True)
 
@@ -21,8 +21,7 @@ class HexapodEnv(MujocoEnv):
                                         self.map_joint_qpos,
                                         self.dt)
         self.collision_sim = SimCollision()
-        self.orientation_sim = SimOrientation()
-        self.balance_sim = SimBalance()
+        self.balance_sim = SimBalance(self.dt)
 
     def reset_model(self):
         """
@@ -32,7 +31,6 @@ class HexapodEnv(MujocoEnv):
 
         self.movement_sim.reset()
         self.collision_sim.reset()
-        self.orientation_sim.reset()
         self.balance_sim.reset()
 
         self.body_names = list(self.model.body_names)
@@ -41,16 +39,23 @@ class HexapodEnv(MujocoEnv):
 
     def step(self, action, render=False):
         if action.shape == (self.model.nq,):  # if step is action (or other mujoco's inner step runs)
-            # pos after vanilla action
+            # Motion: pos after vanilla action
             qvel = self.movement_sim.eval(self.qpos, action)
-            self.kinematic_sim(action, qvel, render)
+            self.run_mujoco_sim(action, qvel, render=True)
+            # Balance calculate orientation due to instability
+            contact_pos = [self.sim.data.contact[i].pos for i in
+                           range(self.sim.data.ncon)]  # find bodies in contact with floor or obstacle and get position
+
+            action = self.balance_sim.eval(self.qpos, contact_pos)
+            self.run_mujoco_sim(action, qvel, render=True)
+            # sync legs in contact pos to stay at the same pos
 
         reward = 0
         done = False
         info = dict()
         return self.get_obs(), reward, done, info
 
-    def kinematic_sim(self, action, qvel, render):
+    def run_mujoco_sim(self, action, qvel, render):
         """
         forward kinematics and mujoco sim
         """

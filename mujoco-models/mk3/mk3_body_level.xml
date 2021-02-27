@@ -20,45 +20,45 @@
         <texture type="skybox" file="meshes/mountains.png" gridlayout=".U..LFRB.D.." gridsize="3 4"/>
     </asset>
 
-        <contact>
-            <!--leg1 and body-->
-            <exclude body1="body:torso" body2="body:coxa_RM"/>
-            <exclude body1="body:coxa_RM" body2="body:femur_RM"/>
-            <exclude body1="body:femur_RM" body2="body:tibia_RM"/>
-            <exclude body1="body:eeRM" body2="body:tibia_RM"/>
+    <contact>
+        <!--leg1 and body-->
+        <exclude body1="body:torso" body2="body:coxa_RM"/>
+        <exclude body1="body:coxa_RM" body2="body:femur_RM"/>
+        <exclude body1="body:femur_RM" body2="body:tibia_RM"/>
+        <exclude body1="body:eeRM" body2="body:tibia_RM"/>
 
-            <!--leg2 and body-->
-            <exclude body1="body:torso" body2="body:coxa_RF"/>
-            <exclude body1="body:coxa_RF" body2="body:femur_RF"/>
-            <exclude body1="body:femur_RF" body2="body:tibia_RF"/>
-            <exclude body1="body:eeRM" body2="body:tibia_RF"/>
-            <!---->
-            <!--leg3 and body-->
-            <exclude body1="body:torso" body2="body:coxa_RR"/>
-            <exclude body1="body:coxa_RR" body2="body:femur_RR"/>
-            <exclude body1="body:femur_RR" body2="body:tibia_RR"/>
-            <exclude body1="body:eeRR" body2="body:tibia_RR"/>
-            <!---->
-            <!--leg4 and body-->
-            <exclude body1="body:torso" body2="body:coxa_LM"/>
-            <exclude body1="body:coxa_LM" body2="body:femur_LM"/>
-            <exclude body1="body:femur_LM" body2="body:tibia_LM"/>
-            <exclude body1="body:eeLM" body2="body:tibia_LM"/>
-            <!---->
-            <!--leg5 and body-->
-            <exclude body1="body:torso" body2="body:coxa_LR"/>
-            <exclude body1="body:coxa_LR" body2="body:femur_LR"/>
-            <exclude body1="body:femur_LR" body2="body:tibia_LR"/>
-            <exclude body1="body:eeLR" body2="body:tibia_LR"/>
-            <!---->
-            <!--leg6 and body-->
-            <exclude body1="body:torso" body2="body:coxa_LF"/>
-            <exclude body1="body:coxa_LF" body2="body:femur_LF"/>
-            <exclude body1="body:femur_LF" body2="body:tibia_LF"/>
-            <exclude body1="body:eeLF" body2="body:tibia_LF"/>
+        <!--leg2 and body-->
+        <exclude body1="body:torso" body2="body:coxa_RF"/>
+        <exclude body1="body:coxa_RF" body2="body:femur_RF"/>
+        <exclude body1="body:femur_RF" body2="body:tibia_RF"/>
+        <exclude body1="body:eeRM" body2="body:tibia_RF"/>
+        <!---->
+        <!--leg3 and body-->
+        <exclude body1="body:torso" body2="body:coxa_RR"/>
+        <exclude body1="body:coxa_RR" body2="body:femur_RR"/>
+        <exclude body1="body:femur_RR" body2="body:tibia_RR"/>
+        <exclude body1="body:eeRR" body2="body:tibia_RR"/>
+        <!---->
+        <!--leg4 and body-->
+        <exclude body1="body:torso" body2="body:coxa_LM"/>
+        <exclude body1="body:coxa_LM" body2="body:femur_LM"/>
+        <exclude body1="body:femur_LM" body2="body:tibia_LM"/>
+        <exclude body1="body:eeLM" body2="body:tibia_LM"/>
+        <!---->
+        <!--leg5 and body-->
+        <exclude body1="body:torso" body2="body:coxa_LR"/>
+        <exclude body1="body:coxa_LR" body2="body:femur_LR"/>
+        <exclude body1="body:femur_LR" body2="body:tibia_LR"/>
+        <exclude body1="body:eeLR" body2="body:tibia_LR"/>
+        <!---->
+        <!--leg6 and body-->
+        <exclude body1="body:torso" body2="body:coxa_LF"/>
+        <exclude body1="body:coxa_LF" body2="body:femur_LF"/>
+        <exclude body1="body:femur_LF" body2="body:tibia_LF"/>
+        <exclude body1="body:eeLF" body2="body:tibia_LF"/>
 
 
-        </contact>
+    </contact>
 
     <worldbody>
 
@@ -66,7 +66,10 @@
         <camera fovy="45" pos="1 1 1"/>
         <light pos="0 0 2000" dir="0 0 -1" diffuse=".5 .5 .5"/>
         <!--        <geom name="floor_tile_grey_tile" pos="0 0 0" size="5000 5000 1" type="plane" material="tile"/>-->
-        <geom name='floor' pos='0 0 0' size='3000 3000 10' type='plane' material="tile" condim='3'/>
+        <body pos="0 0 0">
+
+            <geom name='floor' pos='0 0 0' size='3000 3000 10' type='plane' material="tile" condim='3'/>
+        </body>
         <body pos="200 0 0">
             <geom type="box" size="150 500 80" rgba="0.39453125 0.50390625 0.5390625 1"/>
         </body>

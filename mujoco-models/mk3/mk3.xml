@@ -56,7 +56,6 @@
         <exclude body1="body:femur_LF" body2="body:tibia_LF"/>
         <exclude body1="body:eeLF" body2="body:tibia_LF"/>
 
-
     </contact>
 
     <worldbody>
@@ -66,7 +65,6 @@
         <light pos="0 0 2000" dir="0 0 -1" diffuse=".5 .5 .5"/>
         <!--        <geom name="floor_tile_grey_tile" pos="0 0 0" size="5000 5000 1" type="plane" material="tile"/>-->
         <geom name='floor' pos='0 0 0' size='3000 3000 10' type='plane' material="tile" condim='3'/>
-
         <!--        Body of hexapod-->
         <body name="body:torso" pos="0 0 0">
             <joint limited="false" name="root" pos="0 0 0" type="free"/>
