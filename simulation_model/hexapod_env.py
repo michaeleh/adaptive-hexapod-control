@@ -23,8 +23,6 @@ class HexapodEnv(MujocoEnv):
                                         self.dt)
         self.collision_sim = SimCollision()
         self.balance_sim = SimBalance(self.dt)
-        self.Lx = .1
-        self.Ly = .1
 
     def reset_model(self):
         """
@@ -38,6 +36,9 @@ class HexapodEnv(MujocoEnv):
 
         self.body_names = list(self.model.body_names)
         self.initial_ee_pos = np.array([self.sim.data.body_xpos[self.index_of_body(b.value)] for b in EENames])
+
+        self.Lx = np.linalg.norm(self.get_body_pos(EENames.EE_RM.value) - self.get_body_pos(EENames.EE_LM.value))
+        self.Ly = np.linalg.norm(self.get_body_pos(EENames.EE_RR.value) - self.get_body_pos(EENames.EE_RF.value))
         return self.get_obs()
 
     def step(self, action, render=False):

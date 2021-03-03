@@ -1,3 +1,4 @@
+# import matplotlib.pyplot as plt
 from scipy.spatial.transform import Rotation
 from scipy.constants import g
 from simulation_model.sim_templates.abstract_sim_template import AbstractSimTemplate
@@ -45,14 +46,22 @@ class SimBalance(AbstractSimTemplate):
         if supporting_polygon.contains(p_com):
             self.reset()
             return curr_pos
-
+        base.append(base[0])
+        # plt.plot(
+        #     [b[0] for b in base],
+        #     [b[1] for b in base]
+        # )
+        # plt.scatter(*COM[:2])
         p1, p2 = nearest_points(supporting_polygon, p_com)  # p1 is the polygon point
         x, y = p1.xy
         x = x[0]
         y = y[0]
         diff_direction = [COM[0] - x, COM[1] - y]
+        # plt.plot([COM[0], COM[0] - diff_direction[0]], [COM[1], COM[1] - diff_direction[1]])
+        # plt.show()
+
         # if we tip towards x we need to rotate around y and vise versa
-        # angle of rotation is atctn of height and the distance
+        # angle of rotation is arccos of height and the distance
         anglex = np.arctan2(diff_direction[1], COM[2])
         angley = np.arctan2(diff_direction[0], COM[2])  # angle between normal and current position of angle
         L = np.array([Lx, Ly])

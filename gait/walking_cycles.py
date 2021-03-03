@@ -6,7 +6,7 @@ from simulation_model.leg import leg_rf, leg_rm, leg_rr, leg_lf, leg_lm, leg_lr
 
 
 class StageType(Enum):
-    UP, ROTATE, DOWN, SYNC = range(4)
+    UP, DOWN, SYNC = range(3)
 
 
 ROTATION_ANGLE = 2
