@@ -52,20 +52,21 @@ class HexapodEnv(MujocoEnv):
             self.run_mujoco_sim(action, render=True)
 
             # sync legs in contact pos to stay at the same pos
-            action = self.qpos
-            for leg, pos in contacts.items():
-                ee = EENames.ee_of_leg(leg)
-                if ee is None:
-                    continue
-                curr_pos = self.get_body_pos(ee.value)
-                diff = pos - curr_pos
-                coxa = self.map_joint_qpos[leg.coxa.value]
-                femur = self.map_joint_qpos[leg.femur.value]
-                tibia = self.map_joint_qpos[leg.tibia.value]
-                joint_pos = [coxa, femur, tibia]
-                # action[joint_pos], e = angles_to_target(q=self.qpos[joint_pos], target=leg.rotate(diff))
-
-            self.run_mujoco_sim(action, render=True)
+            # action = self.qpos
+            # for leg, pos in contacts.items():
+            #     ee = EENames.ee_of_leg(leg)
+            #     if ee is None:
+            #         continue
+            #     curr_pos = self.get_body_pos(ee.value)
+            #     diff = pos - curr_pos
+            #     coxa = self.map_joint_qpos[leg.coxa.value]
+            #     femur = self.map_joint_qpos[leg.femur.value]
+            #     tibia = self.map_joint_qpos[leg.tibia.value]
+            #     joint_pos = [coxa, femur, tibia]
+            #     # nice idea not working but not needed for now FIXME
+            #     # action[joint_pos], e = angles_to_target(q=self.qpos[joint_pos], target=leg.rotate(diff))
+            #
+            # self.run_mujoco_sim(action, render=True)
 
         reward = 0
         done = False
@@ -81,7 +82,6 @@ class HexapodEnv(MujocoEnv):
             contact = self.sim.data.contact[i]
             geom1 = self.sim.model.geom_id2name(contact.geom1)
             geom2 = self.sim.model.geom_id2name(contact.geom2)
-            pos = contact.pos
             # only 1 leg thus either 1 or 2
             leg = leg_from_geom(geom1)
             if leg is None:
