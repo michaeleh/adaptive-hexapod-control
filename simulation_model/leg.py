@@ -82,3 +82,19 @@ leg_lf = LegLF()
 leg_lm = LegLM()
 leg_lr = LegLR()
 all_legs = [leg_rf, leg_rm, leg_rr, leg_lf, leg_lm, leg_lr]
+
+side_to_leg_dict = {
+    'RF': leg_rf,
+    'RM': leg_rm,
+    'RR': leg_rr,
+    'LF': leg_lf,
+    'LM': leg_lm,
+    'LR': leg_lr
+}
+
+
+def leg_from_geom(name):
+    if '_' not in name:
+        return None
+    name = name.split('_')[1]  # rm, rf,lm etc..
+    return side_to_leg_dict[name]

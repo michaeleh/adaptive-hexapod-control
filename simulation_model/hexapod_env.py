@@ -2,8 +2,9 @@ import numpy as np
 from gym.envs.mujoco import MujocoEnv
 from scipy.spatial.transform import Rotation
 
+from kinematics.ik_algorithm import angles_to_target
 from simulation_model.joint_types import JointNames, EENames
-from simulation_model.sim_templates.sim_balance import SimBalance
+from simulation_model.leg import leg_from_geom
 from simulation_model.sim_templates.sim_collision import SimCollision
 from simulation_model.sim_templates.sim_movement import SimMovement
 from simulation_model.sim_templates.sim_balance import SimBalance
@@ -22,6 +23,8 @@ class HexapodEnv(MujocoEnv):
                                         self.dt)
         self.collision_sim = SimCollision()
         self.balance_sim = SimBalance(self.dt)
+        self.Lx = .1
+        self.Ly = .1
 
     def reset_model(self):
         """
@@ -40,25 +43,58 @@ class HexapodEnv(MujocoEnv):
     def step(self, action, render=False):
         if action.shape == (self.model.nq,):  # if step is action (or other mujoco's inner step runs)
             # Motion: pos after vanilla action
-            qvel = self.movement_sim.eval(self.qpos, action)
-            self.run_mujoco_sim(action, qvel, render=True)
+            self.run_mujoco_sim(action, render=True)
             # Balance calculate orientation due to instability
-            contact_pos = [self.sim.data.contact[i].pos for i in
-                           range(self.sim.data.ncon)]  # find bodies in contact with floor or obstacle and get position
+            # find bodies in contact with floor or obstacle and get position
 
-            action = self.balance_sim.eval(self.qpos, contact_pos)
-            self.run_mujoco_sim(action, qvel, render=True)
+            contacts = self.get_legs_contacts()
+            action = self.balance_sim.eval(self.qpos, contacts.values(), self.Lx, self.Ly)
+            self.run_mujoco_sim(action, render=True)
+
             # sync legs in contact pos to stay at the same pos
+            action = self.qpos
+            for leg, pos in contacts.items():
+                ee = EENames.ee_of_leg(leg)
+                if ee is None:
+                    continue
+                curr_pos = self.get_body_pos(ee.value)
+                diff = pos - curr_pos
+                coxa = self.map_joint_qpos[leg.coxa.value]
+                femur = self.map_joint_qpos[leg.femur.value]
+                tibia = self.map_joint_qpos[leg.tibia.value]
+                joint_pos = [coxa, femur, tibia]
+                # action[joint_pos], e = angles_to_target(q=self.qpos[joint_pos], target=leg.rotate(diff))
+
+            self.run_mujoco_sim(action, render=True)
 
         reward = 0
         done = False
         info = dict()
         return self.get_obs(), reward, done, info
 
-    def run_mujoco_sim(self, action, qvel, render):
+    def get_legs_contacts(self):
+        """
+        :return: each leg contact position
+        """
+        contacts = {}  # where each hexapod's geom had contact
+        for i in range(self.sim.data.ncon):
+            contact = self.sim.data.contact[i]
+            geom1 = self.sim.model.geom_id2name(contact.geom1)
+            geom2 = self.sim.model.geom_id2name(contact.geom2)
+            pos = contact.pos
+            # only 1 leg thus either 1 or 2
+            leg = leg_from_geom(geom1)
+            if leg is None:
+                leg = leg_from_geom(geom2)
+            contacts[leg] = contact.pos
+        return contacts
+
+    def run_mujoco_sim(self, action, render):
         """
         forward kinematics and mujoco sim
         """
+        qvel = self.movement_sim.eval(self.qpos, action)
+
         self.set_state(action, qvel)
         # apply physics simulation steps
         for _ in range(self.frame_skip):

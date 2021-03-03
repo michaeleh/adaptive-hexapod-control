@@ -34,3 +34,14 @@ class EENames(Enum):
     EE_LM = 'body:eeLM'
     EE_LF = 'body:eeLF'
     EE_LR = 'body:eeLR'
+
+    @staticmethod
+    def ee_of_leg(leg):
+        try:
+            coxa = leg.coxa.value
+            side = coxa.split('_')[1]
+            for ee in EENames:
+                if side in ee.value:
+                    return ee
+        except:
+            return None
