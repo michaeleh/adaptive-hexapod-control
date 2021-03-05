@@ -21,7 +21,7 @@ class HexapodEnv(MujocoEnv):
                                         self.map_joint_qvel,
                                         self.map_joint_qpos,
                                         self.dt)
-        self.collision_sim = SimCollision()
+        self.collision_sim = SimCollision(self.map_joint_qpos)
         self.balance_sim = SimBalance(self.dt)
 
     def reset_model(self):
@@ -37,27 +37,30 @@ class HexapodEnv(MujocoEnv):
         self.body_names = list(self.model.body_names)
         self.initial_ee_pos = np.array([self.sim.data.body_xpos[self.index_of_body(b.value)] for b in EENames])
 
-        self.Lx = np.linalg.norm(self.get_body_pos(EENames.EE_RM.value) - self.get_body_pos(EENames.EE_LM.value))
-        self.Ly = np.linalg.norm(self.get_body_pos(EENames.EE_RR.value) - self.get_body_pos(EENames.EE_RF.value))
+        self.Lx = np.linalg.norm(self.get_body_pos(EENames.EE_RM.value)[0] - self.get_body_pos(EENames.EE_LM.value)[0])
+        self.Ly = np.linalg.norm(self.get_body_pos(EENames.EE_RR.value)[1] - self.get_body_pos(EENames.EE_RF.value)[1])
         return self.get_obs()
 
     def step(self, action, render=False):
         if action.shape == (self.model.nq,):  # if step is action (or other mujoco's inner step runs)
             # Motion: pos after vanilla action
             self.run_mujoco_sim(action, render=True)
-            # Balance calculate orientation due to instability
-            # find bodies in contact with floor or obstacle and get position
 
+            # find bodies in contact with floor or obstacle and get position
+            # clip action due to collision
             contacts = self.get_legs_contacts()
-            action = self.balance_sim.eval(self.qpos, contacts.values(), self.Lx, self.Ly)
+            diff = {leg: pos - self.get_body_pos(leg.ee.value) for leg, pos in contacts.items()}
+            action = self.collision_sim.eval(self.qpos, diff)
             self.run_mujoco_sim(action, render=True)
+            # Balance calculate orientation due to instability
+            action = self.balance_sim.eval(self.qpos, contacts.values(), self.Lx, self.Ly)
+            self.run_mujoco_sim(action, render=False)
 
             # sync legs in contact pos to stay at the same pos
             # action = self.qpos
             # for leg, pos in contacts.items():
-            #     ee = EENames.ee_of_leg(leg)
-            #     if ee is None:
-            #         continue
+            #     ee = leg.ee
+            #
             #     curr_pos = self.get_body_pos(ee.value)
             #     diff = pos - curr_pos
             #     coxa = self.map_joint_qpos[leg.coxa.value]
@@ -65,10 +68,10 @@ class HexapodEnv(MujocoEnv):
             #     tibia = self.map_joint_qpos[leg.tibia.value]
             #     joint_pos = [coxa, femur, tibia]
             #     # nice idea not working but not needed for now FIXME
-            #     # action[joint_pos], e = angles_to_target(q=self.qpos[joint_pos], target=leg.rotate(diff))
+            #     # action[joint_pos], e = angles_to_target(q=self.qpos[joint_pos], target=-leg.rotate(diff))
             #
             # self.run_mujoco_sim(action, render=True)
-
+        self.render()
         reward = 0
         done = False
         info = dict()
@@ -134,18 +137,18 @@ class HexapodEnv(MujocoEnv):
     def index_of_body(self, name):
         return self.body_names.index(name)
 
-    def axis_change(self):
-        """
-        body moves relative to the direction of all end effectors i.e the sync move
-        :return: [x,y,z] change of end effectors
-        """
-        torso_current = self.get_body_pos('body:torso')
-        ee_pos = np.array([self.get_body_pos(b.value) for b in EENames])
-        # remove ee pos dependency in space by normalizing to body
-        relative_pos = ee_pos - torso_current
-        # change w.r.t initial pos
-        diff = relative_pos - self.initial_ee_pos
-        return diff.sum(axis=0)
+    # def axis_change(self):
+    #     """
+    #     body moves relative to the direction of all end effectors i.e the sync move
+    #     :return: [x,y,z] change of end effectors
+    #     """
+    #     torso_current = self.get_body_pos('body:torso')
+    #     ee_pos = np.array([self.get_body_pos(b.value) for b in EENames])
+    #     # remove ee pos dependency in space by normalizing to body
+    #     relative_pos = ee_pos - torso_current
+    #     # change w.r.t initial pos
+    #     diff = relative_pos - self.initial_ee_pos
+    #     return diff.sum(axis=0)
 
     def get_body_pos(self, body_name):
         return self.sim.data.body_xpos[self.index_of_body(body_name)]

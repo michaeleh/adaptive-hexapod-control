@@ -25,9 +25,9 @@ obs = env.reset()
 space_size = 10  # how many state to interpolate
 model = next(models)
 start_time = time.time()
-for _ in range(1000):
-    env.sim.step()
-obs = env.get_obs()
+# for _ in range(1000):
+#     env.sim.step()
+# obs = env.get_obs()
 while True:
 
     curr_time = time.time()
@@ -40,7 +40,7 @@ while True:
         obs, reward, done, info = env.step(np.zeros_like(env.qpos))
     else:
         # get simulation_model action
-        goal = model.generate_action(obs, env.axis_change())
+        goal = model.generate_action(obs)
         # interpolate
     for state in linspace(env.get_obs(), goal, space_size):
         obs, reward, done, info = env.step(state, render=True)

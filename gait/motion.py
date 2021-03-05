@@ -6,7 +6,7 @@ from scipy.spatial.transform import Rotation
 from gait.motion_sync import MotionSync
 from gait.walking_cycles import _Cycle, StageType, _3LegCycle, _1LegCycle, _2LegCycle, _RotationCycle
 from kinematics.ik_algorithm import angles_to_target
-from simulation_model.leg import all_legs
+from simulation_model.leg import all_legs, up_vec, forward_vec
 
 
 class _Motion(ABC):
@@ -14,12 +14,13 @@ class _Motion(ABC):
         self.joint_pos_dict = joint_pos_dict
         self.cycle = self.get_cycle()
         self.motion_sync = MotionSync(joint_pos_dict)
+        self.direction = np.zeros(3)
 
     @abstractmethod
     def get_cycle(self) -> _Cycle:
         pass
 
-    def generate_action(self, obs, axis_change):
+    def generate_action(self, obs):
         """
         Generate action according to current cycle and leg group
         """
@@ -34,21 +35,23 @@ class _Motion(ABC):
 
             if stage == StageType.UP:
                 new_pos[joint_pos], e = angles_to_target(q=obs[joint_pos], target=leg.target_up)
+                self.direction += up_vec
 
             # if stage == StageType.ROTATE:
             #     # set new angles in relation to base position not in relation to current one
             #     new_pos[joint_pos], e = angles_to_target(q=np.zeros(3), target=leg.target_forward + leg.target_up)
 
             if stage == StageType.DOWN:
-                new_pos[joint_pos], e = angles_to_target(q=obs[joint_pos], target=leg.target_forward-leg.target_up)
-
+                new_pos[joint_pos], e = angles_to_target(q=obs[joint_pos], target=leg.target_forward - leg.target_up)
+                self.direction += forward_vec - up_vec
         if stage == StageType.SYNC:
             # sync body and all the legs toward direction of interest
 
             new_pos = self.motion_sync.sync_movement(
-                axis_change=axis_change,
+                axis_change=self.direction,
                 qpos=obs
             )
+            self.direction = np.zeros(3)
         return new_pos
 
 

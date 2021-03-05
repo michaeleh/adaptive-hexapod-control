@@ -1,5 +1,5 @@
+import numpy as np
 from typing import Dict
-
 
 from kinematics.ik_algorithm import angles_to_target
 from simulation_model.leg import all_legs
@@ -29,7 +29,6 @@ class MotionSync:
         # move body in the average direction
         new_qpos = qpos.copy()
         mean_dir = axis_change / len(all_legs)
-
         # forward motion on the ground
         new_qpos[self.body_xyz] += mean_dir
         # adjust other legs to make foot tip still

@@ -1,6 +1,6 @@
 import numpy as np
 
-from simulation_model.joint_types import JointNames
+from simulation_model.joint_types import JointNames, EENames
 
 step_size = 80
 up_vec = np.array([0, 0, 10])  # up vector
@@ -44,33 +44,33 @@ class Leg:
 
 
 class LegRM(Leg):
-    coxa, femur, tibia = JointNames.COXA_RM, JointNames.FEMUR_RM, JointNames.TIBIA_RM
+    coxa, femur, tibia, ee = JointNames.COXA_RM, JointNames.FEMUR_RM, JointNames.TIBIA_RM, EENames.EE_RM
 
 
 class LegLM(Leg):
-    coxa, femur, tibia = JointNames.COXA_LM, JointNames.FEMUR_LM, JointNames.TIBIA_LM
+    coxa, femur, tibia, ee = JointNames.COXA_LM, JointNames.FEMUR_LM, JointNames.TIBIA_LM, EENames.EE_LM
 
 
 class LegRF(Leg):
-    coxa, femur, tibia = JointNames.COXA_RF, JointNames.FEMUR_RF, JointNames.TIBIA_RF
+    coxa, femur, tibia, ee = JointNames.COXA_RF, JointNames.FEMUR_RF, JointNames.TIBIA_RF, EENames.EE_RF
     angle = -45
     target_forward = rotate_vec(forward_vec, angle)
 
 
 class LegLF(Leg):
-    coxa, femur, tibia = JointNames.COXA_LF, JointNames.FEMUR_LF, JointNames.TIBIA_LF
+    coxa, femur, tibia, ee = JointNames.COXA_LF, JointNames.FEMUR_LF, JointNames.TIBIA_LF, EENames.EE_LF
     angle = -45
     target_forward = rotate_vec(forward_vec, angle)
 
 
 class LegRR(Leg):
-    coxa, femur, tibia = JointNames.COXA_RR, JointNames.FEMUR_RR, JointNames.TIBIA_RR
+    coxa, femur, tibia, ee = JointNames.COXA_RR, JointNames.FEMUR_RR, JointNames.TIBIA_RR, EENames.EE_RR
     angle = 45
     target_forward = rotate_vec(forward_vec, angle)
 
 
 class LegLR(Leg):
-    coxa, femur, tibia = JointNames.COXA_LR, JointNames.FEMUR_LR, JointNames.TIBIA_LR
+    coxa, femur, tibia, ee = JointNames.COXA_LR, JointNames.FEMUR_LR, JointNames.TIBIA_LR, EENames.EE_LR
     angle = 45
     target_forward = rotate_vec(forward_vec, angle)
 
