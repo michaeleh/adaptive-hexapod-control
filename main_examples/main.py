@@ -12,7 +12,7 @@ Loading environment and environment
 BASE_DIR = os.path.dirname(__file__)
 model_name = 'hexapod'
 xml_path = os.path.join(BASE_DIR, f'../mjcf_model/{model_name}.xml')
-env = HexapodEnv(xml_path, frame_skip=500)
+env = HexapodEnv(xml_path, frame_skip=200)
 
 '''
 Init gaits and other simulation variables
