@@ -3,8 +3,8 @@
     <size njmax="500" nconmax="100"/>
 
     <default>
-        <joint limited="true" range="-45 45"/>
-        <position ctrllimited="false" forcelimited="false" gear="1" kp="10"/>
+        <joint armature="1" damping="1" limited="true"/>
+        <position ctrllimited="false" forcelimited="false" gear="1" kp="4"/>
     </default>
 
     <asset>
@@ -17,6 +17,7 @@
         <texture type="skybox" builtin="gradient" rgb1=".2 .3 .4" rgb2=".1 0.15 0.2" width="32" height="32"/>
 
         <material name="floorplane" reflectance="0.5" texrepeat="1 1" texture="texplane" texuniform="true"/>
+
     </asset>
 
     <worldbody>
@@ -26,16 +27,17 @@
                pos="0 0 4" dir="0 0 -1" name="light0"/>
 
         <body name="torso">
+            <camera name="track" mode="trackcom" pos="0 -3 0.3" xyaxes="1 0 0 0 0 1"/>
+
             <geom pos="0 0.251 0.137" quat="0.707105 0 0 0.707108" type="mesh" group="1"
-                  rgba="1 1 1 1" mesh="body_mesh"/>
-            <joint limited="false" name="root" pos="0 0 0" type="free"/>
+                  rgba="1 1 1 1" mesh="body_mesh" mass="0.4"/>
+            <freejoint/>
 
             <!--LEG LEFT MID-->
             <body name="coxa_LM" pos="0.00053 0.13806 0.16287">
                 <inertial pos="0 0 0" quat="0.5 0.5 -0.5 0.5" mass="0.1" diaginertia="6.125e-05 5.1458e-05 5.1458e-05"/>
                 <joint name="coxa_LM" pos="0 0 0" axis="0 0 1" limited="true" range="-0.78 0.78" damping="0.5"/>
-                <geom pos="0.00047 -0.02306 -0.02187" quat="0.707105 0 0 0.707108" type="mesh" contype="0"
-                      conaffinity="0"
+                <geom pos="0.00047 -0.02306 -0.02187" quat="0.707105 0 0 0.707108" type="mesh"
                       group="1" rgba="0 0 0 1" mesh="coxa_mesh"/>
                 <body name="femur1" pos="-0.01486 -0.04843 -0.02454">
                     <inertial pos="0 0 0" quat="0.5 0.5 -0.5 0.5" mass="0.1"
@@ -59,8 +61,8 @@
             <body name="coxa_LF" pos="-0.12284 0.18389 0.16287" quat="0.923956 0 0 -0.382499">
                 <inertial pos="0 0 0" quat="0.5 0.5 -0.5 0.5" mass="0.1" diaginertia="6.125e-05 5.1458e-05 5.1458e-05"/>
                 <joint name="coxa_LF" pos="0 0 0" axis="0 0 1" limited="true" range="-0.78 0.78" damping="0.5"/>
-                <geom pos="0.00047 -0.02306 -0.02187" quat="0.707105 0 0 0.707108" type="mesh" contype="0"
-                      conaffinity="0"
+                <geom pos="0.00047 -0.02306 -0.02187" quat="0.707105 0 0 0.707108" type="mesh"
+
                       group="1" rgba="0 0 0 1" mesh="coxa_mesh"/>
                 <body name="femur_LF" pos="-0.01486 -0.04843 -0.02454">
                     <inertial pos="0 0 0" quat="0.5 0.5 -0.5 0.5" mass="0.1"
@@ -85,8 +87,8 @@
             <body name="coxa_RF" pos="-0.12284 0.30204 0.16287" quat="0.382773 0 0 -0.923842">
                 <inertial pos="0 0 0" quat="0.5 0.5 -0.5 0.5" mass="0.1" diaginertia="6.125e-05 5.1458e-05 5.1458e-05"/>
                 <joint name="coxa_RF" pos="0 0 0" axis="0 0 1" limited="true" range="-0.78 0.78" damping="0.5"/>
-                <geom pos="0.00047 -0.02306 -0.02187" quat="0.707105 0 0 0.707108" type="mesh" contype="0"
-                      conaffinity="0"
+                <geom pos="0.00047 -0.02306 -0.02187" quat="0.707105 0 0 0.707108" type="mesh"
+
                       group="1" rgba="0 0 0 1" mesh="coxa_mesh"/>
                 <body name="femur_RF" pos="-0.01486 -0.04843 -0.02454">
                     <inertial pos="0 0 0" quat="0.5 0.5 -0.5 0.5" mass="0.1"
@@ -111,8 +113,8 @@
             <body name="coxa_RM" pos="0.00053 0.34564 0.16287" quat="0.000796327 0 0 1">
                 <inertial pos="0 0 0" quat="0.5 0.5 -0.5 0.5" mass="0.1" diaginertia="6.125e-05 5.1458e-05 5.1458e-05"/>
                 <joint name="coxa_RM" pos="0 0 0" axis="0 0 1" limited="true" range="-0.78 0.78" damping="0.5"/>
-                <geom pos="0.00047 -0.02306 -0.02187" quat="0.707105 0 0 0.707108" type="mesh" contype="0"
-                      conaffinity="0"
+                <geom pos="0.00047 -0.02306 -0.02187" quat="0.707105 0 0 0.707108" type="mesh"
+
                       group="1" rgba="0 0 0 1" mesh="coxa_mesh"/>
                 <body name="femur_RM" pos="-0.01486 -0.04843 -0.02454">
                     <inertial pos="0 0 0" quat="0.5 0.5 -0.5 0.5" mass="0.1"
@@ -137,8 +139,8 @@
             <body name="coxa_RR" pos="0.12284 0.30205 0.16287" quat="0.385543 0 0 0.92269">
                 <inertial pos="0 0 0" quat="0.5 0.5 -0.5 0.5" mass="0.1" diaginertia="6.125e-05 5.1458e-05 5.1458e-05"/>
                 <joint name="coxa_RR" pos="0 0 0" axis="0 0 1" limited="true" range="-0.78 0.78" damping="0.5"/>
-                <geom pos="0.00047 -0.02306 -0.02187" quat="0.707105 0 0 0.707108" type="mesh" contype="0"
-                      conaffinity="0"
+                <geom pos="0.00047 -0.02306 -0.02187" quat="0.707105 0 0 0.707108" type="mesh"
+
                       group="1" rgba="0 0 0 1" mesh="coxa_mesh"/>
                 <body name="femur_RR" pos="-0.01486 -0.04843 -0.02454">
                     <inertial pos="0 0 0" quat="0.5 0.5 -0.5 0.5" mass="0.1"
@@ -162,8 +164,8 @@
             <body name="coxa_LR" pos="0.12284 0.18389 0.16287" quat="0.923956 0 0 0.382499">
                 <inertial pos="0 0 0" quat="0.5 0.5 -0.5 0.5" mass="0.1" diaginertia="6.125e-05 5.1458e-05 5.1458e-05"/>
                 <joint name="coxa_LR" pos="0 0 0" axis="0 0 1" limited="true" range="-0.78 0.78" damping="0.5"/>
-                <geom pos="0.00047 -0.02306 -0.02187" quat="0.707105 0 0 0.707108" type="mesh" contype="0"
-                      conaffinity="0"
+                <geom pos="0.00047 -0.02306 -0.02187" quat="0.707105 0 0 0.707108" type="mesh"
+
                       group="1" rgba="0 0 0 1" mesh="coxa_mesh"/>
                 <body name="femur_LR" pos="-0.01486 -0.04843 -0.02454">
                     <inertial pos="0 0 0" quat="0.5 0.5 -0.5 0.5" mass="0.1"

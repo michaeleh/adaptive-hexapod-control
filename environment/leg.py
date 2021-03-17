@@ -1,10 +1,9 @@
 import numpy as np
 
-from simulation_model.joint_types import JointNames, EENames
+from environment.joint_types import JointNames
 
-step_size = 80
-up_vec = np.array([0, 0, 10])  # up vector
-forward_vec = np.array([0, step_size, 0])  # direction vector
+up_vec = np.array([0, 0, 40])  # up vector
+forward_vec = np.array([0, 70, 0])  # direction vector
 
 
 def rotate_vec(vec, deg):
@@ -44,34 +43,36 @@ class Leg:
 
 
 class LegRM(Leg):
-    coxa, femur, tibia, ee = JointNames.COXA_RM, JointNames.FEMUR_RM, JointNames.TIBIA_RM, EENames.EE_RM
+    coxa, femur, tibia, ee = JointNames.COXA_RM, JointNames.FEMUR_RM, JointNames.TIBIA_RM, ''  # EENames.EE_RM
 
 
 class LegLM(Leg):
-    coxa, femur, tibia, ee = JointNames.COXA_LM, JointNames.FEMUR_LM, JointNames.TIBIA_LM, EENames.EE_LM
+    angle = 180
+    coxa, femur, tibia, ee = JointNames.COXA_LM, JointNames.FEMUR_LM, JointNames.TIBIA_LM, ''  # EENames.EE_LM
+    target_forward = rotate_vec(forward_vec, angle)
 
 
 class LegRF(Leg):
-    coxa, femur, tibia, ee = JointNames.COXA_RF, JointNames.FEMUR_RF, JointNames.TIBIA_RF, EENames.EE_RF
+    coxa, femur, tibia, ee = JointNames.COXA_RF, JointNames.FEMUR_RF, JointNames.TIBIA_RF, ''  # EENames.EE_RF
     angle = -45
     target_forward = rotate_vec(forward_vec, angle)
 
 
 class LegLF(Leg):
-    coxa, femur, tibia, ee = JointNames.COXA_LF, JointNames.FEMUR_LF, JointNames.TIBIA_LF, EENames.EE_LF
-    angle = -45
+    coxa, femur, tibia, ee = JointNames.COXA_LF, JointNames.FEMUR_LF, JointNames.TIBIA_LF, ''  # , EENames.EE_LF
+    angle = -135
     target_forward = rotate_vec(forward_vec, angle)
 
 
 class LegRR(Leg):
-    coxa, femur, tibia, ee = JointNames.COXA_RR, JointNames.FEMUR_RR, JointNames.TIBIA_RR, EENames.EE_RR
+    coxa, femur, tibia, ee = JointNames.COXA_RR, JointNames.FEMUR_RR, JointNames.TIBIA_RR, ''  # EENames.EE_RR
     angle = 45
     target_forward = rotate_vec(forward_vec, angle)
 
 
 class LegLR(Leg):
-    coxa, femur, tibia, ee = JointNames.COXA_LR, JointNames.FEMUR_LR, JointNames.TIBIA_LR, EENames.EE_LR
-    angle = 45
+    coxa, femur, tibia, ee = JointNames.COXA_LR, JointNames.FEMUR_LR, JointNames.TIBIA_LR, ''  # EENames.EE_LR
+    angle = 135
     target_forward = rotate_vec(forward_vec, angle)
 
 
@@ -91,10 +92,3 @@ side_to_leg_dict = {
     'LM': leg_lm,
     'LR': leg_lr
 }
-
-
-def leg_from_geom(name):
-    if '_' not in name:
-        return None
-    name = name.split('_')[1]  # rm, rf,lm etc..
-    return side_to_leg_dict[name]

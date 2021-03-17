@@ -9,17 +9,17 @@ from tqdm import tqdm
 
 from kinematics.constants import DeltaLengths
 from kinematics.ik_algorithm import angles_to_target
-from simulation_model.hexapod_env import HexapodEnv
-from simulation_model.joint_types import JointNames
-from simulation_model.leg import all_legs
+from environment.hexapod_env import HexapodEnv
+from environment.joint_types import JointNames
+from environment.leg import all_legs
 from neuro.plane_angles import PlaneRotation
 
 '''
-Loading simulation_model and environment
+Loading environment and environment
 '''
 BASE_DIR = os.path.dirname(__file__)
-xml_path = os.path.join(BASE_DIR, 'mujoco-models/mk3/mk3_body_level.xml')
-env = HexapodEnv(xml_path, frame_skip=1)  # frame skip should match simulation_model dt so keep frame_skip=1
+xml_path = os.path.join(BASE_DIR, 'mjcf_model/mk3/mk3_body_level.xml')
+env = HexapodEnv(xml_path, frame_skip=1)  # frame skip should match environment dt so keep frame_skip=1
 qpos_map = env.map_joint_qpos()
 obs = env.reset()
 space_size = 10  # how many state to interpolate
@@ -28,7 +28,7 @@ space_size = 10  # how many state to interpolate
 joint1 = JointNames.COXA_RM.value
 joint2 = JointNames.COXA_LM.value
 
-# simulation_model
+# environment
 neuro_model = PlaneRotation(sim_dt=env.dt)
 prevp1 = prevp2 = np.zeros(3)  # prev pos init to 0
 
