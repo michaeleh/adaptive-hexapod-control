@@ -3,8 +3,8 @@
     <size njmax="500" nconmax="100"/>
 
     <default>
-        <joint armature="5" damping="1" limited="true"/>
-        <position ctrllimited="false" forcelimited="false" gear="1" kp="5"/>
+        <joint armature="10" damping="1" limited="true"/>
+        <position ctrllimited="false" forcelimited="false" gear="1" kp="10"/>
 <!--        <geom condim="3"  margin="0.01"/>-->
     </default>
 

@@ -1,3 +1,6 @@
+import time
+
+import matplotlib.pyplot as plt
 from typing import Dict
 
 import numpy as np
@@ -12,14 +15,16 @@ class HexapodEnv(MujocoEnv):
 
     def __init__(self, model_path, frame_skip):
         super().__init__(model_path, frame_skip)
+        self.ctrl_history = []
 
     def reset_model(self):
         """
         reset environment to zero state
         """
+        self.acuator_names = list(self.model.actuator_names)
+        self.save_ctrl()
         self.set_state(0 * self.qpos, 0 * self.qvel)
         self.body_names = list(self.model.body_names)
-        self.acuator_names = list(self.model.actuator_names)
         self.do_simulation(0 * self.ctrl, self.frame_skip)
         return self.get_obs()
 
@@ -46,6 +51,7 @@ class HexapodEnv(MujocoEnv):
         self.sim.data.ctrl[:] = ctrl
         for _ in range(n_frames):
             self.sim.step()
+            self.ctrl_history.append(self.ctrl)
             if render:
                 self.render()
 
@@ -86,3 +92,21 @@ class HexapodEnv(MujocoEnv):
 
     def get_pos(self, name):
         return self.sim.data.body_xpos[self.index_of_body(name)]
+
+    def save_ctrl(self):
+        if len(self.ctrl_history) == 0:
+            return
+        plt.figure(figsize=(10, 10))
+
+        history = np.array(self.ctrl_history)  # i rows, len(ctrl) columns
+
+        for i, joint in enumerate(self.acuator_names):
+            plt.plot(np.rad2deg(history.T[i]), label=joint)
+
+        plt.xlabel('step')
+        plt.ylabel('degrees')
+        plt.title('footfall')
+        plt.legend()
+        plt.grid()
+        plt.savefig(f'out/{time.time()}.png')
+        self.ctrl_history.clear()
