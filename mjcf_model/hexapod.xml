@@ -3,9 +3,9 @@
     <size njmax="500" nconmax="100"/>
 
     <default>
-        <joint armature="1" damping="1" limited="true"/>
+        <joint armature="5" damping="1" limited="true"/>
         <position ctrllimited="false" forcelimited="false" gear="1" kp="5"/>
-        <geom condim="3" density="15.0" friction="1 0.5 0.5" margin="0.01"/>
+<!--        <geom condim="3"  margin="0.01"/>-->
     </default>
 
     <asset>
@@ -20,12 +20,12 @@
         <material name="floorplane" reflectance="0.5" texrepeat="1 1" texture="texplane" texuniform="true"/>
 
     </asset>
-
     <worldbody>
         <geom name="floor0" pos="0. 0. -0.14493" size="3 3 .125" type="plane" condim="3" material="floorplane"/>
 
         <light directional="true" ambient="0.2 0.2 0.2" diffuse="0.8 0.8 0.8" specular="0.3 0.3 0.3" castshadow="false"
                pos="0 0 4" dir="0 0 -1" name="light0"/>
+
 
         <body name="torso">
             <camera name="track" mode="trackcom" pos="0 -3 0.3" xyaxes="1 0 0 0 0 1"/>
