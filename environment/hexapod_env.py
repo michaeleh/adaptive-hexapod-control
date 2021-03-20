@@ -2,7 +2,6 @@ from typing import Dict
 
 import numpy as np
 from gym.envs.mujoco import MujocoEnv
-from scipy.spatial.transform import Rotation
 
 from environment.joint_types import JointNames
 

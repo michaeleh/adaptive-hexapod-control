@@ -1,4 +1,3 @@
-import numpy as np
 import os
 import time
 from itertools import cycle
