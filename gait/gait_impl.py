@@ -22,6 +22,9 @@ class _Motion(ABC):
         """
         new_pos = {}
         legs, stage = self.cycle.get_next()
+        if stage == StageType.WAIT:
+            return new_pos
+
         for leg in legs:
             # get qpos of each joint
             coxa = self.joint_pos_dict[leg.coxa.value]
@@ -39,6 +42,7 @@ class _Motion(ABC):
                 q, _ = angles_to_target(q=obs[joint_pos], target=-leg.target_up)
             if stage == StageType.RETURN:
                 q = np.zeros(3)
+
             new_pos[leg.coxa.value], new_pos[leg.femur.value], new_pos[leg.tibia.value] = q
 
         return new_pos

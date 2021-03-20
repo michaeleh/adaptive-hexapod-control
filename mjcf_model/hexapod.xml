@@ -3,9 +3,9 @@
     <size njmax="500" nconmax="100"/>
 
     <default>
-        <joint armature="10" damping="1" limited="true"/>
-        <position ctrllimited="false" forcelimited="false" gear="1" kp="10"/>
-<!--        <geom condim="3"  margin="0.01"/>-->
+        <joint armature="5" damping="2" limited="true"/>
+        <geom condim="3"/>
+        <position ctrllimited="false" forcelimited="false" gear="1" kp="6"/>
     </default>
 
     <asset>
@@ -32,26 +32,26 @@
 
             <geom pos="0 0.251 0.137" quat="0.707105 0 0 0.707108" type="mesh" group="1"
                   rgba="1 1 1 1" mesh="body_mesh" mass="0.4"/>
-            <freejoint/>
+            <joint armature="0" damping="0" limited="false" name="torso" pos="0 0 0" type="free"/>
 
             <!--LEG LEFT MID-->
             <body name="coxa_LM" pos="0.00053 0.13806 0.16287">
                 <inertial pos="0 0 0" quat="0.5 0.5 -0.5 0.5" mass="0.1" diaginertia="6.125e-05 5.1458e-05 5.1458e-05"/>
-                <joint name="coxa_LM" pos="0 0 0" axis="0 0 1" limited="true" range="-0.78 0.78" damping="0.5"/>
+                <joint name="coxa_LM" pos="0 0 0" axis="0 0 1" limited="true" range="-0.78 0.78"/>
                 <geom pos="0.00047 -0.02306 -0.02187" quat="0.707105 0 0 0.707108" type="mesh"
                       group="1" rgba="0 0 0 1" mesh="coxa_mesh"/>
                 <body name="femur1" pos="-0.01486 -0.04843 -0.02454">
                     <inertial pos="0 0 0" quat="0.5 0.5 -0.5 0.5" mass="0.1"
                               diaginertia="6.125e-05 5.1458e-05 5.1458e-05"/>
                     <joint name="femur_LM" pos="0 0 0" axis="1 0 0" limited="true" range="-0.7848 0.78"
-                           damping="0.5"/>
+                    />
                     <geom pos="0.0343 -0.03663 -0.0133" type="mesh" group="1" rgba="0 0 0 1"
                           mesh="femur_mesh"/>
                     <body name="tibia1" pos="0.03215 -0.06142 -0.01381">
                         <inertial pos="0 0 0" quat="0.5 0.5 -0.5 0.5" mass="0.1"
                                   diaginertia="6.125e-05 5.1458e-05 5.1458e-05"/>
                         <joint name="tibia_LM" pos="0 0 0" axis="1 0 0" limited="true" range="-0.78 0.78"
-                               damping="0.5"/>
+                        />
                         <geom pos="-0.01782 -0.02821 -0.06052" type="mesh" group="1"
                               rgba="0 0 0 1" mesh="tibia_mesh"/>
                     </body>
@@ -61,7 +61,7 @@
             <!--LEG LEFT FRONT-->
             <body name="coxa_LF" pos="-0.12284 0.18389 0.16287" quat="0.923956 0 0 -0.382499">
                 <inertial pos="0 0 0" quat="0.5 0.5 -0.5 0.5" mass="0.1" diaginertia="6.125e-05 5.1458e-05 5.1458e-05"/>
-                <joint name="coxa_LF" pos="0 0 0" axis="0 0 1" limited="true" range="-0.78 0.78" damping="0.5"/>
+                <joint name="coxa_LF" pos="0 0 0" axis="0 0 1" limited="true" range="-0.78 0.78"/>
                 <geom pos="0.00047 -0.02306 -0.02187" quat="0.707105 0 0 0.707108" type="mesh"
 
                       group="1" rgba="0 0 0 1" mesh="coxa_mesh"/>
@@ -69,14 +69,14 @@
                     <inertial pos="0 0 0" quat="0.5 0.5 -0.5 0.5" mass="0.1"
                               diaginertia="6.125e-05 5.1458e-05 5.1458e-05"/>
                     <joint name="femur_LF" pos="0 0 0" axis="1 0 0" limited="true" range="-0.7848 0.78"
-                           damping="0.5"/>
+                    />
                     <geom pos="0.0343 -0.03663 -0.0133" type="mesh" group="1" rgba="0 0 0 1"
                           mesh="femur_mesh"/>
                     <body name="tibia_LF" pos="0.03215 -0.06142 -0.01381">
                         <inertial pos="0 0 0" quat="0.5 0.5 -0.5 0.5" mass="0.1"
                                   diaginertia="6.125e-05 5.1458e-05 5.1458e-05"/>
                         <joint name="tibia_LF" pos="0 0 0" axis="1 0 0" limited="true" range="-0.78 0.78"
-                               damping="0.5"/>
+                        />
                         <geom pos="-0.01782 -0.02821 -0.06052" type="mesh" group="1"
                               rgba="0 0 0 1" mesh="tibia_mesh"/>
                     </body>
@@ -87,7 +87,7 @@
             <!--LEG RIGHT FRONT-->
             <body name="coxa_RF" pos="-0.12284 0.30204 0.16287" quat="0.382773 0 0 -0.923842">
                 <inertial pos="0 0 0" quat="0.5 0.5 -0.5 0.5" mass="0.1" diaginertia="6.125e-05 5.1458e-05 5.1458e-05"/>
-                <joint name="coxa_RF" pos="0 0 0" axis="0 0 1" limited="true" range="-0.78 0.78" damping="0.5"/>
+                <joint name="coxa_RF" pos="0 0 0" axis="0 0 1" limited="true" range="-0.78 0.78"/>
                 <geom pos="0.00047 -0.02306 -0.02187" quat="0.707105 0 0 0.707108" type="mesh"
 
                       group="1" rgba="0 0 0 1" mesh="coxa_mesh"/>
@@ -95,14 +95,14 @@
                     <inertial pos="0 0 0" quat="0.5 0.5 -0.5 0.5" mass="0.1"
                               diaginertia="6.125e-05 5.1458e-05 5.1458e-05"/>
                     <joint name="femur_RF" pos="0 0 0" axis="1 0 0" limited="true" range="-0.7848 0.78"
-                           damping="0.5"/>
+                    />
                     <geom pos="0.0343 -0.03663 -0.0133" type="mesh" group="1" rgba="0 0 0 1"
                           mesh="femur_mesh"/>
                     <body name="tibia_RF" pos="0.03215 -0.06142 -0.01381">
                         <inertial pos="0 0 0" quat="0.5 0.5 -0.5 0.5" mass="0.1"
                                   diaginertia="6.125e-05 5.1458e-05 5.1458e-05"/>
                         <joint name="tibia_RF" pos="0 0 0" axis="1 0 0" limited="true" range="-0.78 0.78"
-                               damping="0.5"/>
+                        />
                         <geom pos="-0.01782 -0.02821 -0.06052" type="mesh" group="1"
                               rgba="0 0 0 1" mesh="tibia_mesh"/>
                     </body>
@@ -113,7 +113,7 @@
             <!--LEG RIGHT MID-->
             <body name="coxa_RM" pos="0.00053 0.34564 0.16287" quat="0.000796327 0 0 1">
                 <inertial pos="0 0 0" quat="0.5 0.5 -0.5 0.5" mass="0.1" diaginertia="6.125e-05 5.1458e-05 5.1458e-05"/>
-                <joint name="coxa_RM" pos="0 0 0" axis="0 0 1" limited="true" range="-0.78 0.78" damping="0.5"/>
+                <joint name="coxa_RM" pos="0 0 0" axis="0 0 1" limited="true" range="-0.78 0.78"/>
                 <geom pos="0.00047 -0.02306 -0.02187" quat="0.707105 0 0 0.707108" type="mesh"
 
                       group="1" rgba="0 0 0 1" mesh="coxa_mesh"/>
@@ -121,14 +121,14 @@
                     <inertial pos="0 0 0" quat="0.5 0.5 -0.5 0.5" mass="0.1"
                               diaginertia="6.125e-05 5.1458e-05 5.1458e-05"/>
                     <joint name="femur_RM" pos="0 0 0" axis="1 0 0" limited="true" range="-0.7848 0.78"
-                           damping="0.5"/>
+                    />
                     <geom pos="0.0343 -0.03663 -0.0133" type="mesh" group="1" rgba="0 0 0 1"
                           mesh="femur_mesh"/>
                     <body name="tibia_RM" pos="0.03215 -0.06142 -0.01381">
                         <inertial pos="0 0 0" quat="0.5 0.5 -0.5 0.5" mass="0.1"
                                   diaginertia="6.125e-05 5.1458e-05 5.1458e-05"/>
                         <joint name="tibia_RM" pos="0 0 0" axis="1 0 0" limited="true" range="-0.78 0.78"
-                               damping="0.5"/>
+                        />
                         <geom pos="-0.01782 -0.02821 -0.06052" type="mesh" group="1"
                               rgba="0 0 0 1" mesh="tibia_mesh"/>
                     </body>
@@ -139,7 +139,7 @@
             <!--LEG RIGHT REAR-->
             <body name="coxa_RR" pos="0.12284 0.30205 0.16287" quat="0.385543 0 0 0.92269">
                 <inertial pos="0 0 0" quat="0.5 0.5 -0.5 0.5" mass="0.1" diaginertia="6.125e-05 5.1458e-05 5.1458e-05"/>
-                <joint name="coxa_RR" pos="0 0 0" axis="0 0 1" limited="true" range="-0.78 0.78" damping="0.5"/>
+                <joint name="coxa_RR" pos="0 0 0" axis="0 0 1" limited="true" range="-0.78 0.78"/>
                 <geom pos="0.00047 -0.02306 -0.02187" quat="0.707105 0 0 0.707108" type="mesh"
 
                       group="1" rgba="0 0 0 1" mesh="coxa_mesh"/>
@@ -147,14 +147,14 @@
                     <inertial pos="0 0 0" quat="0.5 0.5 -0.5 0.5" mass="0.1"
                               diaginertia="6.125e-05 5.1458e-05 5.1458e-05"/>
                     <joint name="femur_RR" pos="0 0 0" axis="1 0 0" limited="true" range="-0.7848 0.78"
-                           damping="0.5"/>
+                    />
                     <geom pos="0.0343 -0.03663 -0.0133" type="mesh" group="1" rgba="0 0 0 1"
                           mesh="femur_mesh"/>
                     <body name="tibia_RR" pos="0.03215 -0.06142 -0.01381">
                         <inertial pos="0 0 0" quat="0.5 0.5 -0.5 0.5" mass="0.1"
                                   diaginertia="6.125e-05 5.1458e-05 5.1458e-05"/>
                         <joint name="tibia_RR" pos="0 0 0" axis="1 0 0" limited="true" range="-0.78 0.78"
-                               damping="0.5"/>
+                        />
                         <geom pos="-0.01782 -0.02821 -0.06052" type="mesh" group="1"
                               rgba="0 0 0 1" mesh="tibia_mesh"/>
                     </body>
@@ -164,7 +164,7 @@
             <!--LEG LEFT REAR-->
             <body name="coxa_LR" pos="0.12284 0.18389 0.16287" quat="0.923956 0 0 0.382499">
                 <inertial pos="0 0 0" quat="0.5 0.5 -0.5 0.5" mass="0.1" diaginertia="6.125e-05 5.1458e-05 5.1458e-05"/>
-                <joint name="coxa_LR" pos="0 0 0" axis="0 0 1" limited="true" range="-0.78 0.78" damping="0.5"/>
+                <joint name="coxa_LR" pos="0 0 0" axis="0 0 1" limited="true" range="-0.78 0.78"/>
                 <geom pos="0.00047 -0.02306 -0.02187" quat="0.707105 0 0 0.707108" type="mesh"
 
                       group="1" rgba="0 0 0 1" mesh="coxa_mesh"/>
@@ -172,14 +172,14 @@
                     <inertial pos="0 0 0" quat="0.5 0.5 -0.5 0.5" mass="0.1"
                               diaginertia="6.125e-05 5.1458e-05 5.1458e-05"/>
                     <joint name="femur_LR" pos="0 0 0" axis="1 0 0" limited="true" range="-0.7848 0.78"
-                           damping="0.5"/>
+                    />
                     <geom pos="0.0343 -0.03663 -0.0133" type="mesh" group="1" rgba="0 0 0 1"
                           mesh="femur_mesh"/>
                     <body name="tibia_LR" pos="0.03215 -0.06142 -0.01381">
                         <inertial pos="0 0 0" quat="0.5 0.5 -0.5 0.5" mass="0.1"
                                   diaginertia="6.125e-05 5.1458e-05 5.1458e-05"/>
                         <joint name="tibia_LR" pos="0 0 0" axis="1 0 0" limited="true" range="-0.78 0.78"
-                               damping="0.5"/>
+                        />
                         <geom pos="-0.01782 -0.02821 -0.06052" type="mesh" group="1"
                               rgba="0 0 0 1" mesh="tibia_mesh"/>
                     </body>
