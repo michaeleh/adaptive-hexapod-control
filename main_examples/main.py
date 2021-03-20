@@ -10,7 +10,7 @@ Loading environment and environment
 '''
 BASE_DIR = os.path.dirname(__file__)
 model_name = 'hexapod'
-xml_path = os.path.join(BASE_DIR, f'../mjcf_model/{model_name}.xml')
+xml_path = os.path.join(BASE_DIR, f'../mjcf_models/{model_name}.xml')
 env = HexapodEnv(xml_path, frame_skip=300)
 
 '''

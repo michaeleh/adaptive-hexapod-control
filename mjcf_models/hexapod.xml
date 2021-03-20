@@ -3,9 +3,9 @@
     <size njmax="500" nconmax="100"/>
 
     <default>
-        <joint armature="5" damping="2" limited="true"/>
+        <joint armature="10" damping="1" limited="true"/>
         <geom condim="3"/>
-        <position ctrllimited="false" forcelimited="false" gear="1" kp="6"/>
+        <position ctrllimited="false" forcelimited="false" gear="1" kp="5"/>
     </default>
 
     <asset>
