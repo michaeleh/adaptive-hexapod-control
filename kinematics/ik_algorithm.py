@@ -18,7 +18,7 @@ class Optimizer(Enum):
     DLS = 2
 
 
-def angles_to_target(q, target, model: HexapodLegKinematic = KinematicNumericImpl(), max_iter=1000, error_thold=0.01,
+def angles_to_target(q, target, model: HexapodLegKinematic = KinematicNumericImpl(), max_iter=10000, error_thold=0.01,
                      kp=0.1, optimizer=Optimizer.STD):
     """
     Giving arm object, a target and optimizer, provides the required set of control signals
@@ -27,7 +27,7 @@ def angles_to_target(q, target, model: HexapodLegKinematic = KinematicNumericImp
     Target is defined in relative to the EE null position
 
     :param q: angles of joints 3x1 np array
-    :param model: Kinematic model of a leg. inherits from HexapodLegKinematic
+    :param model: Kinematic environment of a leg. inherits from HexapodLegKinematic
     :param target: target pos to get to
     :param max_iter: max iter to perform.
     :param error_thold: continue until reached error threshold
