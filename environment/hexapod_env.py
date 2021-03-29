@@ -6,7 +6,6 @@ from typing import Dict
 import numpy as np
 from gym.envs.mujoco import MujocoEnv
 
-from environment.defaults import fill_pos_defaults
 from environment.joint_types import JointNames
 
 np.set_printoptions(suppress=True)
