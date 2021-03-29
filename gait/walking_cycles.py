@@ -6,7 +6,7 @@ from environment.leg import leg_rf, leg_rm, leg_rr, leg_lf, leg_lm, leg_lr
 
 
 class StageType(Enum):
-    UP, FORWARD, DOWN, RETURN, WAIT = range(5)
+    UP, FORWARD, DOWN, RETURN = range(4)
 
 
 class _Cycle(ABC):
@@ -15,7 +15,7 @@ class _Cycle(ABC):
     """
 
     def __init__(self):
-        self.stages_cycle = cycle([state for state in StageType] + [StageType.WAIT]*1)  # leg swing cycle
+        self.stages_cycle = cycle([state for state in StageType] + [StageType.RETURN] * 3)  # leg swing cycle
         self.legs_cycle = self.get_legs_cycle()
         self.legs = next(self.legs_cycle)
         self.stage = StageType.UP

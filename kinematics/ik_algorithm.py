@@ -18,7 +18,7 @@ class Optimizer(Enum):
     DLS = 2
 
 
-def angles_to_target(q, target, model: HexapodLegKinematic = KinematicNumericImpl(), max_iter=10000, error_thold=0.0001,
+def angles_to_target(q, target, model: HexapodLegKinematic = KinematicNumericImpl(), max_iter=10000, error_thold=0.01,
                      kp=0.1, optimizer=Optimizer.STD):
     """
     Giving arm object, a target and optimizer, provides the required set of control signals

@@ -6,6 +6,7 @@ from typing import Dict
 import numpy as np
 from gym.envs.mujoco import MujocoEnv
 
+from environment.defaults import fill_pos_defaults
 from environment.joint_types import JointNames
 
 np.set_printoptions(suppress=True)
@@ -22,8 +23,10 @@ class HexapodEnv(MujocoEnv):
         reset environment to zero state
         """
         self.acuator_names = list(self.model.actuator_names)
-        self.save_ctrl()
-        self.set_state(0 * self.qpos, 0 * self.qvel)
+        # self.save_ctrl()
+        qpos = self.qpos * 0
+        # fill_pos_defaults(qpos, self.map_joint_qpos)
+        self.set_state(qpos, 0 * self.qvel)
         self.body_names = list(self.model.body_names)
         self.do_simulation(0 * self.ctrl, self.frame_skip)
         return self.get_obs()
@@ -36,7 +39,8 @@ class HexapodEnv(MujocoEnv):
         '''
         if isinstance(action, Dict):  # if step is action (or other mujoco's inner step runs)
             # Motion: pos after vanilla action
-            ctrl = self.ctrl  # dont change current angles
+            ctrl = self.ctrl   # dont change current angles
+
             # replace changes values
             for joint, angle in action.items():
                 idx = self.acuator_names.index(joint)

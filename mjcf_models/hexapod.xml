@@ -1,12 +1,13 @@
 <mujoco model="hexapod">
-    <compiler angle="radian" meshdir="meshes/"/>
+    <compiler angle="radian" inertiafromgeom="true" meshdir="meshes/"/>
     <size njmax="500" nconmax="100"/>
 
     <default>
-        <joint armature="10" damping="1" limited="true"/>
-        <geom condim="3"/>
-        <position ctrllimited="false" forcelimited="false" gear="1" kp="5"/>
+        <joint armature="0.5" damping="1" limited="true"/>
+        <geom condim="3" friction="1.5 0.5 0.5"/>
+        <position ctrllimited="false" forcelimited="false" gear="1" kp="3"/>
     </default>
+
 
     <asset>
         <mesh name="body_mesh" file="body_mesh.stl"/>
@@ -20,8 +21,10 @@
         <material name="floorplane" reflectance="0.5" texrepeat="1 1" texture="texplane" texuniform="true"/>
 
     </asset>
+
+
     <worldbody>
-        <geom name="floor0" pos="0. 0. -0.14493" size="3 3 .125" type="plane" condim="3" material="floorplane"/>
+        <geom name="floor" pos="0. 0. -0.14493" size="3 3 .125" type="plane" condim="3" material="floorplane"/>
 
         <light directional="true" ambient="0.2 0.2 0.2" diffuse="0.8 0.8 0.8" specular="0.3 0.3 0.3" castshadow="false"
                pos="0 0 4" dir="0 0 -1" name="light0"/>
@@ -40,20 +43,20 @@
                 <joint name="coxa_LM" pos="0 0 0" axis="0 0 1" limited="true" range="-0.78 0.78"/>
                 <geom pos="0.00047 -0.02306 -0.02187" quat="0.707105 0 0 0.707108" type="mesh"
                       group="1" rgba="0 0 0 1" mesh="coxa_mesh"/>
-                <body name="femur1" pos="-0.01486 -0.04843 -0.02454">
+                <body name="femur_LM" pos="-0.01486 -0.04843 -0.02454">
                     <inertial pos="0 0 0" quat="0.5 0.5 -0.5 0.5" mass="0.1"
                               diaginertia="6.125e-05 5.1458e-05 5.1458e-05"/>
                     <joint name="femur_LM" pos="0 0 0" axis="1 0 0" limited="true" range="-0.7848 0.78"
                     />
                     <geom pos="0.0343 -0.03663 -0.0133" type="mesh" group="1" rgba="0 0 0 1"
                           mesh="femur_mesh"/>
-                    <body name="tibia1" pos="0.03215 -0.06142 -0.01381">
+                    <body name="tibia_LM" pos="0.03215 -0.06142 -0.01381">
                         <inertial pos="0 0 0" quat="0.5 0.5 -0.5 0.5" mass="0.1"
                                   diaginertia="6.125e-05 5.1458e-05 5.1458e-05"/>
                         <joint name="tibia_LM" pos="0 0 0" axis="1 0 0" limited="true" range="-0.78 0.78"
                         />
                         <geom pos="-0.01782 -0.02821 -0.06052" type="mesh" group="1"
-                              rgba="0 0 0 1" mesh="tibia_mesh"/>
+                              rgba="0 0 0 1" mesh="tibia_mesh" name="tibia_LM"/>
                     </body>
                 </body>
             </body>
@@ -78,7 +81,7 @@
                         <joint name="tibia_LF" pos="0 0 0" axis="1 0 0" limited="true" range="-0.78 0.78"
                         />
                         <geom pos="-0.01782 -0.02821 -0.06052" type="mesh" group="1"
-                              rgba="0 0 0 1" mesh="tibia_mesh"/>
+                              rgba="0 0 0 1" mesh="tibia_mesh" name="tibia_LF"/>
                     </body>
                 </body>
             </body>
@@ -104,7 +107,7 @@
                         <joint name="tibia_RF" pos="0 0 0" axis="1 0 0" limited="true" range="-0.78 0.78"
                         />
                         <geom pos="-0.01782 -0.02821 -0.06052" type="mesh" group="1"
-                              rgba="0 0 0 1" mesh="tibia_mesh"/>
+                              rgba="0 0 0 1" mesh="tibia_mesh" name="tibia_RF"/>
                     </body>
                 </body>
             </body>
@@ -130,7 +133,7 @@
                         <joint name="tibia_RM" pos="0 0 0" axis="1 0 0" limited="true" range="-0.78 0.78"
                         />
                         <geom pos="-0.01782 -0.02821 -0.06052" type="mesh" group="1"
-                              rgba="0 0 0 1" mesh="tibia_mesh"/>
+                              rgba="0 0 0 1" mesh="tibia_mesh" name="tibia_RM"/>
                     </body>
                 </body>
             </body>
@@ -156,7 +159,7 @@
                         <joint name="tibia_RR" pos="0 0 0" axis="1 0 0" limited="true" range="-0.78 0.78"
                         />
                         <geom pos="-0.01782 -0.02821 -0.06052" type="mesh" group="1"
-                              rgba="0 0 0 1" mesh="tibia_mesh"/>
+                              rgba="0 0 0 1" mesh="tibia_mesh" name="tibia_RR"/>
                     </body>
                 </body>
             </body>
@@ -181,7 +184,7 @@
                         <joint name="tibia_LR" pos="0 0 0" axis="1 0 0" limited="true" range="-0.78 0.78"
                         />
                         <geom pos="-0.01782 -0.02821 -0.06052" type="mesh" group="1"
-                              rgba="0 0 0 1" mesh="tibia_mesh"/>
+                              rgba="0 0 0 1" mesh="tibia_mesh" name="tibia_LR"/>
                     </body>
                 </body>
             </body>

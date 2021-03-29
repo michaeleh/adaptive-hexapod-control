@@ -2,7 +2,6 @@ from abc import ABC, abstractmethod
 
 import numpy as np
 
-from environment.leg import all_legs
 from gait.walking_cycles import _Cycle, StageType, _3LegCycle, _1LegCycle, _2LegCycle
 from kinematics.ik_algorithm import angles_to_target
 
@@ -22,8 +21,6 @@ class _Motion(ABC):
         """
         new_pos = {}
         legs, stage = self.cycle.get_next()
-        if stage == StageType.WAIT:
-            return new_pos
 
         for leg in legs:
             # get qpos of each joint
