@@ -23,15 +23,13 @@ qpos_map = env.map_joint_qpos
 obs = env.reset()
 
 pos = env.qpos * 0
-pos[:3] = [-1, -0, -0.1]
+pos[:3] = [-.5, -.1, -0.1]
 env.set_state(pos, 0 * env.qvel)
 
 while True:
     action = calculate_body_leveling_action(SimBodyOrientation(env), env.qpos, qpos_map, 'x')
     # calculate the rotation change
     obs, reward, done, info = env.step(action, render=True)
-    # env.set_state(qpos, 0 * env.qvel)
-    # i+=1
-    # if i <1000:
-    #     env.sim.step()
-    # env.render()
+    action = calculate_body_leveling_action(SimBodyOrientation(env), env.qpos, qpos_map, 'y')
+    # calculate the rotation change
+    obs, reward, done, info = env.step(action, render=True)
