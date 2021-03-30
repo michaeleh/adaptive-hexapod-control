@@ -43,7 +43,9 @@ def angles_to_target(q, target, model: HexapodLegKinematic = KinematicNumericImp
         pos_ee = model.calc_xyz(q)  # Get current EE position
         pos_diff = pos_target - pos_ee  # Get vector to target
         error = np.linalg.norm(pos_diff)  # Distance to target
-
+        # Stop when within 1mm accurancy (arm mechanical accurancy limit)
+        if error < error_thold:
+            break
         ux = pos_diff * kp  # direction of movement
         J_x = model.calc_J(q)  # Calculate the jacobian
 
@@ -56,9 +58,6 @@ def angles_to_target(q, target, model: HexapodLegKinematic = KinematicNumericImp
 
         q += u
 
-        # Stop when within 1mm accurancy (arm mechanical accurancy limit)
-        if error < error_thold:
-            break
     if error > 1:
         print('error', error)
     return q, error

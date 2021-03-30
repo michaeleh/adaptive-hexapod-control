@@ -1,9 +1,15 @@
+from enum import Enum
+
 import numpy as np
 
 from environment.joint_types import JointNames
 
 up_vec = np.array([0, 0, 50])  # up vector
 forward_vec = np.array([0, 80, 0])  # direction vector
+
+
+class Side(Enum):
+    R, L = range(2)
 
 
 def rotate_vec(vec, deg):
@@ -36,10 +42,18 @@ class Leg:
 
     def position(self):
         """
-        :return: [side (Left,Right), Location (Fron, Mid, Rear)]
+        :return: [side (Left,Right), Location (Front, Mid, Rear)]
         """
         pos = self.coxa.value.split('_')[1]
         return list(pos)
+
+    @property
+    def side(self):
+        pos = self.position()
+        if pos[0] == 'L':
+            return Side.L
+        else:
+            return Side.R
 
 
 class LegRM(Leg):
