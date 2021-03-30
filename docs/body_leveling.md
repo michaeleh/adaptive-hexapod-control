@@ -23,5 +23,5 @@ The algorithm for body leveling given <img src="https://render.githubusercontent
 
 ## Results
 
-<img src="../images/body_level_impl_before.jpg" width=200><img src="../images/body_level_impl_after.jpg" width=200>
+<img src="../images/body_level_impl_before.png" width=200><img src="../images/body_level_impl_after.png" width=200>
 
