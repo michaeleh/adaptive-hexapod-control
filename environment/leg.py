@@ -8,10 +8,6 @@ up_vec = np.array([0, 0, 50])  # up vector
 forward_vec = np.array([0, 80, 0])  # direction vector
 
 
-class Side(Enum):
-    R, L = range(2)
-
-
 def rotate_vec(vec, deg):
     rad = np.deg2rad(deg)
     '''
@@ -46,14 +42,6 @@ class Leg:
         """
         pos = self.coxa.value.split('_')[1]
         return list(pos)
-
-    @property
-    def side(self):
-        pos = self.position()
-        if pos[0] == 'L':
-            return Side.L
-        else:
-            return Side.R
 
 
 class LegRM(Leg):
