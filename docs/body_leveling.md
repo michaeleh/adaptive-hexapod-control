@@ -21,4 +21,7 @@ The algorithm for body leveling given <img src="https://render.githubusercontent
    - using inverse kinematics, calculate the angles which will make the leg go from it's current position to <img src="https://render.githubusercontent.com/render/math?math=-d_i">
    - set new angles from inverse kinematics
 
+## Results
+
+<img src="../images/body_level_impl_before.jpg" width=200><img src="../images/body_level_impl_after.jpg" width=200>
 
