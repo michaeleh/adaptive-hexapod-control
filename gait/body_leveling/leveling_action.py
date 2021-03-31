@@ -23,9 +23,10 @@ def extend(diff, axis):
         return np.array([diff[0], 0, diff[1]])
 
 
-def calcualte_r(angles, axis):
+def calcualte_r(angles, leg, axis):
     assert axis in ['x', 'y']
     xyz = fk.calc_xyz(angles)
+    xyz = leg.rotate(xyz)
     if axis == 'x':
         r = xyz[1:]
     if axis == 'y':
@@ -44,7 +45,7 @@ def calculate_body_leveling_action(body_or: AbstractBodyOrientation, qpos, qpos_
         joint_pos = [coxa, femur, tibia]
         angles = qpos[joint_pos]
 
-        r = calcualte_r(angles, axis)
+        r = calcualte_r(angles, leg, axis)
         src = theta + body_or.wrap_angle_around_axis(leg, axis)  # -pi or not
         dst = theta_target + body_or.wrap_angle_around_axis(leg, axis)
 

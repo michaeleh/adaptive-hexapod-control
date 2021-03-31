@@ -23,7 +23,7 @@ qpos_map = env.map_joint_qpos
 obs = env.reset()
 
 pos = env.qpos * 0
-pos[:3] = [-.5, -.1, -0.1]
+pos[:3] = [-1, -0., -0.1]
 env.set_state(pos, 0 * env.qvel)
 
 while True:
