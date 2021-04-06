@@ -50,7 +50,7 @@ class HexapodEnv(MujocoEnv):
         info = dict()
         return self.get_obs(), reward, done, info
 
-    def do_simulation(self, ctrl, n_frames, render=True):
+    def do_simulation(self, ctrl, n_frames, render=False):
         self.sim.data.ctrl[:] = ctrl
         for _ in range(n_frames):
             self.sim.step()

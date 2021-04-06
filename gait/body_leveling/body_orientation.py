@@ -1,11 +1,13 @@
 import numpy as np
 from abc import ABC, abstractmethod
 
+from SNN.body_level_sensing import BodyOrientationModel
 from environment.leg import Leg, leg_rf, leg_rr, leg_rm, leg_lm
 
 
 class AbstractBodyOrientation(ABC):
-    def __init__(self):
+    def __init__(self, env):
+        self.env = env
         self.x_anchors = [leg_rm, leg_lm]  # h = RM-LM
         self.y_anchors = [leg_rr, leg_rf]  # h = rr-rf
 
@@ -30,6 +32,16 @@ class AbstractBodyOrientation(ABC):
         if axis == 'y':
             return self.get_theta_y()
 
+    def get_x_points(self):
+        p1 = self.env.get_pos(self.x_anchors[0].coxa.value)[1:]
+        p2 = self.env.get_pos(self.x_anchors[1].coxa.value)[1:]
+        return np.array([p1, p2])
+
+    def get_y_points(self):
+        p1 = self.env.get_pos(self.y_anchors[0].coxa.value)[[0, 2]]
+        p2 = self.env.get_pos(self.y_anchors[1].coxa.value)[[0, 2]]
+        return np.array([p1, p2])
+
     def wrap_angle_around_axis(self, leg: Leg, axis):
         """
         wrap angle around axis of orientation pi removing pi from it or not
@@ -52,23 +64,40 @@ class AbstractBodyOrientation(ABC):
 
 
 class SimBodyOrientation(AbstractBodyOrientation):
-    def __init__(self, env):
-        super().__init__()
-        self.env = env
 
     def get_theta_x(self):
-        p1 = self.env.get_pos(self.x_anchors[0].coxa.value)
-        p2 = self.env.get_pos(self.x_anchors[1].coxa.value)
-        w, h = (p1 - p2)[1:]  # y and z
+        p1, p2 = self.get_x_points()
+        w, h = (p1 - p2)
         theta = np.arctan2(h, w)
-        target_theta = 0
-        return theta, target_theta
+        return theta
 
     def get_theta_y(self):
-        p1 = self.env.get_pos(self.y_anchors[0].coxa.value)
-        p2 = self.env.get_pos(self.y_anchors[1].coxa.value)
-        d = (p1 - p2)
-        w, h = d[0], d[2]  # x and z
+        p1, p2 = self.get_y_points()
+        w, h = (p1 - p2)
         theta = np.arctan2(h, w)
-        target_theta = 0
-        return theta, target_theta
+        return theta
+
+
+class NeuromorphicOrientationModel(AbstractBodyOrientation):
+    def __init__(self, env):
+        super().__init__(env)
+        self.model = BodyOrientationModel(env.dt, env.frame_skip)
+        self.prev_x = np.zeros((2, 2))
+        self.prev_y = np.zeros((2, 2))
+
+    def get_theta_y(self):
+        _, y = self.model.curr_val
+        return y
+
+    def get_theta_x(self):
+        x, _ = self.model.curr_val
+        return x
+
+    def update(self):
+        new_x = self.get_x_points()
+        new_y = self.get_y_points()
+        x_change = new_x - self.prev_x
+        y_change = new_y - self.prev_y
+        self.model.update(x_change, y_change)
+        self.prev_x = new_x.copy()
+        self.prev_y = new_y.copy()

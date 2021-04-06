@@ -7,7 +7,7 @@ from kinematics.joint_kinematics import KinematicNumericImpl
 fk = KinematicNumericImpl()
 
 
-def cartesian_change(r, src, dst):
+def cartesian_change(r, src, dst=0):
     x0 = r * np.cos(src)
     y0 = r * np.sin(src)
     x1 = r * np.cos(dst)
@@ -36,7 +36,7 @@ def calcualte_r(angles, leg, axis):
 
 def calculate_body_leveling_action(body_or: AbstractBodyOrientation, qpos, qpos_map, axis):
     assert axis in ['x', 'y']
-    theta, theta_target = body_or.get_theta(axis)
+    theta = body_or.get_theta(axis)
     action = {}
     for leg in all_legs:
         coxa = qpos_map[leg.coxa.value]
@@ -47,7 +47,7 @@ def calculate_body_leveling_action(body_or: AbstractBodyOrientation, qpos, qpos_
 
         r = calcualte_r(angles, leg, axis)
         src = theta + body_or.wrap_angle_around_axis(leg, axis)  # -pi or not
-        dst = theta_target + body_or.wrap_angle_around_axis(leg, axis)
+        dst = 0 + body_or.wrap_angle_around_axis(leg, axis)
 
         diff = cartesian_change(r, src, dst)
         diff = extend(diff, axis)

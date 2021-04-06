@@ -1,12 +1,10 @@
-import numpy as np
 import os
 
-from gait.body_leveling.body_orientation import SimBodyOrientation
-from gait.body_leveling.leveling_action import calculate_body_leveling_action
-from gait.gait_impl import TripodMotion
+from tqdm import tqdm
+
+from gait.body_leveling.body_orientation import NeuromorphicOrientationModel, SimBodyOrientation
 from environment.hexapod_env import HexapodEnv
-from kinematics.ik_algorithm import angles_to_target
-from kinematics.joint_kinematics import KinematicNumericImpl
+from gait.body_leveling.leveling_action import calculate_body_leveling_action
 
 '''
 Loading environment and environment
@@ -26,10 +24,16 @@ pos = env.qpos * 0
 pos[:3] = [-1, -0., -0.1]
 env.set_state(pos, 0 * env.qvel)
 
-while True:
-    action = calculate_body_leveling_action(SimBodyOrientation(env), env.qpos, qpos_map, 'x')
+orientation_model = NeuromorphicOrientationModel(env)
+sim_model = SimBodyOrientation(env)
+for i in tqdm(range(5)):
+    orientation_model.update()
+    action = calculate_body_leveling_action(orientation_model, env.qpos, qpos_map, 'x')
+    p1, p2 = sim_model.get_x_points()
     # calculate the rotation change
     obs, reward, done, info = env.step(action, render=True)
-    action = calculate_body_leveling_action(SimBodyOrientation(env), env.qpos, qpos_map, 'y')
+    action = calculate_body_leveling_action(orientation_model, env.qpos, qpos_map, 'y')
     # calculate the rotation change
     obs, reward, done, info = env.step(action, render=True)
+orientation_model.model.save_figs(axis='x')
+orientation_model.model.save_figs(axis='y')
