@@ -8,14 +8,14 @@ from SNN.orientation_network import OrientationNetwork
 
 
 class BodyOrientationModel:
-    def __init__(self, sim_dt, frame_skip):
+    def __init__(self, xw_diff, yw_diff, sim_dt, frame_skip):
         self.frame_skip = frame_skip
         self.history = []
         self.model = nengo.Network()
         with self.model:
-            self.x_angle = OrientationNetwork(n_neurons=300, label='x_angle', debug_figs=True)
-            self.y_angle = OrientationNetwork(n_neurons=300, label='y_angle')
-            self.probe_x = nengo.Probe(self.x_angle.p1_integrator.output, synapse=0.01)
+            self.x_angle = OrientationNetwork(n_neurons=300, w_diff=xw_diff, label='x_angle', debug_figs=True)
+            self.y_angle = OrientationNetwork(n_neurons=300, w_diff=yw_diff, label='y_angle', debug_figs=False)
+            self.probe_x = nengo.Probe(self.x_angle.output, synapse=0.01)
             self.probe_y = nengo.Probe(self.y_angle.output, synapse=0.01)
         self.sim = nengo.Simulator(self.model, dt=sim_dt / frame_skip)
 
@@ -23,8 +23,7 @@ class BodyOrientationModel:
         self.x_angle.update(*valx)
 
         self.y_angle.update(*valy)
-        for _ in range(self.frame_skip):
-            self.sim.step()
+        self.sim.step()
 
     def get_xy(self, probe=None):
         if probe is None:
