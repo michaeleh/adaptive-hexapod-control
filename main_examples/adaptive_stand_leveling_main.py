@@ -24,7 +24,8 @@ qpos_map = env.map_joint_qpos
 obs = env.reset()
 
 pos = env.qpos * 0
-pos[:3] = [-1, -0., -0.1]
+pos[:3] = [-1, -0., -0.1]  # x axis leveling
+# pos[:3] = [-0.5, -0.25, -0.1]  # y axis
 env.set_state(pos, 0 * env.qvel)
 
 sim_model = SimBodyOrientation(env)
@@ -44,6 +45,3 @@ for i in tqdm(range(3)):
     obs, reward, done, info = env.step(action, callback=orientation_model.update, render=True)
     orientation_model.model.save_figs(axis='x')
     orientation_model.model.save_figs(axis='y')
-
-with open('tmp.pkl', 'wb') as fp:
-    pickle.dump(orientation_model.history, fp)
