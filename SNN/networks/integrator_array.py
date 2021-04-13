@@ -7,6 +7,8 @@ from nengo.exceptions import ValidationError
 from nengo.utils.network import with_self
 from nengo.utils.numpy import is_iterable
 
+from SNN.networks.integrator import Integrator
+
 
 class IntegratorArray(nengo.Network):
     """An array of ensembles.
@@ -75,8 +77,9 @@ class IntegratorArray(nengo.Network):
             n_neurons,
             n_ensembles,
             recurrent_tau,
+            inp_transform,
+            inp_synapse,
             ens_dimensions=1,
-            initial_values=None,
             label=None,
             seed=None,
             add_to_container=None,
@@ -112,14 +115,14 @@ class IntegratorArray(nengo.Network):
 
         with self:
             self.input = nengo.Node(size_in=self.dimensions, label="input")
-            if initial_values:
-                self.initial_values = nengo.Node(initial_values)  # set constant initial values
 
             for i in range(n_ensembles):
-                e = nengo.networks.Integrator(
+                e = Integrator(
                     n_neurons=n_neurons,
                     dimensions=self.dimensions_per_ensemble,
                     recurrent_tau=recurrent_tau,
+                    inp_transform=inp_transform,
+                    inp_synapse=inp_synapse,
                     label="%s%d" % (label_prefix, i),
                 )
                 nengo.Connection(
@@ -131,12 +134,6 @@ class IntegratorArray(nengo.Network):
                 self.ea_ensembles.append(e)
 
         self.add_output("output", function=None)
-        if initial_values:
-            nengo.Connection(
-                self.initial_values,
-                self.output,
-                synapse=None
-            )
 
     @property
     def dimensions(self):

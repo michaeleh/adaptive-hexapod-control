@@ -81,13 +81,12 @@ class SimBodyOrientation(AbstractBodyOrientation):
 class NeuromorphicOrientationModel(AbstractBodyOrientation):
     def __init__(self, env):
         super().__init__(env)
-        px1, px2 = self.get_x_points()
-        py1, py2 = self.get_y_points()
-        self.model = BodyOrientationModel(xw_diff=(px1 - px2)[0],
-                                          yw_diff=(py1 - py2)[0],
+        self.model = BodyOrientationModel(x0_points=self.get_x_points(),
+                                          y0_points=self.get_y_points(),
                                           sim_dt=env.dt, frame_skip=env.frame_skip)
-        self.prev_xh = 0
-        self.prev_yh = 0
+        self.prev_xh = self.get_x_points().T[1]
+        self.prev_yh = self.get_y_points().T[1]
+        self.history = []
 
     def get_theta_y(self):
         _, y = self.model.curr_val
@@ -103,6 +102,7 @@ class NeuromorphicOrientationModel(AbstractBodyOrientation):
 
         x_change = new_xh - self.prev_xh
         y_change = new_yh - self.prev_yh
+        self.history.append(x_change)
         self.model.update(x_change, y_change)
-        self.prev_x = new_xh
-        self.prev_y = new_yh
+        self.prev_xh = new_xh
+        self.prev_yh = new_yh
