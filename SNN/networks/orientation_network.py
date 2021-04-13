@@ -27,6 +27,9 @@ class OrientationNetwork(nengo.Network):
             # difference of h1-h2
             self.integrator_out = nengo.Ensemble(n_neurons=n_neurons, dimensions=2)
             nengo.Connection(self.integrators.output, self.integrator_out, synapse=None)
+            if starting_heights:
+                self.starting_h_stim = nengo.Node(starting_heights)
+                nengo.Connection(self.starting_h_stim, self.integrator_out, synapse=None)
 
             self.h_diff = nengo.Ensemble(n_neurons=n_neurons, dimensions=1)
             nengo.Connection(self.integrator_out, self.h_diff, function=lambda p: p[0] - p[1], synapse=None)
@@ -36,6 +39,7 @@ class OrientationNetwork(nengo.Network):
 
             if debug_figs:
                 self.probes_dict['h_integrator'] = nengo.Probe(self.integrators.output, synapse=0.1)
+                self.probes_dict['integrator_out'] = nengo.Probe(self.integrator_out, synapse=0.1)
                 self.probes_dict['h_diff'] = nengo.Probe(self.h_diff, synapse=0.1)
                 self.probes_dict['rot_angle'] = nengo.Probe(self.angle, synapse=0.1)
 
