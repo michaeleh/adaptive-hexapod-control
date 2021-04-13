@@ -83,7 +83,7 @@ class NeuromorphicOrientationModel(AbstractBodyOrientation):
         super().__init__(env)
         self.model = BodyOrientationModel(x0_points=self.get_x_points(),
                                           y0_points=self.get_y_points(),
-                                          sim_dt=env.dt, frame_skip=env.frame_skip)
+                                          frame_skip=env.frame_skip,debug=True)
         self.prev_xh = self.get_x_points().T[1]
         self.prev_yh = self.get_y_points().T[1]
         self.history = []

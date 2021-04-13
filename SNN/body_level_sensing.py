@@ -6,7 +6,7 @@ from SNN.networks.orientation_network import OrientationNetwork
 
 
 class BodyOrientationModel:
-    def __init__(self, x0_points, y0_points, sim_dt, frame_skip):
+    def __init__(self, x0_points, y0_points, debug, frame_skip):
         self.frame_skip = frame_skip
         self.history = []
         self.model = nengo.Network()
@@ -22,9 +22,9 @@ class BodyOrientationModel:
             self.y_stim = nengo.Node(lambda t: self.yh_change)
 
             self.x_angle = OrientationNetwork(n_neurons=500, starting_heights=[p[-1] for p in x0_points],
-                                              width_diff=xw_diff, label='x_angle', debug_figs=True)
+                                              width_diff=xw_diff, label='x_angle', debug_figs=debug)
             self.y_angle = OrientationNetwork(n_neurons=500, starting_heights=[p[-1] for p in y0_points],
-                                              width_diff=yw_diff, label='y_angle', debug_figs=False)
+                                              width_diff=yw_diff, label='y_angle', debug_figs=debug)
 
             nengo.Connection(self.x_stim, self.x_angle.input, synapse=None)
             nengo.Connection(self.y_stim, self.y_angle.input, synapse=None)
