@@ -4,8 +4,8 @@ import numpy as np
 
 from environment.joint_types import JointNames
 
-up_vec = np.array([0, 0, 50])  # up vector
-forward_vec = np.array([0, 80, 0])  # direction vector
+up_vec = np.array([0, 0, 30])  # up vector
+forward_vec = np.array([0, 50, 0])  # direction vector
 
 
 def rotate_vec(vec, deg):

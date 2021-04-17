@@ -39,9 +39,9 @@ env.step({}, orientation_model.update, render=True)
 for i in tqdm(range(3)):
     action = calculate_body_leveling_action(orientation_model, env.qpos, qpos_map, 'x')
     # calculate the rotation change
-    obs, reward, done, info = env.step(action, callback=orientation_model.update, render=True)
+    obs, reward, done, info = env.step(action, frame_skip=100, callback=orientation_model.update, render=True)
     action = calculate_body_leveling_action(orientation_model, env.qpos, qpos_map, 'y')
     # calculate the rotation change
-    obs, reward, done, info = env.step(action, callback=orientation_model.update, render=True)
+    obs, reward, done, info = env.step(action, frame_skip=100, callback=orientation_model.update, render=True)
     orientation_model.model.save_figs(axis='x')
     orientation_model.model.save_figs(axis='y')

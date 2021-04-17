@@ -3,8 +3,8 @@
     <size njmax="500" nconmax="100"/>
 
     <default>
-        <joint armature="0.5" damping="1" limited="true"/>
-        <geom condim="3" friction="1.5 0.5 0.5"/>
+        <joint armature="0.1" damping="2" limited="true"/>
+        <geom condim="3" />
         <position ctrllimited="false" forcelimited="false" gear="1" kp="10"/>
     </default>
 

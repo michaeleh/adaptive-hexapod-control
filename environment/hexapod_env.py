@@ -30,12 +30,14 @@ class HexapodEnv(MujocoEnv):
         self.do_simulation(0 * self.ctrl, self.frame_skip)
         return self.get_obs()
 
-    def step(self, action: Dict[str, float], callback=None, render=False):
+    def step(self, action: Dict[str, float], callback=None, render=False, frame_skip=None):
         '''
         step simulation and implement action
         :param action: dict of joint_name -> desired angle
         :return: new observation
         '''
+        if frame_skip is None:
+            frame_skip = self.frame_skip
         if isinstance(action, Dict):  # if step is action (or other mujoco's inner step runs)
             # Motion: pos after vanilla action
             ctrl = self.ctrl  # dont change current angles
@@ -44,7 +46,7 @@ class HexapodEnv(MujocoEnv):
             for joint, angle in action.items():
                 idx = self.acuator_names.index(joint)
                 ctrl[idx] = angle
-            self.do_simulation(ctrl, self.frame_skip, callback, render)
+            self.do_simulation(ctrl, frame_skip, callback, render)
         reward = 0
         done = False
         info = dict()

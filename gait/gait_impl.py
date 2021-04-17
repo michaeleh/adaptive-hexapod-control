@@ -2,8 +2,12 @@ from abc import ABC, abstractmethod
 
 import numpy as np
 
-from gait.walking_cycles import _Cycle, StageType, _3LegCycle, _1LegCycle, _2LegCycle
+from gait.state_transitions import StageType
+from gait.walking_cycles import _Cycle, _3LegCycle, _1LegCycle, _2LegCycle
 from kinematics.ik_algorithm import angles_to_target
+from kinematics.joint_kinematics import KinematicNumericImpl
+
+kinematic_model = KinematicNumericImpl()
 
 
 class _Motion(ABC):
@@ -20,27 +24,33 @@ class _Motion(ABC):
         Generate action according to current cycle and leg group
         """
         new_pos = {}
-        legs, stage = self.cycle.get_next()
+        stage_mapping = self.cycle.get_next()
 
-        for leg in legs:
-            # get qpos of each joint
-            coxa = self.joint_pos_dict[leg.coxa.value]
-            femur = self.joint_pos_dict[leg.femur.value]
-            tibia = self.joint_pos_dict[leg.tibia.value]
-            joint_pos = [coxa, femur, tibia]
-            if stage == StageType.UP:
-                q, _ = angles_to_target(q=obs[joint_pos], target=leg.target_up)
+        for stage, legs in stage_mapping.items():
+            if stage is None:
+                continue
+            for leg in legs:
+                # get qpos of each joint
+                coxa = self.joint_pos_dict[leg.coxa.value]
+                femur = self.joint_pos_dict[leg.femur.value]
+                tibia = self.joint_pos_dict[leg.tibia.value]
+                joint_pos = [coxa, femur, tibia]
+                joints_value = obs[joint_pos]
 
-            if stage == StageType.FORWARD:
-                # set new angles in relation to base position not in relation to current one
-                q, _ = angles_to_target(q=np.zeros(3), target=leg.target_forward + leg.target_up)
+                if stage == StageType.UP:
+                    q, _ = angles_to_target(q=joints_value, target=leg.target_up)
 
-            if stage == StageType.DOWN:
-                q, _ = angles_to_target(q=obs[joint_pos], target=-leg.target_up)
-            if stage == StageType.RETURN:
-                q = np.zeros(3)
+                if stage == StageType.FORWARD:
+                    # set new angles in relation to base position not in relation to current one
+                    q, _ = angles_to_target(q=np.zeros(3), target=leg.target_forward + leg.target_up)
 
-            new_pos[leg.coxa.value], new_pos[leg.femur.value], new_pos[leg.tibia.value] = q
+                if stage == StageType.DOWN:
+                    q, _ = angles_to_target(q=joints_value, target=-leg.target_up)
+
+                if stage == StageType.RETURN:
+                    q = np.zeros(3)
+
+                new_pos[leg.coxa.value], new_pos[leg.femur.value], new_pos[leg.tibia.value] = q
 
         return new_pos
 
