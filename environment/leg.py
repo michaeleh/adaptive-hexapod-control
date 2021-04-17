@@ -3,33 +3,26 @@ from enum import Enum
 import numpy as np
 
 from environment.joint_types import JointNames
+from utils.coordinates import polar2xy
+from utils.vectors import rotate_vec
 
-up_vec = np.array([0, 0, 30])  # up vector
-forward_vec = np.array([0, 50, 0])  # direction vector
+
+class _DirectionManager:
+    def __init__(self):
+        self.up_vec = np.array([0, 0, 30])  # up vector
+        self.r = 50
+        self.theta = np.deg2rad(90)  # constant direction
+        self.theta_change = 0
 
 
-def rotate_vec(vec, deg):
-    rad = np.deg2rad(deg)
-    '''
-    x' = x cos θ − y sin θ
-    y' = x sin θ + y cos θ
-    '''
-    x = vec[0]
-    y = vec[1]
-    z = vec[2]
-    return np.array([
-        x * np.cos(rad) - y * np.sin(rad),
-        x * np.sin(rad) + y * np.cos(rad),
-        z
-    ])
+direction_manager = _DirectionManager()
 
 
 class Leg:
     """
     Legs creation for joint names, and rotated direction vector
     """
-    target_up = up_vec.copy()
-    target_forward = forward_vec.copy()
+    target_up = direction_manager.up_vec.copy()
     coxa, femur, tibia = '', '', ''
     angle = 0
 
@@ -43,6 +36,11 @@ class Leg:
         pos = self.coxa.value.split('_')[1]
         return list(pos)
 
+    @property
+    def target_forward(self):
+        x, y = polar2xy(direction_manager.r, direction_manager.theta + direction_manager.theta_change + self.angle)
+        return np.array([x, y, 0])
+
 
 class LegRM(Leg):
     coxa, femur, tibia, ee = JointNames.COXA_RM, JointNames.FEMUR_RM, JointNames.TIBIA_RM, ''  # EENames.EE_RM
@@ -51,31 +49,26 @@ class LegRM(Leg):
 class LegLM(Leg):
     angle = 180
     coxa, femur, tibia, ee = JointNames.COXA_LM, JointNames.FEMUR_LM, JointNames.TIBIA_LM, ''  # EENames.EE_LM
-    target_forward = rotate_vec(forward_vec, angle)
 
 
 class LegRF(Leg):
     coxa, femur, tibia, ee = JointNames.COXA_RF, JointNames.FEMUR_RF, JointNames.TIBIA_RF, ''  # EENames.EE_RF
     angle = -45
-    target_forward = rotate_vec(forward_vec, angle)
 
 
 class LegLF(Leg):
     coxa, femur, tibia, ee = JointNames.COXA_LF, JointNames.FEMUR_LF, JointNames.TIBIA_LF, ''  # , EENames.EE_LF
     angle = -135
-    target_forward = rotate_vec(forward_vec, angle)
 
 
 class LegRR(Leg):
     coxa, femur, tibia, ee = JointNames.COXA_RR, JointNames.FEMUR_RR, JointNames.TIBIA_RR, ''  # EENames.EE_RR
     angle = 45
-    target_forward = rotate_vec(forward_vec, angle)
 
 
 class LegLR(Leg):
     coxa, femur, tibia, ee = JointNames.COXA_LR, JointNames.FEMUR_LR, JointNames.TIBIA_LR, ''  # EENames.EE_LR
     angle = 135
-    target_forward = rotate_vec(forward_vec, angle)
 
 
 leg_rf = LegRF()

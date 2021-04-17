@@ -7,7 +7,7 @@
     </asset>
 
     <worldbody>
-        <body name="ramp" pos="0.5 0.1 0 ">
+        <body name="ramp" pos="0.5 0. 0 ">
             <geom name = "box0" pos = "-1.0 0.0 -0.15" type = "box" size = "0.01 0.25 0.001" material = "wood" />
 <geom name = "box1" pos = "-1.01 0.0 -0.15" type = "box" size = "0.01 0.25 0.002" material = "wood" />
 <geom name = "box2" pos = "-1.02 0.0 -0.15" type = "box" size = "0.01 0.25 0.003" material = "wood" />
