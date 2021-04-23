@@ -81,7 +81,7 @@ class HexapodEnv(MujocoEnv):
         r1 = angle_between(self.direction[:2], coxa_rf[:2], coxa_lf[:2])
         r2 = angle_between(self.direction[:2], coxa_lf[:2], coxa_rf[:2])
 
-        return 0.5 * (r1 - r2)  # minus the angle, i.e angle correction
+        return 0.5 * (r2 - r1)  # minus the angle, i.e angle correction
 
     def do_simulation(self, ctrl, n_frames, callback=None, render=False):
         self.sim.data.ctrl[:] = ctrl

@@ -9,7 +9,7 @@ from utils.vectors import rotate_vec
 
 class _DirectionManager:
     def __init__(self):
-        self.up_vec = np.array([0, 0, 30])  # up vector
+        self.up_vec = np.array([0, 0, 50])  # up vector
         self.r = 50
         self.theta = np.deg2rad(90)  # constant direction
         self.theta_change = 0
