@@ -33,8 +33,7 @@ class StateTransitions(object):
         (StageType.FORWARD, None),
         (StageType.DOWN, StageType.UP),
         (StageType.RETURN, StageType.FORWARD),
-        (StageType.UP, StageType.DOWN),
-        (StageType.FORWARD, StageType.RETURN)
+
     ]
 
     def __init__(self, legs):
@@ -44,13 +43,13 @@ class StateTransitions(object):
 
     def __next__(self):
         states = self.states[self.idx_state.idx]
-        if states == (StageType.UP, StageType.DOWN):
-            self.idx_leg.increment()
+
         leg_i = self.idx_leg.idx
         legs1 = self.legs[leg_i]
         legs2 = self.legs[self.idx_leg.wrap(leg_i + 1)]
         self.idx_state.increment()
-
+        if states == (StageType.RETURN, StageType.FORWARD):
+            self.idx_leg.increment()
         return dict(zip(states, (legs1, legs2)))
 
     @property
