@@ -36,7 +36,7 @@ while True:
     rad_to_target = info['rad_to_target']
     direction_manager.theta_change = rad_to_target
 
-    # # calculate the rotation change
+    # calculate the rotation change
     # if StageType.DOWN in gait.cycle.stages_cycle.curr:
     #     action = calculate_body_leveling_action(sim_model, env.qpos, qpos_map, 'x')
     #     obs, reward, done, info = env.step(action, render=True)  # TODO model.update

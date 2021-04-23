@@ -14,7 +14,7 @@ class _Motion(ABC):
     def __init__(self, joint_pos_dict):
         self.joint_pos_dict = joint_pos_dict
         self.cycle = self.get_cycle()
-        self.leg_return_h = {}
+        self.leg_h = {}
         self.default_h = kinematic_model.calc_xyz(np.zeros(3)) * np.array([0, 0, 1])
 
     @abstractmethod
@@ -40,7 +40,7 @@ class _Motion(ABC):
                 joints_value = obs[joint_pos]
 
                 if stage == StageType.UP:
-                    self.leg_return_h[leg] = kinematic_model.calc_xyz(joints_value) * np.array([0, 0, 1])  # only z
+                    self.leg_h[leg] = kinematic_model.calc_xyz(joints_value) * np.array([0, 0, 1])  # only z
                     q, _ = angles_to_target(q=np.zeros(3), target=leg.target_up)
 
                 if stage == StageType.FORWARD:
@@ -48,7 +48,8 @@ class _Motion(ABC):
                     q, _ = angles_to_target(q=np.zeros(3), target=leg.target_forward + leg.target_up)
 
                 if stage == StageType.DOWN:
-                    q, _ = angles_to_target(q=np.zeros(3), target=leg.target_forward)
+                    h_diff = self.leg_h[leg] - self.default_h
+                    q, _ = angles_to_target(q=np.zeros(3), target=leg.target_forward + h_diff)
 
                 if stage == StageType.RETURN:
                     q = np.zeros(3)
