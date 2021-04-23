@@ -7,6 +7,7 @@ from gait.body_leveling.body_orientation import NeuromorphicOrientationModel, Si
 from gait.body_leveling.leveling_action import calculate_body_leveling_action
 from gait.gait_impl import TripodMotion
 from environment.hexapod_env import HexapodEnv
+from gait.state_transitions import StageType
 
 '''
 Loading environment and environment
@@ -34,9 +35,11 @@ while True:
     obs, reward, done, info = env.step(gait.generate_action(obs), render=True)  # TODO model.update
     rad_to_target = info['rad_to_target']
     direction_manager.theta_change = rad_to_target
-    # action = calculate_body_leveling_action(sim_model, env.qpos, qpos_map, 'x')
+
     # # calculate the rotation change
-    # obs, reward, done, info = env.step(action, frame_skip=50, render=True)  # TODO model.update
-    # action = calculate_body_leveling_action(sim_model, env.qpos, qpos_map, 'y')
-    # # calculate the rotation change
-    # obs, reward, done, info = env.step(action, frame_skip=50, render=True)  # TODO model.update
+    # if StageType.DOWN in gait.cycle.stages_cycle.curr:
+    #     action = calculate_body_leveling_action(sim_model, env.qpos, qpos_map, 'x')
+    #     obs, reward, done, info = env.step(action, render=True)  # TODO model.update
+    #     action = calculate_body_leveling_action(sim_model, env.qpos, qpos_map, 'y')
+    #     # calculate the rotation change
+    #     obs, reward, done, info = env.step(action, render=True)  # TODO model.update

@@ -9,9 +9,9 @@ from utils.vectors import rotate_vec
 
 class _DirectionManager:
     def __init__(self):
-        self.up_vec = np.array([0, 0, 50])  # up vector
-        self.r = 50
-        self.theta = np.deg2rad(90)  # constant direction
+        self.up_vec = np.array([0, 0, -0.05])  # up vector we want to go up from the ee thus
+        self.r = 0.04
+        self.theta = np.deg2rad(180)  # constant direction
         self.theta_change = 0
 
 
@@ -47,28 +47,28 @@ class LegRM(Leg):
 
 
 class LegLM(Leg):
-    angle = 180
+    angle = np.deg2rad(180)
     coxa, femur, tibia, ee = JointNames.COXA_LM, JointNames.FEMUR_LM, JointNames.TIBIA_LM, ''  # EENames.EE_LM
 
 
 class LegRF(Leg):
     coxa, femur, tibia, ee = JointNames.COXA_RF, JointNames.FEMUR_RF, JointNames.TIBIA_RF, ''  # EENames.EE_RF
-    angle = -45
+    angle = np.deg2rad(-45)
 
 
 class LegLF(Leg):
     coxa, femur, tibia, ee = JointNames.COXA_LF, JointNames.FEMUR_LF, JointNames.TIBIA_LF, ''  # , EENames.EE_LF
-    angle = -135
+    angle = np.deg2rad(-135)
 
 
 class LegRR(Leg):
     coxa, femur, tibia, ee = JointNames.COXA_RR, JointNames.FEMUR_RR, JointNames.TIBIA_RR, ''  # EENames.EE_RR
-    angle = 45
+    angle = np.deg2rad(45)
 
 
 class LegLR(Leg):
     coxa, femur, tibia, ee = JointNames.COXA_LR, JointNames.FEMUR_LR, JointNames.TIBIA_LR, ''  # EENames.EE_LR
-    angle = 135
+    angle = np.deg2rad(135)
 
 
 leg_rf = LegRF()

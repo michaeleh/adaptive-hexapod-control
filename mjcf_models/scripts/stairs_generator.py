@@ -3,7 +3,7 @@ import numpy as np
 if __name__ == '__main__':
     size = np.array([0.01, 0.25])
     step_size = 0.001
-    target_height = .08
+    target_height = .075
     pos = np.array([-1, 0, -0.15])
     name = 'box'
     material = 'wood'

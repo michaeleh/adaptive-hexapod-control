@@ -14,6 +14,8 @@ class _Motion(ABC):
     def __init__(self, joint_pos_dict):
         self.joint_pos_dict = joint_pos_dict
         self.cycle = self.get_cycle()
+        self.leg_return_h = {}
+        self.default_h = kinematic_model.calc_xyz(np.zeros(3)) * np.array([0, 0, 1])
 
     @abstractmethod
     def get_cycle(self) -> _Cycle:
@@ -38,18 +40,18 @@ class _Motion(ABC):
                 joints_value = obs[joint_pos]
 
                 if stage == StageType.UP:
-                    q, _ = angles_to_target(q=joints_value, target=leg.target_up)
+                    self.leg_return_h[leg] = kinematic_model.calc_xyz(joints_value) * np.array([0, 0, 1])  # only z
+                    q, _ = angles_to_target(q=np.zeros(3), target=leg.target_up)
 
                 if stage == StageType.FORWARD:
                     # set new angles in relation to base position not in relation to current one
                     q, _ = angles_to_target(q=np.zeros(3), target=leg.target_forward + leg.target_up)
 
                 if stage == StageType.DOWN:
-                    q, _ = angles_to_target(q=joints_value, target=-leg.target_up)
+                    q, _ = angles_to_target(q=np.zeros(3), target=leg.target_forward)
 
                 if stage == StageType.RETURN:
                     q = np.zeros(3)
-
                 new_pos[leg.coxa.value], new_pos[leg.femur.value], new_pos[leg.tibia.value] = q
 
         return new_pos

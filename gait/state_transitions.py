@@ -54,4 +54,4 @@ class StateTransitions(object):
 
     @property
     def curr(self):
-        return self.states[self.idx_state]
+        return self.states[self.idx_state.idx]
