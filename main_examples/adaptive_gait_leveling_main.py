@@ -2,7 +2,7 @@ import numpy as np
 import os
 
 from environment.leg import direction_manager
-from gait.body_leveling.body_orientation import SimBodyOrientation
+from gait.body_leveling.body_orientation import SimBodyOrientation, NeuromorphicOrientationModel
 from gait.body_leveling.leveling_action import calculate_body_leveling_action
 from gait.gait_impl import TripodMotion
 from environment.hexapod_env import HexapodEnv
@@ -28,8 +28,8 @@ for i in range(2):
     obs, reward, done, info = env.step({}, render=True)  # warmup
 
 # init
-# orientation_model = NeuromorphicOrientationModel(env)
-obs, reward, done, info = env.step({}, render=True)  # TODO model.update
+orientation_model = NeuromorphicOrientationModel(env)
+obs, reward, done, info = env.step({}, callback=orientation_model.update, render=True)
 
 while True:
     gait_state = gait.cycle.stages_cycle.curr
@@ -38,10 +38,12 @@ while True:
         pass
         action, theta = calculate_body_leveling_action(sim_model, env.qpos, qpos_map, 'wide')
         if abs(theta) > np.deg2rad(2.5):
-            obs, reward, done, info = env.step(action, frame_skip=100, render=True)  # TODO model.update
+            obs, reward, done, info = env.step(action, callback=orientation_model.update, frame_skip=100,
+                                               render=True)  # TODO model.update
         action, theta = calculate_body_leveling_action(sim_model, env.qpos, qpos_map, 'long')
         if abs(theta) > np.deg2rad(2.5):
-            obs, reward, done, info = env.step(action, frame_skip=100, render=True)  # TODO model.update
+            obs, reward, done, info = env.step(action, callback=orientation_model.update, frame_skip=100,
+                                               render=True)  # TODO model.update
     else:
         obs, reward, done, info = env.step(action, render=True)  # TODO model.update
 
