@@ -2,7 +2,7 @@ from enum import Enum
 
 
 class StageType(Enum):
-    UP, FORWARD, DOWN, RETURN = range(4)
+    UP, FORWARD, DOWN, RETURN, LEVEL = range(5)
 
 
 class _Index:
@@ -31,7 +31,9 @@ class StateTransitions(object):
     states = [
         (StageType.UP, None),
         (StageType.FORWARD, None),
-        (StageType.DOWN, StageType.UP),
+        (StageType.DOWN, None),
+        (StageType.LEVEL, StageType.LEVEL),
+        (None, StageType.UP),
         (StageType.RETURN, StageType.FORWARD),
 
     ]

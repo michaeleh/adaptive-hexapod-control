@@ -9,27 +9,27 @@ fk = KinematicNumericImpl()
 
 
 def extend(diff, axis):
-    assert axis in ['x', 'y']
-    if axis == 'x':
+    assert axis in ['wide', 'long']
+    if axis == 'long':
         return np.array([0, *diff])
-    if axis == 'y':
+    if axis == 'wide':
         return np.array([diff[0], 0, diff[1]])
 
 
-def calcualte_r(angles, leg, axis):
-    assert axis in ['x', 'y']
+def calculate_r(angles, leg, axis):
+    assert axis in ['wide', 'long']
     xyz = fk.calc_xyz(angles)
     xyz = leg.rotate(xyz)
-    if axis == 'x':
+    if axis == 'wide':
         r = xyz[1:]
-    if axis == 'y':
+    if axis == 'long':
         r = [xyz[0], xyz[2]]
     return np.linalg.norm(r)
 
 
-def calculate_body_leveling_action(body_or: AbstractBodyOrientation, qpos, qpos_map, axis):
-    assert axis in ['x', 'y']
-    theta = body_or.get_theta(axis)
+def calculate_body_leveling_action(body_orientation: AbstractBodyOrientation, qpos, qpos_map, axis):
+    assert axis in ['wide', 'long']
+    theta = body_orientation.get_theta(axis)
     action = {}
     for leg in all_legs:
         coxa = qpos_map[leg.coxa.value]
@@ -38,13 +38,13 @@ def calculate_body_leveling_action(body_or: AbstractBodyOrientation, qpos, qpos_
         joint_pos = [coxa, femur, tibia]
         angles = qpos[joint_pos]
 
-        r = calcualte_r(angles, leg, axis)
-        src = theta + body_or.wrap_angle_around_axis(leg, axis)  # -pi or not
-        dst = 0 + body_or.wrap_angle_around_axis(leg, axis)
+        r = calculate_r(angles, leg, axis)
+        src = theta + body_orientation.wrap_angle_around_axis(leg, axis)  # -pi or not
+        dst = 0 + body_orientation.wrap_angle_around_axis(leg, axis)
 
         diff = cartesian_change(r, src, dst)
         diff = extend(diff, axis)
-        q, _ = angles_to_target(angles, -diff)
+        q, _ = angles_to_target(angles, diff)
         action[leg.coxa.value], action[leg.femur.value], action[leg.tibia.value] = q
 
     return action

@@ -6,30 +6,30 @@ from SNN.networks.orientation_network import OrientationNetwork
 
 
 class BodyOrientationModel:
-    def __init__(self, x0_points, y0_points, debug, frame_skip):
+    def __init__(self, wide0_points, long0_points, debug, frame_skip):
         self.frame_skip = frame_skip
         self.history = []
         self.model = nengo.Network()
-        self.xh_change = [0, 0]
-        self.yh_change = [0, 0]
+        self.wideh_change = [0, 0]
+        self.longh_change = [0, 0]
 
-        px1, px2 = x0_points
-        py1, py2 = y0_points
-        xw_diff = (px1 - px2)[0],
-        yw_diff = (py1 - py2)[0]
+        pwide1, pwide2 = wide0_points
+        plong1, plong2 = long0_points
+        widew_diff = (pwide1 - pwide2)[0],
+        longw_diff = (plong1 - plong2)[0]
         with self.model:
-            self.x_stim = nengo.Node(lambda t: self.xh_change)
-            self.y_stim = nengo.Node(lambda t: self.yh_change)
+            self.wide_stim = nengo.Node(lambda t: self.wideh_change)
+            self.long_stim = nengo.Node(lambda t: self.longh_change)
 
-            self.x_angle = OrientationNetwork(n_neurons=500, starting_heights=[p[-1] for p in x0_points],
-                                              width_diff=xw_diff, label='x_angle', debug_figs=debug)
-            self.y_angle = OrientationNetwork(n_neurons=500, starting_heights=[p[-1] for p in y0_points],
-                                              width_diff=yw_diff, label='y_angle', debug_figs=debug)
+            self.wide_angle = OrientationNetwork(n_neurons=500, starting_heights=[p[-1] for p in wide0_points],
+                                              width_diff=widew_diff, label='wide_angle', debug_figs=debug)
+            self.long_angle = OrientationNetwork(n_neurons=500, starting_heights=[p[-1] for p in long0_points],
+                                              width_diff=longw_diff, label='long_angle', debug_figs=debug)
 
-            nengo.Connection(self.x_stim, self.x_angle.input, synapse=None)
-            nengo.Connection(self.y_stim, self.y_angle.input, synapse=None)
-            self.probe_x = nengo.Probe(self.x_angle.output, synapse=0.1)
-            self.probe_y = nengo.Probe(self.y_angle.output, synapse=0.1)
+            nengo.Connection(self.wide_stim, self.wide_angle.input, synapse=None)
+            nengo.Connection(self.long_stim, self.long_angle.input, synapse=None)
+            self.probe_wide = nengo.Probe(self.wide_angle.output, synapse=0.1)
+            self.probe_long = nengo.Probe(self.long_angle.output, synapse=0.1)
         self.sim = nengo.Simulator(self.model, 0.001)
 
     def update(self, valx, valy):
@@ -39,22 +39,22 @@ class BodyOrientationModel:
 
     def get_xy(self, probe=None):
         if probe is None:
-            probe = self.probe_x
+            probe = self.probe_wide
         return self.sim.trange(), self.sim.data[probe]
 
     @property
     def curr_val(self):
-        return self.sim.data[self.probe_x][-1][0], self.sim.data[self.probe_y][-1][0]
+        return self.sim.data[self.probe_wide][-1][0], self.sim.data[self.probe_long][-1][0]
 
     def save_figs(self, axis):
 
-        assert axis in ['x', 'y']
+        assert axis in ['wide', 'long']
         path = os.path.dirname(__file__)
 
-        if axis == 'x':
-            angle = self.x_angle
-        if axis == 'y':
-            angle = self.y_angle
+        if axis == 'wide':
+            angle = self.wide_angle
+        if axis == 'long':
+            angle = self.long_angle
 
         for name, probe in angle.probes_dict.items():
             figname = angle.label + '_' + name + '.png'

@@ -8,38 +8,38 @@ from environment.leg import Leg, leg_rf, leg_rr, leg_rm, leg_lm
 class AbstractBodyOrientation(ABC):
     def __init__(self, env):
         self.env = env
-        self.x_anchors = [leg_rm, leg_lm]  # h = RM-LM
-        self.y_anchors = [leg_rr, leg_rf]  # h = rr-rf
+        self.wide_anchors = [leg_rm, leg_lm]  # h = RM-LM
+        self.long_anchors = [leg_rr, leg_rf]  # h = rr-rf
 
     @abstractmethod
-    def get_theta_x(self):
+    def get_theta_wide(self):
         """
         :return: current and target orientation
         """
         pass
 
     @abstractmethod
-    def get_theta_y(self):
+    def get_theta_long(self):
         """
         :return: current and target orientation
         """
         pass
 
     def get_theta(self, axis):
-        assert axis in ['x', 'y']
-        if axis == 'x':
-            return self.get_theta_x()
-        if axis == 'y':
-            return self.get_theta_y()
+        assert axis in ['wide', 'long']
+        if axis == 'wide':
+            return self.get_theta_wide()
+        if axis == 'long':
+            return self.get_theta_long()
 
-    def get_x_points(self):
-        p1 = self.env.get_pos(self.x_anchors[0].coxa.value)[1:]
-        p2 = self.env.get_pos(self.x_anchors[1].coxa.value)[1:]
+    def get_wide_points(self):
+        p1 = self.env.get_pos(self.wide_anchors[0].coxa.value)[1:]
+        p2 = self.env.get_pos(self.wide_anchors[1].coxa.value)[1:]
         return np.array([p1, p2])
 
-    def get_y_points(self):
-        p1 = self.env.get_pos(self.y_anchors[0].coxa.value)[[0, 2]]
-        p2 = self.env.get_pos(self.y_anchors[1].coxa.value)[[0, 2]]
+    def get_long_points(self):
+        p1 = self.env.get_pos(self.long_anchors[0].coxa.value)[[0, 2]]
+        p2 = self.env.get_pos(self.long_anchors[1].coxa.value)[[0, 2]]
         return np.array([p1, p2])
 
     def wrap_angle_around_axis(self, leg: Leg, axis):
@@ -49,30 +49,30 @@ class AbstractBodyOrientation(ABC):
         :param: axis or rotation x or y
         :return: new angle target
         """
-        assert axis in ['x', 'y']
+        assert axis in ['wide', 'long']
         side, loc = leg.position()
-        if axis == 'x':
-            x_side, _ = self.x_anchors[0].position()
-            if side == x_side:  # rear is 0 around x axis
+        if axis == 'wide':
+            wide_side, _ = self.wide_anchors[0].position()
+            if side == wide_side:  # rear is 0 around x axis
                 return 0
             return -np.pi
-        if axis == 'y':
-            _, y_loc = self.y_anchors[0].position()
-            if loc == y_loc:  # right is 0 around y axis
+        if axis == 'long':
+            _, long_loc = self.long_anchors[0].position()
+            if loc == long_loc:  # right is 0 around y axis
                 return 0
             return -np.pi
 
 
 class SimBodyOrientation(AbstractBodyOrientation):
 
-    def get_theta_x(self):
-        p1, p2 = self.get_x_points()
+    def get_theta_wide(self):
+        p1, p2 = self.get_wide_points()
         w, h = (p1 - p2)
         theta = np.arctan2(h, w)
         return theta
 
-    def get_theta_y(self):
-        p1, p2 = self.get_y_points()
+    def get_theta_long(self):
+        p1, p2 = self.get_long_points()
         w, h = (p1 - p2)
         theta = np.arctan2(h, w)
         return theta
@@ -81,28 +81,28 @@ class SimBodyOrientation(AbstractBodyOrientation):
 class NeuromorphicOrientationModel(AbstractBodyOrientation):
     def __init__(self, env):
         super().__init__(env)
-        self.model = BodyOrientationModel(x0_points=self.get_x_points(),
-                                          y0_points=self.get_y_points(),
-                                          frame_skip=env.frame_skip,debug=True)
-        self.prev_xh = self.get_x_points().T[1]
-        self.prev_yh = self.get_y_points().T[1]
+        self.model = BodyOrientationModel(wide0_points=self.get_wide_points(),
+                                          long0_points=self.get_long_points(),
+                                          frame_skip=env.frame_skip, debug=True)
+        self.prev_wideh = self.get_wide_points().T[1]
+        self.prev_longh = self.get_long_points().T[1]
         self.history = []
 
-    def get_theta_y(self):
-        _, y = self.model.curr_val
-        return y
+    def get_theta_long(self):
+        _, long = self.model.curr_val
+        return long
 
-    def get_theta_x(self):
-        x, _ = self.model.curr_val
-        return x
+    def get_theta_wide(self):
+        wide, _ = self.model.curr_val
+        return wide
 
     def update(self):
-        new_xh = self.get_x_points().T[1]
-        new_yh = self.get_y_points().T[1]
+        new_wideh = self.get_wide_points().T[1]
+        new_longh = self.get_long_points().T[1]
 
-        x_change = new_xh - self.prev_xh
-        y_change = new_yh - self.prev_yh
-        self.history.append(x_change)
-        self.model.update(x_change, y_change)
-        self.prev_xh = new_xh
-        self.prev_yh = new_yh
+        wide_change = new_wideh - self.prev_wideh
+        long_change = new_longh - self.prev_longh
+        self.history.append(wide_change)
+        self.model.update(wide_change, long_change)
+        self.prev_wideh = new_wideh
+        self.prev_longh = new_longh

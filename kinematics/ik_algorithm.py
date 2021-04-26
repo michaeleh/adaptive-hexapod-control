@@ -70,7 +70,7 @@ def angles_to_target(q, target, model: HexapodLegKinematic = KinematicNumericImp
 
 
 if __name__ == '__main__':
-    target = np.array([0, 0, 0.13])
+    target = np.array([0, 0, 0.037])
     xyz = KinematicNumericImpl().calc_xyz(np.zeros(3)) + target
     q, _, traj, errors = angles_to_target(np.zeros(3), target)
     print(np.rad2deg(q))

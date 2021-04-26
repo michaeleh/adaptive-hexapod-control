@@ -31,9 +31,10 @@ class _Motion(ABC):
         stage_mapping = self.cycle.get_next()
 
         for stage, legs in stage_mapping.items():
-            if stage is None:
+            if stage in [None, StageType.LEVEL]:
                 continue
             for leg in legs:
+
                 # get qpos of each joint
                 coxa = self.joint_pos_dict[leg.coxa.value]
                 femur = self.joint_pos_dict[leg.femur.value]
@@ -50,7 +51,7 @@ class _Motion(ABC):
                     q, _ = angles_to_target(q=np.zeros(3), target=leg.target_forward + leg.target_up)
 
                 if stage == StageType.DOWN:
-                    q, _ = angles_to_target(q=np.zeros(3), target=leg.target_forward + self.leg_h[leg])
+                    q, _ = angles_to_target(q=np.zeros(3), target=leg.target_forward - self.leg_h[leg])
                 if stage == StageType.RETURN:
                     q, _ = angles_to_target(q=np.zeros(3), target=self.leg_h[leg])
 
