@@ -1,9 +1,8 @@
-import matplotlib.pyplot as plt
 import numpy as np
 import os
 
 from environment.leg import direction_manager
-from gait.body_leveling.body_orientation import NeuromorphicOrientationModel, SimBodyOrientation
+from gait.body_leveling.body_orientation import SimBodyOrientation
 from gait.body_leveling.leveling_action import calculate_body_leveling_action
 from gait.gait_impl import TripodMotion
 from environment.hexapod_env import HexapodEnv
@@ -31,15 +30,20 @@ for i in range(2):
 # init
 # orientation_model = NeuromorphicOrientationModel(env)
 obs, reward, done, info = env.step({}, render=True)  # TODO model.update
+
 while True:
-    obs, reward, done, info = env.step(gait.generate_action(obs), render=True)  # TODO model.update
+    gait_state = gait.cycle.stages_cycle.curr
+    action = gait.generate_action(obs)
+    if StageType.LEVEL in gait_state:
+        pass
+        action, theta = calculate_body_leveling_action(sim_model, env.qpos, qpos_map, 'wide')
+        if abs(theta) > np.deg2rad(2.5):
+            obs, reward, done, info = env.step(action, frame_skip=100, render=True)  # TODO model.update
+        action, theta = calculate_body_leveling_action(sim_model, env.qpos, qpos_map, 'long')
+        if abs(theta) > np.deg2rad(2.5):
+            obs, reward, done, info = env.step(action, frame_skip=100, render=True)  # TODO model.update
+    else:
+        obs, reward, done, info = env.step(action, render=True)  # TODO model.update
+
     rad_to_target = info['rad_to_target']
     direction_manager.theta_change = rad_to_target
-
-    # calculate the rotation change
-    if False and StageType.LEVEL in gait.cycle.stages_cycle.curr:
-        action = calculate_body_leveling_action(sim_model, env.qpos, qpos_map, 'wide')
-        obs, reward, done, info = env.step(action, frame_skip=100, render=True)  # TODO model.update
-        action = calculate_body_leveling_action(sim_model, env.qpos, qpos_map, 'long')
-        # calculate the rotation change
-        obs, reward, done, info = env.step(action, frame_skip=100, render=True)  # TODO model.update

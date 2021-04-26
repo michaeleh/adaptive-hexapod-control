@@ -42,19 +42,18 @@ class _Motion(ABC):
                 joint_pos = [coxa, femur, tibia]
                 joints_value = obs[joint_pos]
                 if stage == StageType.UP:
-                    delta_h = (self.default_pos - kinematic_model.calc_xyz(joints_value)) * axis.z
-                    self.leg_h[leg] = delta_h
-                    q, _ = angles_to_target(q=np.zeros(3), target=leg.target_up)
+                    q, _ = angles_to_target(q=joints_value, target=leg.target_up)
 
                 if stage == StageType.FORWARD:
                     # set new angles in relation to base position not in relation to current one
-                    q, _ = angles_to_target(q=np.zeros(3), target=leg.target_forward + leg.target_up)
+                    q, _ = angles_to_target(q=joints_value, target=leg.target_forward)
 
                 if stage == StageType.DOWN:
-                    q, _ = angles_to_target(q=np.zeros(3), target=leg.target_forward - self.leg_h[leg])
+                    q, _ = angles_to_target(q=joints_value, target=-leg.target_up)
                 if stage == StageType.RETURN:
-                    q, _ = angles_to_target(q=np.zeros(3), target=self.leg_h[leg])
-
+                    q = np.zeros(3)
+                    # target = (self.default_pos - kinematic_model.calc_xyz(joints_value))
+                    # q, _ = angles_to_target(q=joints_value, target=target)
                 new_pos[leg.coxa.value], new_pos[leg.femur.value], new_pos[leg.tibia.value] = q
 
         return new_pos

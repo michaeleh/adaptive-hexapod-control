@@ -19,7 +19,7 @@ class Optimizer(Enum):
     DLS = 2
 
 
-def angles_to_target(q, target, model: HexapodLegKinematic = KinematicNumericImpl(), max_iter=10000,
+def angles_to_target(q, target, model: HexapodLegKinematic = KinematicNumericImpl(), max_iter=1000,
                      error_thold=0.00001,
                      kp=0.1, optimizer=Optimizer.STD):
     """
@@ -66,14 +66,17 @@ def angles_to_target(q, target, model: HexapodLegKinematic = KinematicNumericImp
 
     if error > 1:
         print('error', error)
-    return q, error #  , traj, errors
+    return q, error#, traj, errors
 
 
 if __name__ == '__main__':
-    target = np.array([0, 0, 0.037])
-    xyz = KinematicNumericImpl().calc_xyz(np.zeros(3)) + target
-    q, _, traj, errors = angles_to_target(np.zeros(3), target)
-    print(np.rad2deg(q))
+    target = np.array([0, 0, -0.04])
+    angles = np.array([0.15389753, -0.04409856, -0.22947206])
+    pos = KinematicNumericImpl().calc_xyz(angles)
+    print(np.rad2deg(angles), pos)
+    xyz = pos + target
+    q, _, traj, errors = angles_to_target(angles, target)
+    # print(np.rad2deg(q))
     plt.plot(errors)
     plt.grid()
     plt.show()

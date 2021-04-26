@@ -40,20 +40,24 @@ class StateTransitions(object):
 
     def __init__(self, legs):
         self.legs = legs
+        self.reset()
+
+    def reset(self):
         self.idx_leg = _Index(init_val=0, max_val=len(self.legs))
         self.idx_state = _Index(init_val=2, max_val=len(self.states))
 
     def __next__(self):
         states = self.states[self.idx_state.idx]
-
-        leg_i = self.idx_leg.idx
-        legs1 = self.legs[leg_i]
-        legs2 = self.legs[self.idx_leg.wrap(leg_i + 1)]
+        ret = self.curr
         self.idx_state.increment()
         if states == (StageType.RETURN, StageType.FORWARD):
             self.idx_leg.increment()
-        return dict(zip(states, (legs1, legs2)))
+        return ret
 
     @property
     def curr(self):
-        return self.states[self.idx_state.idx]
+        states = self.states[self.idx_state.idx]
+        leg_i = self.idx_leg.idx
+        legs1 = self.legs[leg_i]
+        legs2 = self.legs[self.idx_leg.wrap(leg_i + 1)]
+        return dict(zip(states, (legs1, legs2)))

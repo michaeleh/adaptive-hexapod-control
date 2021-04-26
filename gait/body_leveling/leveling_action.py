@@ -45,6 +45,8 @@ def calculate_body_leveling_action(body_orientation: AbstractBodyOrientation, qp
         diff = cartesian_change(r, src, dst)
         diff = extend(diff, axis)
         q, _ = angles_to_target(angles, diff)
+        if np.count_nonzero(np.abs(q) > np.deg2rad(40)) > 0:  # if impossible then leave it
+            continue
         action[leg.coxa.value], action[leg.femur.value], action[leg.tibia.value] = q
 
-    return action
+    return action, theta

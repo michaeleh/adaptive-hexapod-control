@@ -8,80 +8,11 @@
 
     <worldbody>
         <body name="ramp" pos="0.5 0. 0 ">
-      <geom name = "box0" pos = "-1.0 0.0 -0.15" type = "box" size = "0.01 0.25 0.001" material = "wood" />
-<geom name = "box1" pos = "-1.01 0.0 -0.15" type = "box" size = "0.01 0.25 0.002" material = "wood" />
-<geom name = "box2" pos = "-1.02 0.0 -0.15" type = "box" size = "0.01 0.25 0.003" material = "wood" />
-<geom name = "box3" pos = "-1.03 0.0 -0.15" type = "box" size = "0.01 0.25 0.004" material = "wood" />
-<geom name = "box4" pos = "-1.04 0.0 -0.15" type = "box" size = "0.01 0.25 0.005" material = "wood" />
-<geom name = "box5" pos = "-1.05 0.0 -0.15" type = "box" size = "0.01 0.25 0.006" material = "wood" />
-<geom name = "box6" pos = "-1.06 0.0 -0.15" type = "box" size = "0.01 0.25 0.007" material = "wood" />
-<geom name = "box7" pos = "-1.07 0.0 -0.15" type = "box" size = "0.01 0.25 0.008" material = "wood" />
-<geom name = "box8" pos = "-1.08 0.0 -0.15" type = "box" size = "0.01 0.25 0.009000000000000001" material = "wood" />
-<geom name = "box9" pos = "-1.09 0.0 -0.15" type = "box" size = "0.01 0.25 0.010000000000000002" material = "wood" />
-<geom name = "box10" pos = "-1.1 0.0 -0.15" type = "box" size = "0.01 0.25 0.011" material = "wood" />
-<geom name = "box11" pos = "-1.11 0.0 -0.15" type = "box" size = "0.01 0.25 0.012" material = "wood" />
-<geom name = "box12" pos = "-1.12 0.0 -0.15" type = "box" size = "0.01 0.25 0.013000000000000001" material = "wood" />
-<geom name = "box13" pos = "-1.13 0.0 -0.15" type = "box" size = "0.01 0.25 0.014000000000000002" material = "wood" />
-<geom name = "box14" pos = "-1.1400000000000001 0.0 -0.15" type = "box" size = "0.01 0.25 0.015" material = "wood" />
-<geom name = "box15" pos = "-1.15 0.0 -0.15" type = "box" size = "0.01 0.25 0.016" material = "wood" />
-<geom name = "box16" pos = "-1.16 0.0 -0.15" type = "box" size = "0.01 0.25 0.017" material = "wood" />
-<geom name = "box17" pos = "-1.17 0.0 -0.15" type = "box" size = "0.01 0.25 0.018000000000000002" material = "wood" />
-<geom name = "box18" pos = "-1.18 0.0 -0.15" type = "box" size = "0.01 0.25 0.019000000000000003" material = "wood" />
-<geom name = "box19" pos = "-1.19 0.0 -0.15" type = "box" size = "0.01 0.25 0.02" material = "wood" />
-<geom name = "box20" pos = "-1.2 0.0 -0.15" type = "box" size = "0.01 0.25 0.021" material = "wood" />
-<geom name = "box21" pos = "-1.21 0.0 -0.15" type = "box" size = "0.01 0.25 0.022000000000000002" material = "wood" />
-<geom name = "box22" pos = "-1.22 0.0 -0.15" type = "box" size = "0.01 0.25 0.023" material = "wood" />
-<geom name = "box23" pos = "-1.23 0.0 -0.15" type = "box" size = "0.01 0.25 0.024" material = "wood" />
-<geom name = "box24" pos = "-1.24 0.0 -0.15" type = "box" size = "0.01 0.25 0.025" material = "wood" />
-<geom name = "box25" pos = "-1.25 0.0 -0.15" type = "box" size = "0.01 0.25 0.026000000000000002" material = "wood" />
-<geom name = "box26" pos = "-1.26 0.0 -0.15" type = "box" size = "0.01 0.25 0.027000000000000003" material = "wood" />
-<geom name = "box27" pos = "-1.27 0.0 -0.15" type = "box" size = "0.01 0.25 0.028" material = "wood" />
-<geom name = "box28" pos = "-1.28 0.0 -0.15" type = "box" size = "0.01 0.25 0.029" material = "wood" />
-<geom name = "box29" pos = "-1.29 0.0 -0.15" type = "box" size = "0.01 0.25 0.030000000000000002" material = "wood" />
-<geom name = "box30" pos = "-1.3 0.0 -0.15" type = "box" size = "0.01 0.25 0.031" material = "wood" />
-<geom name = "box31" pos = "-1.31 0.0 -0.15" type = "box" size = "0.01 0.25 0.032" material = "wood" />
-<geom name = "box32" pos = "-1.32 0.0 -0.15" type = "box" size = "0.01 0.25 0.033" material = "wood" />
-<geom name = "box33" pos = "-1.33 0.0 -0.15" type = "box" size = "0.01 0.25 0.034" material = "wood" />
-<geom name = "box34" pos = "-1.34 0.0 -0.15" type = "box" size = "0.01 0.25 0.035" material = "wood" />
-<geom name = "box35" pos = "-1.35 0.0 -0.15" type = "box" size = "0.01 0.25 0.036000000000000004" material = "wood" />
-<geom name = "box36" pos = "-1.3599999999999999 0.0 -0.15" type = "box" size = "0.01 0.25 0.037000000000000005" material = "wood" />
-<geom name = "box37" pos = "-1.37 0.0 -0.15" type = "box" size = "0.01 0.25 0.038" material = "wood" />
-<geom name = "box38" pos = "-1.38 0.0 -0.15" type = "box" size = "0.01 0.25 0.039" material = "wood" />
-<geom name = "box39" pos = "-1.3900000000000001 0.0 -0.15" type = "box" size = "0.01 0.25 0.04" material = "wood" />
-<geom name = "box40" pos = "-1.4 0.0 -0.15" type = "box" size = "0.01 0.25 0.041" material = "wood" />
-<geom name = "box41" pos = "-1.4100000000000001 0.0 -0.15" type = "box" size = "0.01 0.25 0.042" material = "wood" />
-<geom name = "box42" pos = "-1.42 0.0 -0.15" type = "box" size = "0.01 0.25 0.043000000000000003" material = "wood" />
-<geom name = "box43" pos = "-1.43 0.0 -0.15" type = "box" size = "0.01 0.25 0.044000000000000004" material = "wood" />
-<geom name = "box44" pos = "-1.44 0.0 -0.15" type = "box" size = "0.01 0.25 0.045" material = "wood" />
-<geom name = "box45" pos = "-1.45 0.0 -0.15" type = "box" size = "0.01 0.25 0.046" material = "wood" />
-<geom name = "box46" pos = "-1.46 0.0 -0.15" type = "box" size = "0.01 0.25 0.047" material = "wood" />
-<geom name = "box47" pos = "-1.47 0.0 -0.15" type = "box" size = "0.01 0.25 0.048" material = "wood" />
-<geom name = "box48" pos = "-1.48 0.0 -0.15" type = "box" size = "0.01 0.25 0.049" material = "wood" />
-<geom name = "box49" pos = "-1.49 0.0 -0.15" type = "box" size = "0.01 0.25 0.05" material = "wood" />
-<geom name = "box50" pos = "-1.5 0.0 -0.15" type = "box" size = "0.01 0.25 0.051000000000000004" material = "wood" />
-<geom name = "box51" pos = "-1.51 0.0 -0.15" type = "box" size = "0.01 0.25 0.052000000000000005" material = "wood" />
-<geom name = "box52" pos = "-1.52 0.0 -0.15" type = "box" size = "0.01 0.25 0.053000000000000005" material = "wood" />
-<geom name = "box53" pos = "-1.53 0.0 -0.15" type = "box" size = "0.01 0.25 0.054" material = "wood" />
-<geom name = "box54" pos = "-1.54 0.0 -0.15" type = "box" size = "0.01 0.25 0.055" material = "wood" />
-<geom name = "box55" pos = "-1.55 0.0 -0.15" type = "box" size = "0.01 0.25 0.056" material = "wood" />
-<geom name = "box56" pos = "-1.56 0.0 -0.15" type = "box" size = "0.01 0.25 0.057" material = "wood" />
-<geom name = "box57" pos = "-1.57 0.0 -0.15" type = "box" size = "0.01 0.25 0.058" material = "wood" />
-<geom name = "box58" pos = "-1.58 0.0 -0.15" type = "box" size = "0.01 0.25 0.059000000000000004" material = "wood" />
-<geom name = "box59" pos = "-1.5899999999999999 0.0 -0.15" type = "box" size = "0.01 0.25 0.060000000000000005" material = "wood" />
-<geom name = "box60" pos = "-1.6 0.0 -0.15" type = "box" size = "0.01 0.25 0.061" material = "wood" />
-<geom name = "box61" pos = "-1.6099999999999999 0.0 -0.15" type = "box" size = "0.01 0.25 0.062" material = "wood" />
-<geom name = "box62" pos = "-1.62 0.0 -0.15" type = "box" size = "0.01 0.25 0.063" material = "wood" />
-<geom name = "box63" pos = "-1.63 0.0 -0.15" type = "box" size = "0.01 0.25 0.064" material = "wood" />
-<geom name = "box64" pos = "-1.6400000000000001 0.0 -0.15" type = "box" size = "0.01 0.25 0.065" material = "wood" />
-<geom name = "box65" pos = "-1.65 0.0 -0.15" type = "box" size = "0.01 0.25 0.066" material = "wood" />
-<geom name = "box66" pos = "-1.6600000000000001 0.0 -0.15" type = "box" size = "0.01 0.25 0.067" material = "wood" />
-<geom name = "box67" pos = "-1.67 0.0 -0.15" type = "box" size = "0.01 0.25 0.068" material = "wood" />
-<geom name = "box68" pos = "-1.6800000000000002 0.0 -0.15" type = "box" size = "0.01 0.25 0.069" material = "wood" />
-<geom name = "box69" pos = "-1.69 0.0 -0.15" type = "box" size = "0.01 0.25 0.07" material = "wood" />
-<geom name = "box70" pos = "-1.7000000000000002 0.0 -0.15" type = "box" size = "0.01 0.25 0.07100000000000001" material = "wood" />
-<geom name = "box71" pos = "-1.71 0.0 -0.15" type = "box" size = "0.01 0.25 0.07200000000000001" material = "wood" />
-<geom name = "box72" pos = "-1.72 0.0 -0.15" type = "box" size = "0.01 0.25 0.07300000000000001" material = "wood" />
-<geom name = "box73" pos = "-2.23 0.0 -0.15" type = "box" size = "0.5 0.25 0.074" material = "wood" />
+            <geom name="box1" pos="-1.2 0.0 -0.15" type="box" size=".3 0.25 0.02" material="wood"/>
+            <geom name="box2" pos="-1.5 0.0 -0.15" type="box" size=".3 0.25 0.04" material="wood"/>
+            <geom name="box3" pos="-1.8 0.0 -0.15" type="box" size=".3 0.25 0.06" material="wood"/>
+            <geom name="box4" pos="-2.1 0.0 -0.15" type="box" size=".3 0.25 0.04" material="wood"/>
+            <geom name="box5" pos="-2.4 0.0 -0.15" type="box" size=".3 0.25 0.02" material="wood"/>
         </body>
     </worldbody>
 

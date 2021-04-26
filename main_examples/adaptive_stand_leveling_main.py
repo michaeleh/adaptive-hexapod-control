@@ -28,7 +28,7 @@ pos[:3] = [-1, -0., -0.1]  # x axis leveling
 # pos[:3] = [-0.5, -0.25, -0.1]  # y axis
 env.set_state(pos, 0 * env.qvel)
 
-# sim_model = SimBodyOrientation(env)
+sim_model = SimBodyOrientation(env)
 for i in range(2):
     env.step({}, render=True)  # warmup
 
@@ -37,10 +37,10 @@ orientation_model = NeuromorphicOrientationModel(env)
 env.step({}, orientation_model.update, render=True)
 
 for i in tqdm(range(5)):
-    action = calculate_body_leveling_action(orientation_model, env.qpos, qpos_map, 'wide')
+    action = calculate_body_leveling_action(sim_model, env.qpos, qpos_map, 'wide')
     # calculate the rotation change
     obs, reward, done, info = env.step(action, frame_skip=50, callback=orientation_model.update, render=True)
-    action = calculate_body_leveling_action(orientation_model, env.qpos, qpos_map, 'long')
+    action = calculate_body_leveling_action(sim_model, env.qpos, qpos_map, 'long')
     # calculate the rotation change
     obs, reward, done, info = env.step(action, frame_skip=50, callback=orientation_model.update, render=True)
     orientation_model.model.save_figs(axis='wide')

@@ -9,8 +9,8 @@ from utils.vectors import rotate_vec
 
 class _DirectionManager:
     def __init__(self):
-        self.up_vec = np.array([0, 0, -0.05])  # up vector we want to go up from the ee thus
-        self.r = 0.04
+        self.up_vec = np.array([0, 0, -0.03])  # up vector we want to go up from the ee thus
+        self.r = 0.03
         self.theta = np.deg2rad(180)  # constant direction
         self.theta_change = 0
 
@@ -38,7 +38,7 @@ class Leg:
 
     @property
     def target_forward(self):
-        x, y = polar2xy(direction_manager.r, direction_manager.theta + self.angle)
+        x, y = polar2xy(direction_manager.r, direction_manager.theta + direction_manager.theta_change + self.angle)
         return np.array([x, y, 0])
 
 
