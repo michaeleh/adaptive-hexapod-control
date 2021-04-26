@@ -2,10 +2,12 @@ from abc import ABC, abstractmethod
 
 import numpy as np
 
+from environment.leg import leg_lf
 from gait.state_transitions import StageType
 from gait.walking_cycles import _Cycle, _3LegCycle, _1LegCycle, _2LegCycle
 from kinematics.ik_algorithm import angles_to_target
 from kinematics.joint_kinematics import KinematicNumericImpl
+from utils import axis
 
 kinematic_model = KinematicNumericImpl()
 
@@ -15,7 +17,7 @@ class _Motion(ABC):
         self.joint_pos_dict = joint_pos_dict
         self.cycle = self.get_cycle()
         self.leg_h = {}
-        self.default_h = kinematic_model.calc_xyz(np.zeros(3)) * np.array([0, 0, 1])
+        self.default_pos = kinematic_model.calc_xyz(np.zeros(3))
 
     @abstractmethod
     def get_cycle(self) -> _Cycle:
@@ -38,9 +40,9 @@ class _Motion(ABC):
                 tibia = self.joint_pos_dict[leg.tibia.value]
                 joint_pos = [coxa, femur, tibia]
                 joints_value = obs[joint_pos]
-
                 if stage == StageType.UP:
-                    self.leg_h[leg] = kinematic_model.calc_xyz(joints_value) * np.array([0, 0, 1])  # only z
+                    delta_h = (self.default_pos - kinematic_model.calc_xyz(joints_value)) * axis.z
+                    self.leg_h[leg] = delta_h
                     q, _ = angles_to_target(q=np.zeros(3), target=leg.target_up)
 
                 if stage == StageType.FORWARD:
@@ -48,11 +50,10 @@ class _Motion(ABC):
                     q, _ = angles_to_target(q=np.zeros(3), target=leg.target_forward + leg.target_up)
 
                 if stage == StageType.DOWN:
-                    h_diff = self.leg_h[leg] - self.default_h
-                    q, _ = angles_to_target(q=np.zeros(3), target=leg.target_forward + h_diff)
-
+                    q, _ = angles_to_target(q=np.zeros(3), target=leg.target_forward + self.leg_h[leg])
                 if stage == StageType.RETURN:
-                    q = np.zeros(3)
+                    q, _ = angles_to_target(q=np.zeros(3), target=self.leg_h[leg])
+
                 new_pos[leg.coxa.value], new_pos[leg.femur.value], new_pos[leg.tibia.value] = q
 
         return new_pos

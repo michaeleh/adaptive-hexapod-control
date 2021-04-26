@@ -38,7 +38,7 @@ class Leg:
 
     @property
     def target_forward(self):
-        x, y = polar2xy(direction_manager.r, direction_manager.theta + direction_manager.theta_change + self.angle)
+        x, y = polar2xy(direction_manager.r, direction_manager.theta + self.angle)
         return np.array([x, y, 0])
 
 

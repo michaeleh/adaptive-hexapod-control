@@ -19,7 +19,8 @@ class Optimizer(Enum):
     DLS = 2
 
 
-def angles_to_target(q, target, model: HexapodLegKinematic = KinematicNumericImpl(), max_iter=10000, error_thold=0.00001,
+def angles_to_target(q, target, model: HexapodLegKinematic = KinematicNumericImpl(), max_iter=10000,
+                     error_thold=0.00001,
                      kp=0.1, optimizer=Optimizer.STD):
     """
     Giving arm object, a target and optimizer, provides the required set of control signals
@@ -65,11 +66,11 @@ def angles_to_target(q, target, model: HexapodLegKinematic = KinematicNumericImp
 
     if error > 1:
         print('error', error)
-    return q, error#, traj, errors
+    return q, error #  , traj, errors
 
 
 if __name__ == '__main__':
-    target = np.array([0, -0.01, -0.01])
+    target = np.array([0, 0, 0.13])
     xyz = KinematicNumericImpl().calc_xyz(np.zeros(3)) + target
     q, _, traj, errors = angles_to_target(np.zeros(3), target)
     print(np.rad2deg(q))
