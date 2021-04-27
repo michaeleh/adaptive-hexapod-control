@@ -51,9 +51,9 @@ class _Motion(ABC):
                 if stage == StageType.DOWN:
                     q, _ = angles_to_target(q=joints_value, target=-leg.target_up)
                 if stage == StageType.RETURN:
-                    q = np.zeros(3)
-                    # target = (self.default_pos - kinematic_model.calc_xyz(joints_value))
-                    # q, _ = angles_to_target(q=joints_value, target=target)
+                    target = (kinematic_model.calc_xyz(joints_value) - self.default_pos) * axis.z
+                    q, _ = angles_to_target(q=np.zeros(3), target=target)
+
                 new_pos[leg.coxa.value], new_pos[leg.femur.value], new_pos[leg.tibia.value] = q
 
         return new_pos
