@@ -1,9 +1,11 @@
 import numpy as np
 from environment.leg import all_legs
 from gait.body_leveling.body_orientation import AbstractBodyOrientation
+from gait.body_leveling.legs_heights import AbstractLegHeightModel
 from kinematics.ik_algorithm import angles_to_target
 from kinematics.joint_kinematics import KinematicNumericImpl
 from utils.coordinates import cartesian_change
+from utils import axis
 
 fk = KinematicNumericImpl()
 
@@ -27,7 +29,7 @@ def calculate_r(angles, leg, axis):
     return np.linalg.norm(r)
 
 
-def calculate_body_leveling_action(body_orientation: AbstractBodyOrientation, qpos, qpos_map, axis):
+def calculate_orientation_action(body_orientation: AbstractBodyOrientation, qpos, qpos_map, axis):
     assert axis in ['wide', 'long']
     theta = body_orientation.get_theta(axis)
     action = {}
@@ -50,3 +52,22 @@ def calculate_body_leveling_action(body_orientation: AbstractBodyOrientation, qp
         action[leg.coxa.value], action[leg.femur.value], action[leg.tibia.value] = q
 
     return action, theta
+
+
+def calculate_body_leveling_action(model: AbstractLegHeightModel, qpos, qpos_map):
+    hs = model.get_legs_hs()
+    target_height = hs.mean(axis=0)
+    targets_list = target_height - hs
+
+    action = {}
+    for leg, target in zip(all_legs, targets_list):
+        coxa = qpos_map[leg.coxa.value]
+        femur = qpos_map[leg.femur.value]
+        tibia = qpos_map[leg.tibia.value]
+        joint_pos = [coxa, femur, tibia]
+        angles = qpos[joint_pos]
+
+        q, _ = angles_to_target(angles, target)
+        action[leg.coxa.value], action[leg.femur.value], action[leg.tibia.value] = q
+
+    return action

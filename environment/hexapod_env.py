@@ -17,6 +17,7 @@ class HexapodEnv(MujocoEnv):
     def __init__(self, model_path, frame_skip):
         super().__init__(model_path, frame_skip)
         self.ctrl_history = []
+
         self.direction = np.zeros(2)
 
     def reset_model(self):

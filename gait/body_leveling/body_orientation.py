@@ -1,7 +1,7 @@
 import numpy as np
 from abc import ABC, abstractmethod
 
-from SNN.body_level_sensing import BodyOrientationModel
+from SNN.body_orientation_sensing import BodyOrientationModel
 from environment.leg import Leg, leg_rf, leg_rr, leg_rm, leg_lm
 
 

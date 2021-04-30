@@ -1,8 +1,5 @@
-import numpy as np
 import os
-
-from environment.leg import direction_manager
-from gait.body_leveling.body_orientation import SimBodyOrientation, NeuromorphicOrientationModel
+from gait.body_leveling.legs_heights import NeuromorphicLegHeightModel
 from gait.body_leveling.leveling_action import calculate_body_leveling_action
 from gait.gait_impl import TripodMotion
 from environment.hexapod_env import HexapodEnv
@@ -23,29 +20,21 @@ Init gaits and other simulation variables
 qpos_map = env.map_joint_qpos
 gait = TripodMotion(qpos_map)
 
-sim_model = SimBodyOrientation(env)
+# sim_model = SimLegHeightModel(env)
 for i in range(2):
     obs, reward, done, info = env.step({}, render=True)  # warmup
 
 # init
-orientation_model = NeuromorphicOrientationModel(env)
-obs, reward, done, info = env.step({}, callback=orientation_model.update, render=True)
-
+neuro_model = NeuromorphicLegHeightModel(env)
+obs, reward, done, info = env.step({}, callback=neuro_model.update, render=True)
 while True:
     gait_state = gait.cycle.stages_cycle.curr
     action = gait.generate_action(obs)
     if StageType.LEVEL in gait_state:
-        pass
-        action, theta = calculate_body_leveling_action(sim_model, env.qpos, qpos_map, 'wide')
-        if abs(theta) > np.deg2rad(2.5):
-            obs, reward, done, info = env.step(action, callback=orientation_model.update, frame_skip=100,
-                                               render=True)  # TODO model.update
-        action, theta = calculate_body_leveling_action(sim_model, env.qpos, qpos_map, 'long')
-        if abs(theta) > np.deg2rad(2.5):
-            obs, reward, done, info = env.step(action, callback=orientation_model.update, frame_skip=100,
-                                               render=True)  # TODO model.update
+        action = calculate_body_leveling_action(neuro_model, env.qpos, qpos_map)
+        obs, reward, done, info = env.step(action, callback=neuro_model.update, frame_skip=100, render=True)
     else:
-        obs, reward, done, info = env.step(action, render=True)  # TODO model.update
+        obs, reward, done, info = env.step(action, callback=neuro_model.update, render=True)
 
-    rad_to_target = info['rad_to_target']
-    direction_manager.theta_change = rad_to_target
+        # rad_to_target = info['rad_to_target']
+    # direction_manager.theta_change = rad_to_target

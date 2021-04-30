@@ -1,12 +1,12 @@
 import pickle
-
+from time import sleep
 import numpy as np
 import os
 
 from tqdm import tqdm
 
-from gait.body_leveling.body_orientation import NeuromorphicOrientationModel, SimBodyOrientation
 from environment.hexapod_env import HexapodEnv
+from gait.body_leveling.legs_heights import SimLegHeightModel, NeuromorphicLegHeightModel
 from gait.body_leveling.leveling_action import calculate_body_leveling_action
 
 '''
@@ -23,25 +23,28 @@ Init gaits and other simulation variables
 qpos_map = env.map_joint_qpos
 obs = env.reset()
 
+end = [-2.8, 0, 0]
+pos2 = [-2.1, 0, 0]
+pos1 = [-.5, 0, 0]
+middle = [-1.28, 0, 0]
+start = [.3, 0, 0]
+state = middle
+
+sim_model = SimLegHeightModel(env)
 pos = env.qpos * 0
-pos[:3] = [-1, -0., -0.1]  # x axis leveling
-# pos[:3] = [-0.5, -0.25, -0.1]  # y axis
+pos[:3] = state  # x axis leveling
 env.set_state(pos, 0 * env.qvel)
 
-sim_model = SimBodyOrientation(env)
 for i in range(2):
     env.step({}, render=True)  # warmup
 
 # init
-orientation_model = NeuromorphicOrientationModel(env)
-env.step({}, orientation_model.update, render=True)
+orientation_model = NeuromorphicLegHeightModel(env)
+env.step({}, callback=orientation_model.update, render=True)
 
 for i in tqdm(range(5)):
-    action = calculate_body_leveling_action(sim_model, env.qpos, qpos_map, 'wide')
-    # calculate the rotation change
-    obs, reward, done, info = env.step(action, frame_skip=50, callback=orientation_model.update, render=True)
-    action = calculate_body_leveling_action(sim_model, env.qpos, qpos_map, 'long')
-    # calculate the rotation change
-    obs, reward, done, info = env.step(action, frame_skip=50, callback=orientation_model.update, render=True)
-    orientation_model.model.save_figs(axis='wide')
-    orientation_model.model.save_figs(axis='long')
+    action = calculate_body_leveling_action(orientation_model, env.qpos, qpos_map)
+
+    obs, reward, done, info = env.step(action, callback=orientation_model.update, render=True)
+
+    orientation_model.model.save_figs()
