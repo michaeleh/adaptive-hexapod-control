@@ -9,7 +9,7 @@ from utils.vectors import rotate_vec
 
 class _DirectionManager:
     def __init__(self):
-        self.up_vec = np.array([0, 0, -0.05])  # up vector we want to go up from the ee thus
+        self.up_vec = np.array([0, 0, -0.055])  # up vector we want to go up from the ee thus
         self.r = 0.04
         self.theta = np.deg2rad(180)  # constant direction
         self.theta_change = 0

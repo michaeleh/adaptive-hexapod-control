@@ -56,10 +56,12 @@ def calculate_orientation_action(body_orientation: AbstractBodyOrientation, qpos
 
 def calculate_body_leveling_action(model: AbstractLegHeightModel, qpos, qpos_map):
     hs = model.get_legs_hs()
-    target_height = hs.mean(axis=0)
-    targets_list = target_height - hs
+    d_from_ground = (hs - model.heights0).min()
+    goal = model.heights0.mean() * 1.3 + d_from_ground
 
+    targets_list = goal - hs
     action = {}
+
     for leg, target in zip(all_legs, targets_list):
         coxa = qpos_map[leg.coxa.value]
         femur = qpos_map[leg.femur.value]
@@ -67,7 +69,7 @@ def calculate_body_leveling_action(model: AbstractLegHeightModel, qpos, qpos_map
         joint_pos = [coxa, femur, tibia]
         angles = qpos[joint_pos]
 
-        q, _ = angles_to_target(angles, target)
+        q, _ = angles_to_target(angles, target * axis.z)
         action[leg.coxa.value], action[leg.femur.value], action[leg.tibia.value] = q
 
     return action

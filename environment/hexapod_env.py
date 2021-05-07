@@ -1,3 +1,4 @@
+import os
 import time
 
 import matplotlib.pyplot as plt
@@ -5,6 +6,7 @@ from typing import Dict
 
 import numpy as np
 from gym.envs.mujoco import MujocoEnv
+from tqdm import tqdm
 
 from environment.joint_types import JointNames
 from utils.vectors import angle_between
@@ -16,7 +18,6 @@ class HexapodEnv(MujocoEnv):
 
     def __init__(self, model_path, frame_skip):
         super().__init__(model_path, frame_skip)
-        self.ctrl_history = []
 
         self.direction = np.zeros(2)
 
@@ -27,6 +28,7 @@ class HexapodEnv(MujocoEnv):
         self.acuator_names = list(self.model.actuator_names)
         # self.save_ctrl()
         qpos = self.qpos * 0
+        self.frames = []
         # fill_pos_defaults(qpos, self.map_joint_qpos)
         self.set_state(qpos, 0 * self.qvel)
         self.body_names = list(self.model.body_names)
@@ -86,13 +88,20 @@ class HexapodEnv(MujocoEnv):
 
     def do_simulation(self, ctrl, n_frames, callback=None, render=False):
         self.sim.data.ctrl[:] = ctrl
-        for _ in range(n_frames):
+        for i in range(n_frames):
             if callback is not None:
                 callback()
             self.sim.step()
-            self.ctrl_history.append(self.ctrl)
-            if render:
-                self.render()
+            # self.ctrl_history.append(self.ctrl)
+            if render and i % 100 == 0:
+                # self.render(camera_name='side')
+                frame = self.render(mode='rgb_array', camera_name='side')
+                self.save_frame(frame)
+
+    def save_frame(self, frame):
+        if not os.path.isdir('frames'):
+            os.mkdir('frames')
+        plt.imsave(f'frames/{time.time()}.png', frame)
 
     def get_obs(self):
         """
@@ -130,22 +139,22 @@ class HexapodEnv(MujocoEnv):
         return self.body_names.index(name)
 
     def get_pos(self, name):
-        return self.sim.data.body_xpos[self.index_of_body(name)]
-
-    def save_ctrl(self):
-        if len(self.ctrl_history) == 0:
-            return
-        plt.figure(figsize=(10, 10))
-
-        history = np.array(self.ctrl_history)  # i rows, len(ctrl) columns
-
-        for i, joint in enumerate(self.acuator_names):
-            plt.plot(np.rad2deg(history.T[i]), label=joint)
-
-        plt.xlabel('step')
-        plt.ylabel('degrees')
-        plt.title('footfall')
-        plt.legend()
-        plt.grid()
-        plt.savefig(f'out/{time.time()}.png')
-        self.ctrl_history.clear()
+        return self.sim.data.body_xpos[self.index_of_body(name)].copy()
+    #
+    # def save_ctrl(self):
+    #     if len(self.ctrl_history) == 0:
+    #         return
+    #     plt.figure(figsize=(10, 10))
+    #
+    #     history = np.array(self.ctrl_history)  # i rows, len(ctrl) columns
+    #
+    #     for i, joint in enumerate(self.acuator_names):
+    #         plt.plot(np.rad2deg(history.T[i]), label=joint)
+    #
+    #     plt.xlabel('step')
+    #     plt.ylabel('degrees')
+    #     plt.title('footfall')
+    #     plt.legend()
+    #     plt.grid()
+    #     plt.savefig(f'out/{time.time()}.png')
+    #     self.ctrl_history.clear()
