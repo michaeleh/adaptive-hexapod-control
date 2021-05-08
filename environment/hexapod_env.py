@@ -1,4 +1,5 @@
 import os
+import pathlib
 import time
 
 import matplotlib.pyplot as plt
@@ -6,7 +7,6 @@ from typing import Dict
 
 import numpy as np
 from gym.envs.mujoco import MujocoEnv
-from tqdm import tqdm
 
 from environment.joint_types import JointNames
 from utils.vectors import angle_between
@@ -18,7 +18,7 @@ class HexapodEnv(MujocoEnv):
 
     def __init__(self, model_path, frame_skip):
         super().__init__(model_path, frame_skip)
-
+        self.dirname = ''
         self.direction = np.zeros(2)
 
     def reset_model(self):
@@ -99,9 +99,9 @@ class HexapodEnv(MujocoEnv):
                 self.save_frame(frame)
 
     def save_frame(self, frame):
-        if not os.path.isdir('frames'):
-            os.mkdir('frames')
-        plt.imsave(f'frames/{time.time()}.png', frame)
+        if not os.path.isdir(f'{self.dirname}/frames'):
+            pathlib.Path(f'{self.dirname}/frames').mkdir(parents=True, exist_ok=True)
+        plt.imsave(f'{self.dirname}/frames/{time.time()}.png', frame)
 
     def get_obs(self):
         """

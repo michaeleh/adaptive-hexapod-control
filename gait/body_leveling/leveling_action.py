@@ -54,11 +54,25 @@ def calculate_orientation_action(body_orientation: AbstractBodyOrientation, qpos
     return action, theta
 
 
+targets = []
+
+
 def calculate_body_leveling_action(model: AbstractLegHeightModel, qpos, qpos_map):
     hs = model.get_legs_hs()
-    d_from_ground = (hs - model.heights0).min()
-    goal = model.heights0.mean() * 1.3 + d_from_ground
+    ee_pos_list = []
+    for leg, h in zip(all_legs, hs):
+        coxa = qpos_map[leg.coxa.value]
+        femur = qpos_map[leg.femur.value]
+        tibia = qpos_map[leg.tibia.value]
+        joint_pos = [coxa, femur, tibia]
+        angles = qpos[joint_pos]
 
+        ee_relative = fk.calc_xyz(angles)
+        ee_pos_list.append((h - ee_relative)[-1])  # only Z
+
+    highest_ee = max(ee_pos_list)
+    goal = model.heights0.mean() + (highest_ee - model.d_from_default)
+    targets.append(goal)
     targets_list = goal - hs
     action = {}
 
