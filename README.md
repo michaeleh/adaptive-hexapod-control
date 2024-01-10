@@ -1,5 +1,10 @@
 # adaptive-hexapod-control
 adaptive control and simulation for hexapod mk-III
+Paper:
+https://ieeexplore.ieee.org/document/9644943
+
+Paper Overview:
+https://www.youtube.com/watch?v=vwSoD0_55fk&ab_channel=Neuro-BiomorphicEngineeringLab
 
 ## Model
 Stl files was extracted from the complete hexapod model using fusion 360 and brought together using mojuco's xml.\
