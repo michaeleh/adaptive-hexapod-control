@@ -1,0 +1,19 @@
+<mujoco model="hexapod">
+
+    <include file="hexapod.xml"/>
+    <asset>
+        <texture name="wood_texture" file="textures/wood.png" type="cube"/>
+        <material name="wood" texture="wood_texture"/>
+    </asset>
+
+    <worldbody>
+        <body name="ramp" pos="0.5 0. 0 ">
+            <geom name="box1" pos="-1.2 0.0 -0.15" type="box" size=".3 0.25 0.02" material="wood"/>
+            <geom name="box2" pos="-1.5 0.0 -0.15" type="box" size=".3 0.25 0.04" material="wood"/>
+            <geom name="box3" pos="-1.8 0.0 -0.15" type="box" size=".3 0.25 0.06" material="wood"/>
+            <geom name="box4" pos="-2.1 0.0 -0.15" type="box" size=".3 0.25 0.04" material="wood"/>
+            <geom name="box5" pos="-2.4 0.0 -0.15" type="box" size=".3 0.25 0.02" material="wood"/>
+        </body>
+    </worldbody>
+
+</mujoco>

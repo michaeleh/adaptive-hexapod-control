@@ -1,12 +1,7 @@
 from abc import ABC, abstractmethod
-from enum import Enum
-from itertools import cycle
 
 from environment.leg import leg_rf, leg_rm, leg_rr, leg_lf, leg_lm, leg_lr
-
-
-class StageType(Enum):
-    UP, FORWARD, DOWN, RETURN = range(4)
+from gait.state_transitions import StateTransitions
 
 
 class _Cycle(ABC):
@@ -15,22 +10,16 @@ class _Cycle(ABC):
     """
 
     def __init__(self):
-        self.stages_cycle = cycle([state for state in StageType] + [StageType.RETURN] * 3)  # leg swing cycle
-        self.legs_cycle = self.get_legs_cycle()
-        self.legs = next(self.legs_cycle)
-        self.stage = StageType.UP
+        self.stages_cycle = StateTransitions(self.get_legs())
 
     def get_next(self):
         """
         switch swing stage and leg group (if necessary)
         """
-        self.stage = next(self.stages_cycle)
-        if self.stage == StageType.UP:
-            self.legs = next(self.legs_cycle)
-        return self.legs, self.stage
+        return next(self.stages_cycle)
 
     @abstractmethod
-    def get_legs_cycle(self):
+    def get_legs(self):
         pass
 
 
@@ -39,11 +28,11 @@ class _3LegCycle(_Cycle):
     tripod
     """
 
-    def get_legs_cycle(self):
-        return cycle([
+    def get_legs(self):
+        return [
             [leg_rf, leg_rr, leg_lm],
             [leg_lf, leg_lr, leg_rm]
-        ])
+        ]
 
 
 class _1LegCycle(_Cycle):
@@ -51,15 +40,15 @@ class _1LegCycle(_Cycle):
     wave
     """
 
-    def get_legs_cycle(self):
-        return cycle([
+    def get_legs(self):
+        return [
             [leg_lr],
             [leg_rf],
             [leg_rm],
             [leg_rr],
             [leg_lf],
             [leg_lm]
-        ])
+        ]
 
 
 class _2LegCycle(_Cycle):
@@ -67,9 +56,9 @@ class _2LegCycle(_Cycle):
     ripple
     """
 
-    def get_legs_cycle(self):
-        return cycle([
+    def get_legs(self):
+        return [
             [leg_rm, leg_lr],
             [leg_rf, leg_lm],
             [leg_lf, leg_rr]
-        ])
+        ]
