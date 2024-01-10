@@ -14,6 +14,8 @@ The body was separated from the legs and each leg was separated to 3 pieces acco
 currently, 3 basic walking gait was implements:
 <img src="images/gaits.png" width=500>
 <img src="images/walking_gaits.gif">
+<img src="images/adaptive_leveling.gif">
+
 
 ## Loop
 The simulation is based on the following loop as seen in main.py:<br/>
@@ -23,10 +25,3 @@ The simulation is based on the following loop as seen in main.py:<br/>
 4. step hexapod into this direction and calculate joint's speed.
 5. goto 2.
 
-## Structure
-directory structure is as follows:<br/>
-* <b>gait</b>: motion script and action generator.
-* <b>kinematics</b>: inverse and forward kinematics for leg swing use (input: joint angles, target position. output: joints angles to get to target).
-* <b>model</b>: model of hexapod: environment, legs and joints description.
-* <b>mujoco models</b>: xml and stl files to  load physical model.
-* <b>main</b>: main file, starts simulation.
